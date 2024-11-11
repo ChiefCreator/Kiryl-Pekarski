@@ -1,0 +1,22 @@
+.body {
+  font-family: $font-primary;
+  background-color: $color-primary;
+  color: $color-text;
+  font-weight: 500;
+  max-width: 100vw;
+  overflow-x: hidden;
+  &_lock {
+    overflow: hidden;
+  }
+}
+.container {
+  max-width: 1590px;
+  padding: 0 15px;
+  margin: 0 auto;
+}
+.hide {
+  display: none !important;
+  opacity: 0;
+  visibility: 0;
+  pointer-events: none;
+}
