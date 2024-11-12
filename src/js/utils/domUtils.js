@@ -9,3 +9,11 @@ export function createDOM(tag, { className, id, innerHTML, textContent, attribut
 
   return el;
 }
+
+export function getScrollPercentage() {
+  const scrollTop = window.scrollY || document.documentElement.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrollPercentage = (scrollTop / scrollHeight) * 100;
+
+  return scrollPercentage;
+}

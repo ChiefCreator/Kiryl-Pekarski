@@ -23,7 +23,9 @@ export default class App {
   }
   init() {
     this.components = {
-      header: new Header(),
+      header: new Header({
+        linksData: [{ title: "Обо мне" }, { title: "Портфолио" }, { title: "Навыки" }, { title: "Связаться" }],
+      }),
       content: new Content(),
     };
     this.routes = {

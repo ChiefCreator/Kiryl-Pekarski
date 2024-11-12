@@ -11,6 +11,8 @@ export default (env, argv) => {
     output: path.resolve(__dirname, "build"),
     html: path.resolve(__dirname, "src", "index.html"),
     devServer: path.resolve(__dirname, "build"),
+    styleMixins: path.resolve(__dirname, "src", "scss", "base", "_mixin.scss"),
+    fonts: path.resolve(__dirname, "src", "fonts"),
   };
   const config = buildWebpack({
     port: env.port ?? 3000,

@@ -1,0 +1,14 @@
+.scroll-progress-header {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-neutral-main--light);
+  &__container {
+    width: 100%;
+    height: 100%;
+  }
+  &__current-line {
+    height: 100%;
+    background-color: var(--color-neutral-contrast--dark);
+    transition: width 1s var(--transition-elastic--in-out);
+  }
+}

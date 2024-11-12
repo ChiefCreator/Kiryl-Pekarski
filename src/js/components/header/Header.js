@@ -1,19 +1,16 @@
-import { createDOM } from "../../utils/domUtils";
+import HeaderModel from "./HeaderModel";
+import HeaderView from "./HeaderView";
+import HeaderController from "./HeaderController";
+import "./header.scss";
 
 export default class Header {
-  constructor() {
-    this.header = this.create();
+  constructor({ linksData }) {
+    this.view = new HeaderView();
+    this.model = new HeaderModel(this.view, linksData);
+    this.controller = new HeaderController(this.model, this.view);
   }
 
-  create() {
-    const innerHTML = `
-      <div class="header__container">
-          
-      </div>
-    `;
-    return createDOM("header", { className: "header", innerHTML: innerHTML });
-  }
   render() {
-    return this.header;
+    return this.view.render();
   }
 }

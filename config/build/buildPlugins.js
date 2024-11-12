@@ -9,7 +9,9 @@ export default function buildPlugins({ mode, paths }) {
   const plugins = [new HtmlWebpackPlugin({ template: paths.html })];
 
   if (idDev) {
-    plugins.push(new webpack.ProgressPlugin());
+    plugins.push(
+      new webpack.ProgressPlugin(),
+    );
   }
 
   if (idProd) {

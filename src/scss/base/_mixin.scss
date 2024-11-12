@@ -1,4 +1,17 @@
 @mixin font-awesome {
-    font-family: 'Font Awesome 5 Free' , 'Font Awesome 5 Brands';
-    font-weight: 900;
+  font-family: "Font Awesome 5 Free", "Font Awesome 5 Brands";
+  font-weight: 900;
+}
+@mixin theme-light {
+  --color-neutral-main: #f0f0f0;
+  --color-neutral-main--light: #fefefe;
+  --color-neutral-main--lighten: #f0f0f0;
+  --color-neutral-main--dark: #a3a3a3;
+  --color-neutral-main--darken: #f0f0f0;
+
+  --color-neutral-contrast: #242424;
+  --color-neutral-contrast--light: #333333;
+  --color-neutral-contrast--lighten: #292929;
+  --color-neutral-contrast--dark: #333333;
+  --color-neutral-contrast--darken: #292929;
 }

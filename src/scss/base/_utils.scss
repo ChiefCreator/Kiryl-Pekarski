@@ -1,0 +1,9 @@
+.hide {
+  display: none !important;
+  opacity: 0;
+  visibility: 0;
+  pointer-events: none;
+}
+.theme-transition {
+  transition: background-color 0s ease, color 0s ease !important;
+}

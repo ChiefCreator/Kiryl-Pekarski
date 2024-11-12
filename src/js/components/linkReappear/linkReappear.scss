@@ -1,0 +1,49 @@
+.link-reappear {
+  display: inline-block;
+  position: relative;
+  font-size: 16px;
+  color: var(--color-neutral-contrast);
+  cursor: pointer;
+  transition: color .5s var(--transition-power--in-out);
+  &__wrapper {
+    overflow: hidden;
+    width: 100%;
+  }
+  &__word {
+    display: inline-block;
+  }
+  &__letter {
+    display: inline-block;
+    transform: translateY(0px);
+    position: relative;
+    &::before {
+      content: attr(data-letter);
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateY(100%);
+    }
+  }
+  &_underline {
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      bottom: -1px;
+      width: 0;
+      right: 0;
+      height: 1px;
+      background-color: var(--color-primary);
+      border-radius: 10px;
+      transition: width .5s var(--transition-power--in-out);
+    }
+    &:hover {
+      color: var(--color-primary);
+    }
+    &:hover::before {
+      left: 0;
+      width: 100%;
+    }
+  }
+}
