@@ -8,6 +8,7 @@ import ErrorPage from "./../pages/errorPage/ErrorPage.js";
 // компоненты
 import Header from "./../components/header/Header.js";
 import Content from "./../components/content/Content.js";
+import LiquidBackground from "../components/liquidBackground/LiquidBackground.js";
 
 export default class App {
   constructor({ root }) {
@@ -19,10 +20,11 @@ export default class App {
   }
 
   renderComponents() {
-    this.root.append(this.components.header.render(), this.components.content.render());
+    this.root.append(this.components.liquidBackground.render(), this.components.header.render(), this.components.content.render());
   }
   init() {
     this.components = {
+      liquidBackground: new LiquidBackground(),
       header: new Header({
         linksData: [{ title: "Обо мне" }, { title: "Портфолио" }, { title: "Навыки" }, { title: "Связаться" }],
       }),
@@ -30,7 +32,7 @@ export default class App {
     };
     this.routes = {
       main: new HomePage(),
-      default: new HomePage(),
+      // default: new HomePage(),
       error: new ErrorPage(),
     };
   }

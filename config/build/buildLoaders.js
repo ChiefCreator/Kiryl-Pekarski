@@ -26,13 +26,33 @@ export default function buildLoaders(options) {
       fullySpecified: false,
     },
   };
-  const fileLoader = {
+  const fontsLoader = {
     test: /\.(woff|woff2|eot|ttf|otf)$/,
     type: 'asset/resource',
     generator: {
       filename: 'fonts/[name][hash][ext][query]',
     },
   };
+  const imgLoader = {
+    test: /\.(jpg|png)$/,
+    type: 'asset/resource',
+    generator: {
+      filename: 'img/[name][hash][ext][query]',
+    },
+  };
+  const model3DLoader = {
+    test: /\.(glb|gltf|usd|usdc)$/,
+    type: 'asset/resource',
+    generator: {
+      filename: '3d/[name][hash][ext][query]',
+    },
+  };
+  const shaderLoader = {
+    test: /\.(glsl|vs|fs)$/,
+    loader: 'webpack-glsl-loader',
+    exclude: /node_modules/,
+  };
 
-  return [scssLoader, expansionLoader, fileLoader];
+
+  return [scssLoader, expansionLoader, fontsLoader, imgLoader, model3DLoader, shaderLoader];
 }

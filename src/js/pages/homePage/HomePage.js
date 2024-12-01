@@ -1,5 +1,9 @@
 import { createDOM } from "../../utils/domUtils";
 
+import SectionMain from "./SectionMain";
+
+import "./homePage.scss";
+
 export default class HomePage {
   constructor() {
     this.id = "main";
@@ -11,9 +15,18 @@ export default class HomePage {
 
   create() {
     const innerHTML = `
-      <div class="app-main__container"></div>
+      <div class="app-main__container">
+        
+      </div>
     `;
-    return createDOM("main", { className: "app-main", innerHTML: innerHTML });
+    
+    const page = createDOM("main", { className: "app-main", innerHTML: innerHTML });
+    const pageContainer = page.firstElementChild;
+    const sectionMain = new SectionMain();
+
+    pageContainer.append(sectionMain.render());
+
+    return page;
   }
   init() {
     document.title = this.title;

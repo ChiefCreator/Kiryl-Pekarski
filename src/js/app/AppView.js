@@ -8,7 +8,13 @@ export default class AppView {
   renderContent(pageId) {
     const page = this.routes[pageId] || this.routes["error"];
     this.content.innerHTML = "";
-    this.content.append(page.render());
+
+    if (pageId === "main") {
+      this.content.append(page.render());
+    } else {
+      this.content.append(page.render());
+    }
+
     this.updateMenu(pageId);
   }
 

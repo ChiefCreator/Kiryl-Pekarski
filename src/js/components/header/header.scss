@@ -1,9 +1,12 @@
 .header {
-  position: fixed;
+  position: sticky;
+  z-index: 5;
+  top: 0;
   width: 100%;
   text-transform: uppercase;
   font-family: var(--font-secondary);
   font-size: 16px;
+  backdrop-filter: blur(8px);
   &__container {
     width: 100%;
   }
