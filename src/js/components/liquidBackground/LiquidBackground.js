@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { OrbitControls } from "three/examples/jsm/Addons.js";
 
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
@@ -29,13 +28,22 @@ gsap.registerPlugin(ScrollTrigger);
 export default class LiquidBackground {
   constructor() {
     this.liquidBackground = this.create();
+
     this.viewportSettings = {
       width: window.innerWidth,
       height: window.innerHeight,
       aspectRatio: window.innerWidth / window.innerHeight,
       frustumSize: 1,
     };
-    this.textureScene = {};
+
+    this.sculptureWrapper = null;
+    this.meshPosition = new THREE.Vector3(0, 0, 0);
+
+    this.sculptureOptions = {
+      angle: 0,
+      rotationDirection: -1,
+      rotationSpeed: 0.003,
+    }
 
     this.init();
   }
@@ -71,7 +79,7 @@ export default class LiquidBackground {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, this.viewportSettings.aspectRatio, 0.1, 1000);
     // this.camera = new THREE.OrthographicCamera( -this.viewportSettings.frustumSize * this.viewportSettings.aspectRatio, this.viewportSettings.frustumSize * this.viewportSettings.aspectRatio, this.viewportSettings.frustumSize, -this.viewportSettings.frustumSize, 0.1, 1000);
-    this.camera.position.z = 5;
+    this.camera.position.z = 4.5;
 
     this.renderTarget = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {
       format: THREE.RGBAFormat,
@@ -93,14 +101,6 @@ export default class LiquidBackground {
             child.material = new THREE.MeshStandardMaterial({
               map: this.mainTexture,
             });
-
-            // child.material = new THREE.ShaderMaterial({
-            //   uniforms: {
-            //     uTexture: { value: this.mainTexture },
-            //   },
-            //   vertexShader,
-            //   fragmentShader: textureSculptureFragmentShader,
-            // });
           }
         });
         this.mesh.scale.set(1, 1, 1);
@@ -110,18 +110,15 @@ export default class LiquidBackground {
       undefined,
       (error) => console.error("Ошибка загрузки:", error)
     );
-
-    // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
   }
   initPostprocessing() {
     this.composer = new EffectComposer(this.renderer);
-    this.composer.addPass(new RenderPass(this.scene, this.camera));
 
     this.effect = new ShaderPass({
       uniforms: {
         tDiffuse: { value: null },
         uWavesTexture: { value: this.rippleTexture },
-        progress: { value: 1 },
+        progress: { value: 0 },
         scale: { value: 1 },
 
         texturePattern: { value: this.texture },
@@ -139,28 +136,8 @@ export default class LiquidBackground {
       vertexShader,
     });
 
+    this.composer.addPass(new RenderPass(this.scene, this.camera));
     this.composer.addPass(this.effect);
-  }
-  createMaterial() {
-    return new THREE.ShaderMaterial({
-      vertexShader,
-      fragmentShader,
-      side: THREE.DoubleSide,
-      uniforms: {
-        texturePattern: { value: this.texture },
-        noise: { val0e: this.noiseTexture },
-        uDisplacement: { value: this.rippleTexture },
-        meEase: { value: 0.075 },
-        time: { value: Math.ceil(50 * Math.random()) },
-        ease: { value: 0 },
-        alpha: { value: 1.0 },
-        distA: { value: 0.64 },
-        distB: { value: 2.5 },
-        mfBlack: { value: 0.0 },
-      },
-      transparent: true,
-      side: THREE.DoubleSide,
-    });
   }
   init() {
     this.initLoaders();
@@ -170,19 +147,114 @@ export default class LiquidBackground {
     this.initPostprocessing();
 
     this.animate();
+    this.updateSculpturePosition();
     this.animateTransformationFromliquid();
 
     window.addEventListener("resize", this.onWindowResize.bind(this));
+    window.addEventListener("scroll", this.updateSculpturePosition.bind(this));
   }
+  // createMaterial() {
+  //   return new THREE.ShaderMaterial({
+  //     vertexShader,
+  //     fragmentShader,
+  //     side: THREE.DoubleSide,
+  //     uniforms: {
+  //       texturePattern: { value: this.texture },
+  //       noise: { val0e: this.noiseTexture },
+  //       uDisplacement: { value: this.rippleTexture },
+  //       meEase: { value: 0.075 },
+  //       time: { value: Math.ceil(50 * Math.random()) },
+  //       ease: { value: 0 },
+  //       alpha: { value: 1.0 },
+  //       distA: { value: 0.64 },
+  //       distB: { value: 2.5 },
+  //       mfBlack: { value: 0.0 },
+  //     },
+  //     transparent: true,
+  //     side: THREE.DoubleSide,
+  //   });
+  // }
 
+  updateSculpturePosition() {
+    this.sculptureWrapper = document.querySelector(".sculpture-block__wrapper") ?? null;
+
+    if (!this.sculptureWrapper) return;
+
+    const rect = this.sculptureWrapper.getBoundingClientRect();
+    const elementPosition = {
+      x: rect.left,
+      y: rect.top 
+    };
+  
+    const normalizedX = (elementPosition.x / window.innerWidth) * 2 - 1;
+    const normalizedY = -(elementPosition.y / window.innerHeight) * 2 + 1;
+  
+    const vector = new THREE.Vector3(normalizedX + .5, normalizedY - .5, 0.0);
+    vector.unproject(this.camera);
+  
+    if (!this.mesh) return; 
+
+    const direction = vector.sub(this.camera.position).normalize();
+    const distance = (0 - this.camera.position.z) / direction.z;
+    const position = this.camera.position.clone().add(direction.multiplyScalar(distance));
+    const yInaccuracy = 0.8;
+
+    this.meshPosition = new THREE.Vector3(position.x,position.y + yInaccuracy, 0.0);
+
+    if (!this.animateMeshPosition) return;
+
+    this.animateMeshPosition.vars.x = this.meshPosition.x;
+    this.animateMeshPosition.vars.y = this.meshPosition.y;
+    this.animateMeshPosition.invalidate();
+  }
+  animateSculpturePosition = () => {
+    this.mesh.position.set(this.meshPosition.x, this.meshPosition.y, 0);
+
+    this.timeline = requestAnimationFrame(this.animateSculpturePosition);
+  }
   updateProgress = (value) => {
     gsap.to(this.effect.uniforms.progress, {
       value: value,
       duration: 2,
     });
+
+    if (!this.mesh) return;
+
+    this.animateMeshPosition = gsap.to(this.mesh.position, {
+      x: this.meshPosition.x,
+      y: this.meshPosition.y,
+      z: 0,
+      duration: 2,
+      paused: true,
+    });
+
+    switch(value) {
+      case 1:
+        if (this.mesh) {
+          gsap.to(this.mesh.position, {
+            x: 0,
+            y: 0,
+            z: 0,
+            duration: 2,
+          });
+          clearTimeout(this.timeoutId);
+          cancelAnimationFrame(this.timeline)
+        }
+        break;
+      case 0:
+        if (this.mesh && this.meshPosition) {
+          this.animateMeshPosition.invalidate();
+          this.animateMeshPosition.restart(); 
+          this.timeoutId = setTimeout(() => {
+            this.animateSculpturePosition();
+          }, 2000)  
+        }
+        break;
+    }
   };
   animate = () => {
     requestAnimationFrame(this.animate);
+    this.animateSculptureRotation(-0.25, 0.75);
 
     this.rippleTextureRenderer.render(this.renderer);
     this.renderer.setRenderTarget(this.renderTarget);
@@ -193,8 +265,6 @@ export default class LiquidBackground {
     this.effect.uniforms.time.value += 0.01;
 
     if (this.composer) this.composer.render();
-
-    // this.controls.update();
   };
   onWindowResize() {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -204,11 +274,32 @@ export default class LiquidBackground {
       trigger: this.liquidBackground,
       start: "top 75%",
       end: "bottom 25%",
-      onEnter: () => this.updateProgress(1),
-      onLeave: () => this.updateProgress(0),
-      onEnterBack: () => this.updateProgress(1),
-      onLeaveBack: () => this.updateProgress(0),
+      onEnter: () => {
+        console.log("liquid");
+        this.updateProgress(1);
+      },
+      onLeave: () => {
+        console.log("sculpture");
+        this.updateProgress(0);
+      },
+      onEnterBack: () => {
+        console.log("liquid again");
+        this.updateProgress(1);
+      },
+      onLeaveBack: () => {
+        console.log("sculpture again");
+        this.updateProgress(0);
+      },
     });
+  }
+  animateSculptureRotation(startAngle, endAngle) {
+    if (!this.mesh) return;
+
+    if (this.mesh.rotation.y >= endAngle || this.mesh.rotation.y <= startAngle) { 
+      this.sculptureOptions.rotationDirection = -this.sculptureOptions.rotationDirection;
+    }
+    
+    this.mesh.rotation.y += this.sculptureOptions.rotationSpeed * this.sculptureOptions.rotationDirection;
   }
 
   create() {

@@ -33,7 +33,7 @@ void main() {
 	vec4 waveData = texture2D(uWavesTexture, vUv);
     float distortion = waveData.r / 60.0;
 
-	vec2 newUv = vec2(mix(vUv.x, r / 1.8, progress), mix(vUv.y, 0.5 / 1.8, progress)) + distortion;
+	vec2 newUv = vec2(mix(vUv.x + distortion / 2.0, r / 1.8 + distortion, progress), mix(vUv.y + distortion / 2.0, 0.5 / 1.8 + distortion, progress));
 			
 	vec4 color = texture2D( tDiffuse, newUv );
 	gl_FragColor = color;

@@ -1,6 +1,7 @@
 import { createDOM } from "../../utils/domUtils";
 
 import SectionMain from "./SectionMain";
+import SectionAbout from "./SectionAbout";
 
 import "./homePage.scss";
 
@@ -23,8 +24,10 @@ export default class HomePage {
     const page = createDOM("main", { className: "app-main", innerHTML: innerHTML });
     const pageContainer = page.firstElementChild;
     const sectionMain = new SectionMain();
+    const sectionAbout = new SectionAbout();
 
     pageContainer.append(sectionMain.render());
+    pageContainer.append(sectionAbout.render());
 
     return page;
   }
