@@ -1,3 +1,5 @@
+import { animateTextOnScroll } from "../utils/animateOnScrollUtils.js";
+
 export default class AppView {
   constructor(root, routes) {
     this.root = root;
@@ -9,11 +11,12 @@ export default class AppView {
     const page = this.routes[pageId] || this.routes["error"];
     this.content.innerHTML = "";
 
-    if (pageId === "main") {
-      this.content.append(page.render());
-    } else {
-      this.content.append(page.render());
-    }
+    this.content.append(page.render());
+
+    const textAnimatedOnScrollList = document.querySelectorAll('[data-text-animated-on-scroll]');
+    textAnimatedOnScrollList.forEach(text => {
+      setTimeout(() => animateTextOnScroll(text), 100)
+    });
 
     this.updateMenu(pageId);
   }

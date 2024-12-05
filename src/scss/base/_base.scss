@@ -12,4 +12,30 @@
   &[data-theme="light"] {
     @include theme-light;
   }
+  &[data-theme="projectThemeOfNikitaEfremov"] {
+    @include projectThemeOfNikitaEfremov;
+  }
+  &[data-theme="projectThemeOfLimitedCharm"] {
+    @include projectThemeOfLimitedCharm;
+  }
+  &[data-theme="projectThemeOfStudio57"] {
+    @include projectThemeOfStudio57;
+  }
+  &[data-theme="projectThemeOfPanto"] {
+    @include projectThemeOfPanto;
+  }
+  &[data-theme="projectThemeOfTennis"] {
+    @include projectThemeOfTennis;
+  }
+  &[data-theme="projectThemeOfKolyanKovsh"] {
+    @include projectThemeOfKolyanKovsh;
+  }
+}
+
+.text-line {
+  overflow: hidden;
+  display: block;
+  &__container {
+    display: block;
+  }
 }

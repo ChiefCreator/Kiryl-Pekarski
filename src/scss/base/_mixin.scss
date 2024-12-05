@@ -15,3 +15,93 @@
   --color-neutral-contrast--dark: #333333;
   --color-neutral-contrast--darken: #292929;
 }
+@mixin projectThemeOfNikitaEfremov {
+  --color-primary: #ff4900;
+
+  --color-neutral-main: #75767B;
+  --color-neutral-main--light: #fefefe;
+  --color-neutral-main--lighten: #f0f0f0;
+  --color-neutral-main--dark: #a3a3a3;
+  --color-neutral-main--darken: #f0f0f0;
+
+  --color-neutral-contrast: #f0f0f0;
+  --color-neutral-main--light: #fefefe;
+  --color-neutral-main--lighten: #f0f0f0;
+  --color-neutral-main--dark: #a3a3a3;
+  --color-neutral-main--darken: #f0f0f0;
+}
+@mixin projectThemeOfLimitedCharm {
+  --color-primary: #ff4900;
+
+  --color-neutral-main: #B5D97B;
+  --color-neutral-main--light: #fefefe;
+  --color-neutral-main--lighten: #f0f0f0;
+  --color-neutral-main--dark: #a3a3a3;
+  --color-neutral-main--darken: #f0f0f0;
+
+  --color-neutral-contrast: #242424;
+  --color-neutral-contrast--light: #333333;
+  --color-neutral-contrast--lighten: #292929;
+  --color-neutral-contrast--dark: #333333;
+  --color-neutral-contrast--darken: #292929;
+}
+@mixin projectThemeOfStudio57 {
+  --color-primary: #ff4900;
+
+  --color-neutral-main: #636F7B;
+  --color-neutral-main--light: #fefefe;
+  --color-neutral-main--lighten: #f0f0f0;
+  --color-neutral-main--dark: #a3a3a3;
+  --color-neutral-main--darken: #f0f0f0;
+
+  --color-neutral-contrast: #f0f0f0;
+  --color-neutral-main--light: #fefefe;
+  --color-neutral-main--lighten: #f0f0f0;
+  --color-neutral-main--dark: #a3a3a3;
+  --color-neutral-main--darken: #f0f0f0;
+}
+@mixin projectThemeOfPanto {
+  --color-primary: #ffb700;
+
+  --color-neutral-main: #BF7F38;
+  --color-neutral-main--light: #fefefe;
+  --color-neutral-main--lighten: #f0f0f0;
+  --color-neutral-main--dark: #a3a3a3;
+  --color-neutral-main--darken: #f0f0f0;
+
+  --color-neutral-contrast: #f0f0f0;
+  --color-neutral-main--light: #fefefe;
+  --color-neutral-main--lighten: #f0f0f0;
+  --color-neutral-main--dark: #a3a3a3;
+  --color-neutral-main--darken: #f0f0f0;
+}
+@mixin projectThemeOfTennis {
+  --color-primary: #ff4900;
+
+  --color-neutral-main: #988D7B;
+  --color-neutral-main--light: #fefefe;
+  --color-neutral-main--lighten: #f0f0f0;
+  --color-neutral-main--dark: #a3a3a3;
+  --color-neutral-main--darken: #f0f0f0;
+
+  --color-neutral-contrast: #f0f0f0;
+  --color-neutral-main--light: #fefefe;
+  --color-neutral-main--lighten: #f0f0f0;
+  --color-neutral-main--dark: #a3a3a3;
+  --color-neutral-main--darken: #f0f0f0;
+}
+@mixin projectThemeOfKolyanKovsh {
+  --color-primary: #ff4900;
+
+  --color-neutral-main: #555A46;
+  --color-neutral-main--light: #fefefe;
+  --color-neutral-main--lighten: #f0f0f0;
+  --color-neutral-main--dark: #a3a3a3;
+  --color-neutral-main--darken: #f0f0f0;
+
+  --color-neutral-contrast: #f0f0f0;
+  --color-neutral-main--light: #fefefe;
+  --color-neutral-main--lighten: #f0f0f0;
+  --color-neutral-main--dark: #a3a3a3;
+  --color-neutral-main--darken: #f0f0f0;
+}

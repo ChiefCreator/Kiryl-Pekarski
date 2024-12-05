@@ -34,7 +34,7 @@ export default function buildLoaders(options) {
     },
   };
   const imgLoader = {
-    test: /\.(jpg|png)$/,
+    test: /\.(jpg|png|webp)$/,
     type: 'asset/resource',
     generator: {
       filename: 'img/[name][hash][ext][query]',

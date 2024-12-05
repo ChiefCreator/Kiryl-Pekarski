@@ -17,3 +17,36 @@ export function getScrollPercentage() {
 
   return scrollPercentage;
 }
+
+export function splitTextOnLines($text) {
+  let $bufferText = document.createElement("p");
+  $bufferText = $text.cloneNode(true);
+  $bufferText.style.width = $text.offsetWidth + "px";
+  $bufferText.style.position = "absolute";
+  $bufferText.style.left = "0px";
+  $bufferText.innerHTML = "_";
+  document.body.appendChild($bufferText);
+
+  const content = $text.textContent.split("");
+  const oneLineHeight = $bufferText.scrollHeight;
+  const lines = [];
+  let i = 0;
+
+  while (i < content.length) {
+    let line = ($bufferText.innerHTML = "");
+    while (i < content.length && $bufferText.scrollHeight <= oneLineHeight) {
+      $bufferText.innerHTML = line += content[i++];
+    }
+    let lineEndIndex = i === content.length ? i : line.lastIndexOf(" ") + 1;
+    lines.push(content.splice(0, lineEndIndex).join(""));
+    i = 0;
+  }
+  $bufferText.remove();
+  $text.innerHTML = lines.map((line) => {
+    return (
+      `<span class="text-line">
+        <span class="text-line__container">${line}</span>
+      </span>`
+    )
+  }).join("");
+}

@@ -2,6 +2,7 @@ import { createDOM } from "../../utils/domUtils";
 
 import SectionMain from "./SectionMain";
 import SectionAbout from "./SectionAbout";
+import SectionProjects from "./SectionProjects";
 
 import "./homePage.scss";
 
@@ -25,9 +26,11 @@ export default class HomePage {
     const pageContainer = page.firstElementChild;
     const sectionMain = new SectionMain();
     const sectionAbout = new SectionAbout();
+    const sectionProjects = new SectionProjects();
 
     pageContainer.append(sectionMain.render());
     pageContainer.append(sectionAbout.render());
+    pageContainer.append(sectionProjects.render());
 
     return page;
   }

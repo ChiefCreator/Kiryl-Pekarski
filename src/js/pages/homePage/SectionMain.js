@@ -15,15 +15,15 @@ export default class SectionMain {
         <article class="introductory-information">
           <div class="introductory-information__main-content">
             <h1 class="introductory-title introductory-information__title">
-              <span class="introductory-title__name">Кирилл</span>
-              <span class="introductory-title__surname">Пекарский</span>
+              <span class="introductory-title__name" data-text-animated-on-scroll data-text-animated-on-scroll-target="section-main">Кирилл</span>
+              <span class="introductory-title__surname" data-text-animated-on-scroll data-text-animated-on-scroll-target="section-main">Пекарский</span>
             </h1>
           </div>
         </article>
       </div>
     `;
 
-    const section = createDOM("section", { className: "section-main" });
+    const section = createDOM("section", { className: "section-main", id: "section-main" });
     const container = new Container(innerHTML);
 
     section.append(container.render());

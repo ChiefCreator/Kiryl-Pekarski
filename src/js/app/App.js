@@ -9,6 +9,7 @@ import ErrorPage from "./../pages/errorPage/ErrorPage.js";
 import Header from "./../components/header/Header.js";
 import Content from "./../components/content/Content.js";
 import LiquidBackground from "../components/liquidBackground/LiquidBackground.js";
+import ProjectImages from "../components/projectImages/ProjectImages.js";
 
 export default class App {
   constructor({ root }) {

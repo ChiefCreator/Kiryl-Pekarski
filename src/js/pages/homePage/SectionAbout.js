@@ -15,7 +15,7 @@ export default class SectionAbout {
           <div class="sculpture-block__wrapper"></div>
         </article>
         <article class="full-information">
-          <p class="full-information__text">
+          <p class="full-information__text" data-text-animated-on-scroll data-text-animated-on-scroll-target="section-about">
             Привет! Меня зовут Кирилл, мне восемнадцать лет. Я frontend-разработчик, создаю сайты, приложения и онлайн-сервисы для больших и малых компаний.
             Я использую свою страсть и навыки, чтобы создавать качественные цифровые продукты.
             Я ответственно подхожу к выполнению поставленных задач, хорошо организованный человек, позитивный с хорошим чувстов юмора. Фанат футбола, активного отдыха и, конечно же, программирования.
@@ -25,7 +25,7 @@ export default class SectionAbout {
       </div>
     `;
 
-    const section = createDOM("section", { className: "section-about" });
+    const section = createDOM("section", { className: "section-about", id: "section-about" });
     const container = new Container(innerHTML);
 
     section.append(container.render());

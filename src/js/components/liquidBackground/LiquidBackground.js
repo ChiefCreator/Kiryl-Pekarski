@@ -45,6 +45,8 @@ export default class LiquidBackground {
       rotationSpeed: 0.003,
     }
 
+    this.isTr = true;
+
     this.init();
   }
 
@@ -78,7 +80,6 @@ export default class LiquidBackground {
 
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, this.viewportSettings.aspectRatio, 0.1, 1000);
-    // this.camera = new THREE.OrthographicCamera( -this.viewportSettings.frustumSize * this.viewportSettings.aspectRatio, this.viewportSettings.frustumSize * this.viewportSettings.aspectRatio, this.viewportSettings.frustumSize, -this.viewportSettings.frustumSize, 0.1, 1000);
     this.camera.position.z = 4.5;
 
     this.renderTarget = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {
@@ -104,8 +105,9 @@ export default class LiquidBackground {
           }
         });
         this.mesh.scale.set(1, 1, 1);
-        this.mesh.position.set(0, 0, 0);
+        this.animateTransformationFromliquid();
         this.scene.add(this.mesh);
+        this.mesh.position.set(this.meshPosition.x, this.meshPosition.y, 0)
       },
       undefined,
       (error) => console.error("Ошибка загрузки:", error)
@@ -147,33 +149,10 @@ export default class LiquidBackground {
     this.initPostprocessing();
 
     this.animate();
-    this.updateSculpturePosition();
-    this.animateTransformationFromliquid();
 
     window.addEventListener("resize", this.onWindowResize.bind(this));
     window.addEventListener("scroll", this.updateSculpturePosition.bind(this));
   }
-  // createMaterial() {
-  //   return new THREE.ShaderMaterial({
-  //     vertexShader,
-  //     fragmentShader,
-  //     side: THREE.DoubleSide,
-  //     uniforms: {
-  //       texturePattern: { value: this.texture },
-  //       noise: { val0e: this.noiseTexture },
-  //       uDisplacement: { value: this.rippleTexture },
-  //       meEase: { value: 0.075 },
-  //       time: { value: Math.ceil(50 * Math.random()) },
-  //       ease: { value: 0 },
-  //       alpha: { value: 1.0 },
-  //       distA: { value: 0.64 },
-  //       distB: { value: 2.5 },
-  //       mfBlack: { value: 0.0 },
-  //     },
-  //     transparent: true,
-  //     side: THREE.DoubleSide,
-  //   });
-  // }
 
   updateSculpturePosition() {
     this.sculptureWrapper = document.querySelector(".sculpture-block__wrapper") ?? null;
@@ -191,13 +170,11 @@ export default class LiquidBackground {
   
     const vector = new THREE.Vector3(normalizedX + .5, normalizedY - .5, 0.0);
     vector.unproject(this.camera);
-  
-    if (!this.mesh) return; 
 
     const direction = vector.sub(this.camera.position).normalize();
     const distance = (0 - this.camera.position.z) / direction.z;
     const position = this.camera.position.clone().add(direction.multiplyScalar(distance));
-    const yInaccuracy = 0.8;
+    const yInaccuracy = 0.3;
 
     this.meshPosition = new THREE.Vector3(position.x,position.y + yInaccuracy, 0.0);
 
@@ -271,7 +248,7 @@ export default class LiquidBackground {
   }
   animateTransformationFromliquid() {
     ScrollTrigger.create({
-      trigger: this.liquidBackground,
+      trigger: document.querySelector(".section-main"),
       start: "top 75%",
       end: "bottom 25%",
       onEnter: () => {
