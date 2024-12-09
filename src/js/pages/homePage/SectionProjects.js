@@ -1,6 +1,7 @@
 import Container from "../../components/container/Container";
 import { createDOM } from "../../utils/domUtils";
 
+import HeaderSection from "../../components/headerContainer/HeaderSection";
 import ArticleProject from "./ArticleProject";
 import ProjectImages from "../../components/projectImages/ProjectImages";
 import DOMElementWatcher from "../../components/domElementWatcher/DOMElementWatcher";
@@ -146,6 +147,14 @@ export default class SectionProjects {
     section.append(container.render());
 
     const projectsContainer = section.querySelector(".section-projects__container");
+    const sectionHeader = new HeaderSection({ 
+      data: {
+        title: "Избранные проекты",
+        sectionId: "section-projects",
+      },
+    })
+
+    projectsContainer.append(sectionHeader.render());
     this.articlesData.forEach((data, i) => {
       const articleProject = new ArticleProject(data);
       const articleProjectElement = articleProject.render();

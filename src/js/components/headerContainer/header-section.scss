@@ -1,0 +1,27 @@
+.header-section {
+  width: 100%;
+  &__container {
+    width: 100%;
+  }
+  &__title {
+    font-size: 40px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  &__border {
+    width: 100%;
+    margin-top: 20px;
+    background-color: var(--color-neutral-main--light);
+    height: 1px;
+    overflow: hidden;
+    position: relative;
+  }
+  &__border-sub {
+    background-color: var(--color-neutral-contrast);
+    width: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+  }
+}
