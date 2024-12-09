@@ -1,5 +1,3 @@
-import gsap from "gsap";
-
 export default class ProjectImagesController {
   constructor(model, view) {
     this.model = model;
@@ -10,8 +8,13 @@ export default class ProjectImagesController {
 
   init() {
     this.model.init();
+
     this.addListeners();
   }
+  onWindowResize() {
+    this.view.renderer.setSize(window.innerWidth, window.innerHeight);
+  }
   addListeners() {
+    window.addEventListener("resize", this.onWindowResize.bind(this));
   }
 }

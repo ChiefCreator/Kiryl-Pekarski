@@ -3,6 +3,7 @@ import { createDOM } from "../../utils/domUtils";
 
 import ArticleProject from "./ArticleProject";
 import ProjectImages from "../../components/projectImages/ProjectImages";
+import DOMElementWatcher from "../../components/domElementWatcher/DOMElementWatcher";
 
 import "./sectionProjects.scss";
 import project_1 from "./../../../img/project_1-1.jpg";
@@ -80,7 +81,7 @@ export default class SectionProjects {
   }
 
   getArticleImgData() {
-    return this.articlesData.map(data => {
+    return this.articlesData.map((data) => {
       const img = document.querySelector(`#${data.id}`).querySelector(".article-project__img");
       const rect = img.getBoundingClientRect();
       return {
@@ -88,8 +89,8 @@ export default class SectionProjects {
         url: data.imgSrc,
         width: rect.width,
         height: rect.height,
-      }
-    })
+      };
+    });
   }
 
   addListeners() {
@@ -101,9 +102,9 @@ export default class SectionProjects {
 
     if (isAddThemeColor) {
       clearTimeout(this.timeoutRemoveClass);
-      document.querySelectorAll('[data-color-transition]').forEach(elem => elem.classList.add("colorfull-theme-transition"));
+      document.querySelectorAll("[data-color-transition]").forEach((elem) => elem.classList.add("colorfull-theme-transition"));
     } else {
-      this.timeoutRemoveClass = setTimeout(() => document.querySelectorAll('[data-color-transition]').forEach(elem => elem.classList.remove("colorfull-theme-transition")), 1000);
+      this.timeoutRemoveClass = setTimeout(() => document.querySelectorAll("[data-color-transition]").forEach((elem) => elem.classList.remove("colorfull-theme-transition")), 1000);
     }
   }
   mouseoverHandler(event) {
@@ -112,7 +113,7 @@ export default class SectionProjects {
     if (event.target.closest(".article-project__img")) {
       this.currentElem = event.target.closest(".article-project__img");
       const articleId = this.currentElem.closest(".article-project").getAttribute("id");
-      const currentData = this.articlesData.find(data => data.id === articleId);
+      const currentData = this.articlesData.find((data) => data.id === articleId);
       const colorTheme = currentData.colorTheme;
 
       this.currentTheme = document.body.getAttribute("data-theme");
@@ -137,22 +138,30 @@ export default class SectionProjects {
   }
 
   create() {
-    const innerHTML = `<div class="section-projects__container"></div>`;
+    const innerHTML = `<div class="section-projects__container id="section-projects__container"></div>`;
 
-    const section = createDOM("section", { className: "section-projects" });
+    const section = createDOM("section", { className: "section-projects", id: "section-projects" });
     const container = new Container(innerHTML);
 
     section.append(container.render());
 
     const projectsContainer = section.querySelector(".section-projects__container");
-    this.articlesData.forEach(data => {
+    this.articlesData.forEach((data, i) => {
       const articleProject = new ArticleProject(data);
-      projectsContainer.append(articleProject.render());
+      const articleProjectElement = articleProject.render();
+      projectsContainer.append(articleProjectElement);
+
+      if (i === this.articlesData.length - 1) {
+        const watcher = new DOMElementWatcher({
+          elements: articleProjectElement.querySelector(".article-project__img"),
+          callback: () => {
+            const projectImages = new ProjectImages({ data: this.getArticleImgData() });
+            projectsContainer.append(projectImages.render());
+          }
+        });
+        watcher.startWatching();
+      }
     });
-    setTimeout(() => {
-      const projectImages = new ProjectImages({ data: this.getArticleImgData() });
-      projectsContainer.append(projectImages.render());
-    }, 100)
 
     return section;
   }

@@ -23,6 +23,18 @@ export default class ProjectImagesView {
     this.projectImages = null;
 
     this.planeImages = [];
+    this.planeRects = [];
+  }
+
+  getPlaneRects(data) {
+    return data.map((dataObj) => {
+      return {
+        img: dataObj.img,
+        ...this.getPlanePosition(dataObj),
+        prevPosX: null,
+        prebPosY: null,
+      };
+    });
   }
 
   initLoaders() {
@@ -35,7 +47,7 @@ export default class ProjectImagesView {
   initPlaneImages() {
     this.data.forEach((data, i) => {
       const planeWidth = (data.width / this.viewportSettings.width) * this.viewportSettings.aspectRatio * 2;
-      const planeHeight = (data.height / this.viewportSettings.height) * 2; 
+      const planeHeight = (data.height / this.viewportSettings.height) * 2;
 
       const planeGeometry = new THREE.PlaneGeometry(planeWidth, planeHeight);
       const texture = this.textureLoader.load(data.url);
@@ -49,25 +61,24 @@ export default class ProjectImagesView {
       this.scene.add(plane);
 
       const timelineOnScroll = gsap.timeline({ paused: true });
-      timelineOnScroll
-        .fromTo(
-          data.img,
-          {
-            transform: `translate(0, 100%)`,
-          },
-          {
-            transform: `translate(0, 0)`,
-            duration: 2,
-            ease: "power4.inOut",
-          }
-        )
+      timelineOnScroll.fromTo(
+        data.img,
+        {
+          transform: `translate(0, 100%)`,
+        },
+        {
+          transform: `translate(0, 0)`,
+          duration: 2,
+          ease: "power4.inOut",
+        }
+      );
 
       animateElementOnScroll(data.img, {
         events: {
           onEnter: () => {
-            timelineOnScroll.restart()
-          }
-        }
+            timelineOnScroll.restart();
+          },
+        },
       });
     });
   }
@@ -107,12 +118,11 @@ export default class ProjectImagesView {
     this.composer.addPass(new RenderPass(this.scene, this.camera));
     this.composer.addPass(this.effect);
   }
-  initTimelines() {
-    
-  }
+  initTimelines() {}
   init(data) {
     this.data = data;
     this.projectImages = this.create();
+    this.planeRects = this.getPlaneRects(data);
 
     this.initLoaders();
     this.initTextures();
@@ -121,9 +131,6 @@ export default class ProjectImagesView {
     this.initPostprocessing();
 
     this.animate();
-    this.updatePosition();
-
-    window.addEventListener("resize", this.onWindowResize.bind(this));
   }
 
   animate = () => {
@@ -134,26 +141,34 @@ export default class ProjectImagesView {
 
     this.effect.uniforms.uWavesTexture.value = this.rippleTexture;
 
-    if (this.composer) this.composer.render();
+    this.updatePlanesPosition();
 
-    this.updatePosition();
+    if (this.composer) this.composer.render();
 
     requestAnimationFrame(this.animate);
   };
-  updatePosition() {
-    this.data.forEach((dataObj, i) => {
+  getPlanePosition(dataObj) {
+    const rect = dataObj.img.getBoundingClientRect();
 
-    const elementCenterX = dataObj.img.getBoundingClientRect().left + dataObj.img.offsetWidth / 2;
-    const elementCenterY = dataObj.img.getBoundingClientRect().top + dataObj.img.offsetHeight / 2;
+    const elementCenterX = rect.left + rect.width / 2;
+    const elementCenterY = rect.top + rect.height / 2;
 
     const posX = (elementCenterX / this.viewportSettings.width) * 2 * this.viewportSettings.frustumSize * this.viewportSettings.aspectRatio - this.viewportSettings.frustumSize * this.viewportSettings.aspectRatio;
     const posY = this.viewportSettings.frustumSize - (elementCenterY / this.viewportSettings.height) * 2 * this.viewportSettings.frustumSize;
-    
-    this.planeImages[i].position.set(posX, posY, 0);
-    });
+
+    return { posX, posY };
   }
-  onWindowResize() {
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+  updatePlanesPosition() {
+    this.planeRects.forEach((planeRect, i) => {
+      const { posX, posY } = this.getPlanePosition(planeRect);
+
+      if (!planeRect.prevPosX || planeRect.prevPosX !== posX || planeRect.prevPosY !== posY) {
+        this.planeImages[i].position.set(posX, posY, 0);
+
+        planeRect.prevPosX = posX;
+        planeRect.prevPosY = posY;
+      }
+    });
   }
 
   create() {

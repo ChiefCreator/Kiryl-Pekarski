@@ -1,4 +1,5 @@
 import { animateTextOnScroll } from "../utils/animateOnScrollUtils.js";
+import DOMElementWatcher from "../components/domElementWatcher/DOMElementWatcher.js";
 
 export default class AppView {
   constructor(root, routes) {
@@ -14,9 +15,15 @@ export default class AppView {
     this.content.append(page.render());
 
     const textAnimatedOnScrollList = document.querySelectorAll('[data-text-animated-on-scroll]');
-    textAnimatedOnScrollList.forEach(text => {
-      setTimeout(() => animateTextOnScroll(text), 100)
+    const watcher = new DOMElementWatcher({
+      elements: textAnimatedOnScrollList,
+      callback: () => {
+        textAnimatedOnScrollList.forEach(text => {
+          animateTextOnScroll(text);
+        });
+      }
     });
+    watcher.startWatching();
 
     this.updateMenu(pageId);
   }
