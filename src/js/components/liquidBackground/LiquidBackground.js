@@ -20,6 +20,7 @@ import RippleTextureRenderer from "./RippleTextureRenderer";
 
 import envMap from "./../../../img/envMap.jpg";
 import normalMap from "./../../../img/normal-map.jpg";
+import mainTexture from "./../../../img/main-texture.png";
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -56,17 +57,17 @@ export default class LiquidBackground {
     this.gltfLoader = new GLTFLoader();
   }
   initTextures() {
-    this.mainTexture = this.textureLoader.load(envMap);
-    this.cubeTexture = this.cubeTextureLoader.load([envMap, envMap, envMap, envMap, envMap, envMap]);
+    this.mainTexture = this.textureLoader.load(mainTexture);
+    this.cubeTexture = this.cubeTextureLoader.load([mainTexture, mainTexture, mainTexture, mainTexture, mainTexture, mainTexture]);
 
     this.noiseTextureRenderer = new NoiseTextureRenderer();
     this.noiseTexture = this.noiseTextureRenderer.getTexture();
 
-    // const ranges = [[ 0.0, 0.05 ], [ 0.05, 0.1 ], [ 0.1, 0.2 ], [ 0.2, 0.25 ], [ 0.25, 0.4 ], [ 0.4, 1.0 ]];
-    // const colors = ["#99ff00", "#ff0090", "#00ffee", "pink", "#ffff00", "#ff4900"];
+    const ranges = [[ 0.0, 0.05 ], [ 0.05, 0.1 ], [ 0.1, 0.2 ], [ 0.2, 0.25 ], [ 0.25, 0.4 ], [ 0.4, 1.0 ]];
+    const colors = ["#ff4900", "#ff4900", "#00ffee", "pink", "#ffff00", "#ff4900"];
 
-    // this.colorTextureRenderer= new ColorTextureRenderer({ colors, ranges: new Float32Array(ranges.flat()) });
-    // this.colorTexture = this.colorTextureRenderer.getTexture();
+    this.colorTextureRenderer= new ColorTextureRenderer({ colors, ranges: new Float32Array(ranges.flat()) });
+    this.colorTexture = this.colorTextureRenderer.getTexture();
 
     this.rippleTextureRenderer = new RippleTextureRenderer();
     this.rippleTexture = this.rippleTextureRenderer.getTexture();
@@ -89,7 +90,7 @@ export default class LiquidBackground {
       stencilBuffer: false,
     });
 
-    const light = new THREE.DirectionalLight(0xffffff, 5);
+    const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(0, 1, 4).normalize();
     this.scene.add(light);
 
@@ -100,7 +101,9 @@ export default class LiquidBackground {
         this.mesh.traverse((child) => {
           if (child.isMesh) {
             child.material = new THREE.MeshStandardMaterial({
-              map: this.mainTexture,
+              roughness: 0.25,
+              metalness: 1,
+              envMap: this.cubeTexture,
             });
           }
         });
@@ -233,6 +236,7 @@ export default class LiquidBackground {
     requestAnimationFrame(this.animate);
     this.animateSculptureRotation(-0.25, 0.75);
 
+    this.colorTextureRenderer.render(this.renderer);
     this.rippleTextureRenderer.render(this.renderer);
     this.renderer.setRenderTarget(this.renderTarget);
     this.renderer.render(this.scene, this.camera);
@@ -240,6 +244,13 @@ export default class LiquidBackground {
 
     this.effect.uniforms.uWavesTexture.value = this.rippleTexture;
     this.effect.uniforms.time.value += 0.01;
+    if (this.mesh) {
+       this.mesh.traverse((child) => {
+      if (child.isMesh) {
+        child.material.map = this.colorTexture;
+      }
+    });
+    }
 
     if (this.composer) this.composer.render();
   };

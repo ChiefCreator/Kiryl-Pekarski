@@ -14,6 +14,9 @@
 }
 .full-information {
   flex: 1 1 60%;
+  &__text-wrapper {
+    position: relative;
+  }
   &__text {
     width: 100%;
     text-transform: uppercase;
@@ -21,5 +24,16 @@
     font-weight: 500;
     letter-spacing: 1px;
     line-height: 110%;
+    &_behind {
+      z-index: 1;
+    }
+    &_front {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 3;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--color-neutral-contrast);
+    }
   }
 }

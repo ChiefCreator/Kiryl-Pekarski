@@ -1,9 +1,7 @@
-import { element } from "three/webgpu";
-
-
 export default class DOMElementWatcher {
-  constructor({ elements, callback }) {
+  constructor({ elements, selector, callback }) {
     this.elements = elements;
+    this.selector = selector;
     this.renderedElements = new Set();
     this.callback = callback;
     this.observer = null;
@@ -11,6 +9,9 @@ export default class DOMElementWatcher {
 
   checkIsSingleElement() {
     return this.elements instanceof HTMLElement;
+  }
+  checkIsSingleSelector() {
+    return typeof this.selector === "string";
   }
   isRendered(element) {
     if (!element) return false;
@@ -21,6 +22,8 @@ export default class DOMElementWatcher {
   startWatching() {
     if (this.checkIsSingleElement()) {
       this.watchDocumentForSingleElement();
+    } else if (this.checkIsSingleSelector(this.selector)) {
+      this.watchDocumentForSingleSelector();
     } else {
       this.watchDocumentForArrElements();
     }
@@ -41,7 +44,7 @@ export default class DOMElementWatcher {
   }
   watchDocumentForArrElements() {
     this.observer = new MutationObserver((mutation) => {
-      this.elements.forEach(element => {
+      this.elements.forEach((element) => {
         if (!this.renderedElements.has(element)) {
           this.renderedElements.add(element);
         }
@@ -49,6 +52,16 @@ export default class DOMElementWatcher {
 
       if (this.renderedElements.size === this.elements.length) {
         this.callback(this.renderedElements);
+        this.stopWatching();
+      }
+    });
+  }
+  watchDocumentForSingleSelector() {
+    this.observer = new MutationObserver((mutation) => {
+      const element = document.querySelector(this.selector);
+      if (element && this.isRendered(element)) {
+        this.observer.disconnect();
+        this.callback();
         this.stopWatching();
       }
     });

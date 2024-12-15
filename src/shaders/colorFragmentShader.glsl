@@ -53,9 +53,9 @@ void main() {
     // }
 
     vec3 color = interpolateColors(normalizedNoise); // Интерполяция цветов
-            gl_FragColor = vec4(color, 1.0);
+    gl_FragColor = vec4(color, 1.0);
 
-    // gl_FragColor = vec4(color, 1.0);
+    // gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
     // gl_FragColor = vec4(vec3(normalizedNoise), 1.0);
 }
 

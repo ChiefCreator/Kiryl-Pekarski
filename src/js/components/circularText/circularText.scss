@@ -1,3 +1,20 @@
 .circular-text {
-    transform-origin: center;
+  transform-origin: center;
+  &__svg-wrapper {
+    &_behind {
+      position: relative;
+      z-index: 1;
+    }
+    &_front {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 3;
+      text {
+        fill: none !important;
+        stroke: var(--color-neutral-contrast);
+        stroke-width: .005;
+      }
+    }
+  }
 }

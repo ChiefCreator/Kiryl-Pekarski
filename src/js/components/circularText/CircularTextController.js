@@ -15,7 +15,9 @@ export default class CircularTextController {
       if (angle > 360) angle = 0;
       angle += 0.5;
 
-      this.view.svg.style.transform = `rotate(${angle}deg)`;
+      this.view.svgs.forEach(svg => {
+        svg.style.transform = `rotate(${angle}deg)`;
+      })
 
       requestAnimationFrame(animateRotation.bind(this));
     };
@@ -31,7 +33,9 @@ export default class CircularTextController {
       y: 2 * (1 - mouse.y / window.innerHeight - 0.5),
     };
 
-    this.view.circularText.style.transform = `translate(${normalizedMouse.x * 10}px, ${-normalizedMouse.y * 10}px)`;
+    this.view.svgWrappers.forEach(svgWrapper => {
+      svgWrapper.style.transform = `translate(${normalizedMouse.x * 10}px, ${-normalizedMouse.y * 10}px)`;
+    });
   }
   addListeners() {
     window.addEventListener("mousemove", this.mousemoveHandler.bind(this));

@@ -15,14 +15,13 @@
   height: 100%;
   display: flex;
   position: relative;
-  &__main-content {
-  }
-  &__title {
+  &__title-wrapper {
+    position: relative;
   }
   &__circular-text {
     position: absolute;
-    right: 7%;
-    top: 7%;
+    right: 10%;
+    top: 10%;
     text {
       fill: var(--color-neutral-contrast);
       text-transform: uppercase;
@@ -51,6 +50,17 @@
     padding-bottom: 22px;
     font-weight: 500;
     font-family: var(--font-primary);
+  }
+  &_behind {
+    z-index: 1;
+  }
+  &_front {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    color: transparent;
+    -webkit-text-stroke: 3px var(--color-neutral-contrast);
   }
 }
 .sculpture-wrapper {
