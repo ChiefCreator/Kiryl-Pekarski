@@ -46,14 +46,18 @@ export default class LinkReappearView {
       <div class="link-reappear__wrapper"></div>
     `;
 
+    let attributes = [
+      { title: "href", value: data.href },
+      { title: "data-title", value: data.title },
+      { title: "data-color-transition", value: true },
+    ];
+
+    attributes = data.attributes ? attributes.concat(data.attributes) : attributes;
+
     return createDOM("a", {
       className: `link-reappear ${this.hasUnderline ? "link-reappear_underline" : ""}`,
       innerHTML,
-      attributes: [
-        { title: "href", value: data.href },
-        { title: "data-title", value: data.title },
-        { title: "data-color-transition", value: true },
-      ],
+      attributes,
     });
   }
   render() {

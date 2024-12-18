@@ -10,6 +10,16 @@
   font-style: normal;
   font-weight: 400;
 }
+@font-face {
+  font-family: 'Maelstrom Sans';
+  src:
+    url('~@fonts/Maelstrom/MaelstromSans-Bold.woff2') format('woff2'),
+    url('~@fonts/Maelstrom/MaelstromSans-Bold.woff') format('woff'),
+    url('~@fonts/Maelstrom/MaelstromSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --color-primary: #ff4900;
@@ -19,7 +29,7 @@
 
   --color-neutral-main: #0f0f0f;
   --color-neutral-main--light: #1d1c1c;
-  --color-neutral-main--lighten: #1d1c1c;
+  --color-neutral-main--lighten: #2d2b2b;
   --color-neutral-main--dark: #333333;
   --color-neutral-main--darken: #292929;
 
@@ -31,6 +41,7 @@
 
   --font-primary: "Cinematografica";
   --font-secondary: "BebasNeuePro";
+  --font-nums: "Maelstrom Sans";
 
   --transition-power--in-out: linear( 0, 0.0036 9.62%, 0.0185 16.66%, 0.0489 23.03%, 0.0962 28.86%, 0.1705 34.93%, 0.269 40.66%, 0.3867 45.89%, 0.5833 52.95%, 0.683 57.05%, 0.7829 62.14%, 0.8621 67.46%, 0.8991 70.68%, 0.9299 74.03%, 0.9545 77.52%, 0.9735 81.21%, 0.9865 85%, 0.9949 89.15%, 1 );
   --transition-elastic--in-out: linear( 0, 0.0009 8.51%, -0.0047 19.22%, 0.0016 22.39%, 0.023 27.81%, 0.0237 30.08%, 0.0144 31.81%, -0.0051 33.48%, -0.1116 39.25%, -0.1181 40.59%, -0.1058 41.79%, -0.0455, 0.0701 45.34%, 0.9702 55.19%, 1.0696 56.97%, 1.0987 57.88%, 1.1146 58.82%, 1.1181 59.83%, 1.1092 60.95%, 1.0057 66.48%, 0.986 68.14%, 0.9765 69.84%, 0.9769 72.16%, 0.9984 77.61%, 1.0047 80.79%, 0.9991 91.48%, 1 );

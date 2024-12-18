@@ -6,10 +6,10 @@ import AppController from "./AppController.js";
 import HomePage from "./../pages/homePage/HomePage.js";
 import ErrorPage from "./../pages/errorPage/ErrorPage.js";
 // компоненты
+import ProjectsMenu from "../components/projectsMenu/ProjectsMenu.js";
 import Header from "./../components/header/Header.js";
 import Content from "./../components/content/Content.js";
 import LiquidBackground from "../components/liquidBackground/LiquidBackground.js";
-import ProjectImages from "../components/projectImages/ProjectImages.js";
 
 export default class App {
   constructor({ root }) {
@@ -21,13 +21,14 @@ export default class App {
   }
 
   renderComponents() {
-    this.root.append(this.components.liquidBackground.render(), this.components.header.render(), this.components.content.render());
+    this.root.append( this.components.liquidBackground.render(), this.components.header.render(), this.components.content.render(), this.components.projectsMenu.render());
   }
   init() {
     this.components = {
+      projectsMenu: new ProjectsMenu(),
       liquidBackground: new LiquidBackground(),
       header: new Header({
-        linksData: [{ title: "Обо мне" }, { title: "Портфолио" }, { title: "Навыки" }, { title: "Связаться" }],
+        linksData: [ { title: "Проекты", attributes: [{ title: "data-projects-menu-open", value: true }] }, { title: "Обо мне" }, { title: "Портфолио" }, { title: "Навыки" }, { title: "Связаться" }],
       }),
       content: new Content(),
     };

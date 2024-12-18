@@ -127,7 +127,7 @@ export default class LiquidBackground {
         scale: { value: 1 },
 
         texturePattern: { value: this.texture },
-        noise: { val0e: this.noiseTexture },
+        noise: { value: this.noiseTexture },
         uDisplacement: { value: this.rippleTexture },
         meEase: { value: 0.075 },
         time: { value: Math.ceil(50 * Math.random()) },
@@ -236,7 +236,6 @@ export default class LiquidBackground {
     requestAnimationFrame(this.animate);
     this.animateSculptureRotation(-0.25, 0.75);
 
-    this.colorTextureRenderer.render(this.renderer);
     this.rippleTextureRenderer.render(this.renderer);
     this.renderer.setRenderTarget(this.renderTarget);
     this.renderer.render(this.scene, this.camera);
@@ -244,13 +243,6 @@ export default class LiquidBackground {
 
     this.effect.uniforms.uWavesTexture.value = this.rippleTexture;
     this.effect.uniforms.time.value += 0.01;
-    if (this.mesh) {
-       this.mesh.traverse((child) => {
-      if (child.isMesh) {
-        child.material.map = this.colorTexture;
-      }
-    });
-    }
 
     if (this.composer) this.composer.render();
   };

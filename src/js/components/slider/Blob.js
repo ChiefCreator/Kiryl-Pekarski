@@ -25,9 +25,9 @@ export default class Blob {
     return new THREE.IcosahedronGeometry(this.data.geometry.radius, this.data.geometry.detail);
   }
   getMaterial() {
-    const material = new THREE.MeshPhysicalMaterial({
+    const material = new THREE.MeshStandardMaterial({
       metalness: 1,
-      roughness: .5,
+      roughness: .25,
       envMap: this.cubeTextureLoader.load([mainTexture, mainTexture, mainTexture, mainTexture, mainTexture, mainTexture]),
       onBeforeCompile: (shader) => {
         material.userData.shader = shader
