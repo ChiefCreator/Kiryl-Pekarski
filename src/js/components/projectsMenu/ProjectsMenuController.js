@@ -133,10 +133,11 @@ export default class ProjectsMenuController {
     this.currentProject = null;
   }
   clickTriggerElement(event) {
-    event.preventDefault();
     if (event.target.closest(`[${this.dataProjectsMenuOpen}]`)) {
+      event.preventDefault();
       this.open();
     } else if (event.target.closest(`[${this.dataProjectsMenuClose}]`)) {
+      event.preventDefault();
       this.close();
     }
   }

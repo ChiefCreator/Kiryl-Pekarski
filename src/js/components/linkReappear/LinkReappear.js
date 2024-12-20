@@ -4,8 +4,8 @@ import LinkReappearController from "./LinkReappearController";
 import "./linkReappear.scss";
 
 export default class LinkReappear {
-  constructor({ hasUnderline, data }) {
-    this.view = new LinkReappearView(hasUnderline);
+  constructor({ className, hasUnderline, data }) {
+    this.view = new LinkReappearView(className, hasUnderline);
     this.model = new LinkReappearModel(this.view, data);
     this.controller = new LinkReappearController(this.model, this.view);
   }

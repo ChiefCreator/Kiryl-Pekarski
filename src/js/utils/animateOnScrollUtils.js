@@ -5,14 +5,14 @@ gsap.registerPlugin(ScrollTrigger);
 import { splitTextOnLines } from "./domUtils";
 
 export function animateElementOnScroll($element, options) {
-  const { events } = options;
+  const { events, start } = options;
 
   setTimeout(() => {
     const $trigger = document.getElementById($element.dataset.elementAnimatedOnScrollTarget);
 
     ScrollTrigger.create({
       trigger: $trigger,
-      start: "top 80%",
+      start: start ?? "top 80%",
       end: "+500",
       once: true,
       ...events

@@ -1,7 +1,8 @@
 import { createDOM } from "../../utils/domUtils";
 
 export default class LinkReappearView {
-  constructor(hasUnderline) {
+  constructor(className, hasUnderline) {
+    this.className = className;
     this.hasUnderline = hasUnderline ?? false;
 
     this.link = null;
@@ -55,7 +56,7 @@ export default class LinkReappearView {
     attributes = data.attributes ? attributes.concat(data.attributes) : attributes;
 
     return createDOM("a", {
-      className: `link-reappear ${this.hasUnderline ? "link-reappear_underline" : ""}`,
+      className: `link-reappear ${this.hasUnderline ? "link-reappear_underline" : ""} ${this.className ?? ""}`,
       innerHTML,
       attributes,
     });

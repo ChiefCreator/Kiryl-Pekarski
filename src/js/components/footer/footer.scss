@@ -1,0 +1,40 @@
+.footer {
+  width: 100%;
+  &__container {
+    position: relative;
+    padding: 15px 0;
+  }
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  &__social-links-list {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  &__link {
+    font-size: 18px;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+  }
+  &__border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-neutral-main--light);
+    height: 1px;
+    overflow: hidden;
+  }
+  &__border-sub {
+    background-color: var(--color-neutral-contrast);
+    width: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+  }
+}

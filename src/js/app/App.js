@@ -10,6 +10,7 @@ import ProjectsMenu from "../components/projectsMenu/ProjectsMenu.js";
 import Header from "./../components/header/Header.js";
 import Content from "./../components/content/Content.js";
 import LiquidBackground from "../components/liquidBackground/LiquidBackground.js";
+import Footer from "../components/footer/Footer.js";
 
 export default class App {
   constructor({ root }) {
@@ -21,7 +22,7 @@ export default class App {
   }
 
   renderComponents() {
-    this.root.append( this.components.liquidBackground.render(), this.components.header.render(), this.components.content.render(), this.components.projectsMenu.render());
+    this.root.append( this.components.liquidBackground.render(), this.components.header.render(), this.components.content.render(), this.components.projectsMenu.render(), this.components.footer.render());
   }
   init() {
     this.components = {
@@ -30,6 +31,7 @@ export default class App {
       header: new Header({
         linksData: [ { title: "Проекты", attributes: [{ title: "data-projects-menu-open", value: true }] }, { title: "Обо мне" }, { title: "Портфолио" }, { title: "Навыки" }, { title: "Связаться" }],
       }),
+      footer: new Footer(),
       content: new Content(),
     };
     this.routes = {
