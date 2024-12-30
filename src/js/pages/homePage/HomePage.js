@@ -1,5 +1,6 @@
 import { createDOM } from "../../utils/domUtils";
 
+import LiquidBackground from "../../components/liquidBackground/LiquidBackground";
 import SectionMain from "./SectionMain";
 import SectionAbout from "./SectionAbout";
 import SectionProjects from "./SectionProjects";
@@ -12,8 +13,6 @@ export default class HomePage {
     this.id = "main";
     this.title = "Kiryl Pekarski";
     this.page = this.create();
-
-    this.init();
   }
 
   create() {
@@ -25,20 +24,19 @@ export default class HomePage {
     
     const page = createDOM("main", { className: "app-main", innerHTML: innerHTML });
     const pageContainer = page.firstElementChild;
+    const liquidBackground = new LiquidBackground();
     const sectionMain = new SectionMain();
     const sectionAbout = new SectionAbout();
     const sectionProjects = new SectionProjects();
     const sectionService = new SectionService();
 
+    page.append(liquidBackground.render())
     pageContainer.append(sectionMain.render());
     pageContainer.append(sectionAbout.render());
     pageContainer.append(sectionProjects.render());
     pageContainer.append(sectionService.render());
 
     return page;
-  }
-  init() {
-    document.title = this.title;
   }
   render() {
     return this.page;

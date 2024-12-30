@@ -5,6 +5,7 @@ import HeaderSection from "../../components/headerContainer/HeaderSection";
 import ArticleProject from "./ArticleProject";
 import ProjectImages from "../../components/projectImages/ProjectImages";
 import DOMElementWatcher from "../../components/domElementWatcher/DOMElementWatcher";
+import ImageGalery3D from "../../components/ImageGalery3D/ImageGalery3D";
 
 import "./sectionProjects.scss";
 import project_1 from "./../../../img/project_1-1.jpg";
@@ -13,6 +14,8 @@ import project_3 from "./../../../img/project_3-1.jpg";
 import project_4 from "./../../../img/project_4-1.jpg";
 import project_5 from "./../../../img/project_5-1.png";
 import project_6 from "./../../../img/project_6-1.jpg";
+
+import projectsData from "../../data/projectsData";
 
 export default class SectionProjects {
   constructor() {
@@ -153,6 +156,7 @@ export default class SectionProjects {
         sectionId: "section-projects",
       },
     })
+    // const imageGalery3D = new ImageGalery3D({ projectsData: projectsData });
 
     projectsContainer.append(sectionHeader.render());
     this.articlesData.forEach((data, i) => {
@@ -171,6 +175,7 @@ export default class SectionProjects {
         watcher.startWatching();
       }
     });
+    // projectsContainer.append(imageGalery3D.render())
 
     return section;
   }

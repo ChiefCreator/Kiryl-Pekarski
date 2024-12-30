@@ -14,18 +14,23 @@ export default class AppView {
 
     this.content.append(page.render());
 
-    const textAnimatedOnScrollList = document.querySelectorAll('[data-text-animated-on-scroll]');
-    const watcher = new DOMElementWatcher({
-      elements: textAnimatedOnScrollList,
-      callback: () => {
-        textAnimatedOnScrollList.forEach(text => {
-          animateTextOnScroll(text);
-        });
-      }
-    });
-    watcher.startWatching();
+    document.title = page.title;
 
-    this.updateMenu(pageId);
+    const textAnimatedOnScrollList = document.querySelectorAll('[data-text-animated-on-scroll]');
+
+    if (textAnimatedOnScrollList.length) {
+      const watcher = new DOMElementWatcher({
+        elements: textAnimatedOnScrollList,
+        callback: () => {
+          textAnimatedOnScrollList.forEach(text => {
+            animateTextOnScroll(text);
+          });
+        }
+      });
+      watcher.startWatching();
+    }
+
+    // this.updateMenu(pageId);
   }
 
   updateMenu(activePage) {

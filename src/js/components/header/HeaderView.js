@@ -28,7 +28,7 @@ export default class HeaderView {
 
     const container = new Container(innerHTML);
     const header = createDOM("header", { className: "header", innerHTML: container.render().outerHTML });
-    const logo = new Logo({ className: "header__logo" });
+    const logo = new Logo({ className: "header__logo", href: "#main" });
     const scrollProgress = new ScrollProgress({ type: "header" });
     const themeToggle = new ThemeToggle();
 

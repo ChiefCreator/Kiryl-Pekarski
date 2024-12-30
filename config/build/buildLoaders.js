@@ -52,7 +52,12 @@ export default function buildLoaders(options) {
     loader: 'webpack-glsl-loader',
     exclude: /node_modules/,
   };
+  const jsonLoader = {
+    test: /\.json$/,
+    loader: 'json-loader',
+    type: 'javascript/auto'
+  };
 
 
-  return [scssLoader, expansionLoader, fontsLoader, imgLoader, model3DLoader, shaderLoader];
+  return [scssLoader, expansionLoader, fontsLoader, imgLoader, model3DLoader, shaderLoader, jsonLoader];
 }

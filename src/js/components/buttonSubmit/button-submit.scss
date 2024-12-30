@@ -1,0 +1,109 @@
+.button-submit {
+  //   border: .5px solid var(--color-neutral-contrast);
+  background-color: var(--color-primary);
+  border-radius: 5px;
+  cursor: pointer;
+  &__container {
+    padding: 9px 22px;
+    position: relative;
+  }
+  &__title {
+    font-family: var(--font-primary);
+    color: var(--color-neutral-contrast);
+    font-size: 26px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    &_invisible {
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+    }
+    &_visible {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+    }
+  }
+  &__dots-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    z-index: 2;
+  }
+  &__dot {
+    display: block;
+    flex: 0 0 4px;
+    aspect-ratio: 1;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 0;
+    transform: translate(0, -50%);
+  }
+  &__loader-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  &__loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  &__loader-circle {
+    position: absolute;
+    left: -6px;
+    top: -6px;
+    display: block;
+    width: 12px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+  }
+  &__icon-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+  }
+  &__icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  &__check {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-miterlimit: 10;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+  }
+  &__cross {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 4.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-miterlimit: 10;
+    transform-origin: 50% 50%;
+    stroke-dasharray: 29;
+    stroke-dashoffset: 29;
+  }
+}

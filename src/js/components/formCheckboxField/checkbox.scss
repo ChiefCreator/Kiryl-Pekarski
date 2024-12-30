@@ -1,0 +1,31 @@
+.checkbox {
+  display: block;
+  padding: 9px 18px;
+  border: .5px solid #494949;
+  border-radius: 5px;
+  position: relative;
+  cursor: pointer;
+  transition: border .5s var(--transition-power--in-out), background-color .5s var(--transition-power--in-out);
+  &__title {
+    font-size: 20px;
+    font-family: var(--font-secondary);
+    color: #494949;
+    transition: color .5s var(--transition-power--in-out);
+  }
+  &__input {
+    opacity: 0;
+    position: absolute;
+  }
+  &_active {
+    background-color: #494949;
+    .checkbox__title {
+      color: #b2b2b2;
+    }
+  }
+  &:hover {
+    border: .5px solid var(--color-neutral-contrast);
+    .checkbox__title {
+        color: var(--color-neutral-contrast);
+    }
+  }
+}
