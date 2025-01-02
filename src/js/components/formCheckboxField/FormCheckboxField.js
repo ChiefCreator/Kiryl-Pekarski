@@ -4,10 +4,21 @@ import FormCheckboxFieldView from "./FormCheckboxFieldView";
 import "./form-checkbox-field.scss";
 
 export default class FormCheckboxField {
-  constructor({ data }) {
+  constructor({ data, index }) {
     this.view = new FormCheckboxFieldView();
-    this.model = new FormCheckboxFieldModel(this.view, data);
+    this.model = new FormCheckboxFieldModel(this.view, data, index);
     this.controller = new FormCheckboxFieldController(this.model, this.view);
+  }
+
+  isClickedOnCheckbox(event) {
+    return this.controller.isClickedOnCheckbox(event);
+  }
+  clickCheckboxHandler(event) {
+    this.controller.clickCheckboxHandler(event);
+  }
+
+  getData() {
+    return this.model.getData();
   }
 
   render() {

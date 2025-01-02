@@ -4,6 +4,14 @@ export default class FormTextareaFieldModel {
       this.data = data;
       
       this.value = "";
+      this.error = false;
+  }
+
+  checkIfErrorExist() {
+    return this.error;
+  }
+  setError(isError) {
+    this.error = isError;
   }
 
   checkIfValueEmpty() {
@@ -16,8 +24,8 @@ export default class FormTextareaFieldModel {
     this.value = value;
   }
   
-    init() {
-      this.view.init(this.data);
-    }
+  init() {
+    this.view.init(this.data);
+  }
   }
   

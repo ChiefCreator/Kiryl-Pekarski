@@ -8,16 +8,7 @@ export default class ButtonSubmitController {
     this.init();
   }
 
-  clickHandler() {
-    this.model.startAnimation();
-  }
-
-  addListeners() {
-    this.view.button.addEventListener("click", this.clickHandler.bind(this));
-  }
   init() {
     this.model.init();
-  
-    this.addListeners();
   }
 }

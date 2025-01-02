@@ -1,8 +1,8 @@
 .button-submit {
-  //   border: .5px solid var(--color-neutral-contrast);
   background-color: var(--color-primary);
   border-radius: 5px;
   cursor: pointer;
+  transition: transform .2s var(--transition-power--in-out), background-color .5s var(--transition-power--in-out);
   &__container {
     padding: 9px 22px;
     position: relative;
@@ -105,5 +105,11 @@
     transform-origin: 50% 50%;
     stroke-dasharray: 29;
     stroke-dashoffset: 29;
+  }
+  &:active {
+    transform: scale(1.02);
+  }
+  &:hover {
+    background-color: var(--color-primary--dark);
   }
 }

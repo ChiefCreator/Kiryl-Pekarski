@@ -4,8 +4,16 @@ export default class FormInputFieldModel {
     this.data = data;
 
     this.value = "";
+    this.error = false;
   }
 
+  checkIfErrorExist() {
+    return this.error;
+  }
+  setError(isError) {
+    this.error = isError;
+  }
+ 
   checkIfValueEmpty() {
     return !this.value;
   }

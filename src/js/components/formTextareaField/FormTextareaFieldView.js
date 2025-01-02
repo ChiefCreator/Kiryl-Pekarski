@@ -9,10 +9,14 @@ export default class FormTextareaFieldView {
     this.lineSub = null;
 
     this.timelineOnMouseover = gsap.timeline({ paused: true });
+    this.timelineOnMouseout = gsap.timeline({ paused: true });
     this.timelineOnFocusin = gsap.timeline({ paused: true });
     this.timelineOnFocusout = gsap.timeline({ paused: true });
     this.timelineOnFocusoutWithoutAnimatedText = gsap.timeline({ paused: true });
-    this.timelineOfAnimatedText = gsap.timeline({ paused: true });
+    this.timelineOfShowText = gsap.timeline({ paused: true });
+    this.timelineOfHideText = gsap.timeline({ paused: true });
+    this.timelineOfValidationError = gsap.timeline({ paused: true });
+    this.timelineOfValidationSuccess = gsap.timeline({ paused: true });
   }
 
   animateLetters(animatedProps) {
@@ -52,8 +56,13 @@ export default class FormTextareaFieldView {
 
   // инициализация
   initTimeline() {
-    this.timelineOfAnimatedText.add(this.animateLetters({
+    this.timelineOfShowText.add(this.animateLetters({
       transform: `translate(0, 0)`,
+      duration: 0.5,
+      ease: "power2.inOut",
+    }), 0);
+    this.timelineOfHideText.add(this.animateLetters({
+      transform: `translate(0, -100%)`,
       duration: 0.5,
       ease: "power2.inOut",
     }), 0);
@@ -64,6 +73,11 @@ export default class FormTextareaFieldView {
         ease: "power4.inOut",
         duration: .5,
       })
+      .to(this.lineSub, {
+        backgroundColor: "#f0f0f0",
+        ease: "power4.inOut",
+        duration: 0.5,
+      }, "<")
       .to(this.textarea, {
         color: "#f0f0f0",
         ease: "power4.inOut",
@@ -75,18 +89,45 @@ export default class FormTextareaFieldView {
         duration: .5,
       }, "<")
 
-    this.timelineOnFocusin
-    .add(this.animateLetters(
-      {
-        transform: `translate(0, -100%)`,
+    this.timelineOnMouseout
+      .to(this.lineSub, {
+        width: "0%",
+        ease: "power4.inOut",
         duration: 0.5,
-        ease: "power2.inOut",
-      }
-    ), 0)
+      })
+      .to(this.lineSub, {
+          backgroundColor: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
+      .to(this.textarea, {
+          color: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+      }, "<")
+      .to(this.placeholder, {
+          color: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+      }, "<");
+
+    this.timelineOnFocusin
+      .add(this.animateLetters(
+        {
+          transform: `translate(0, -100%)`,
+          duration: 0.5,
+          ease: "power2.inOut",
+        }
+      ), 0)
       .to(this.lineSub, {
         width: "100%",
         ease: "power4.inOut",
         duration: .5,
+      }, "<")
+      .to(this.lineSub, {
+        backgroundColor: "#f0f0f0",
+        ease: "power4.inOut",
+        duration: 0.5,
       }, "<")
       .to(this.textarea, {
         color: "#f0f0f0",
@@ -110,6 +151,11 @@ export default class FormTextareaFieldView {
         ease: "power4.inOut",
         duration: .5,
       }, "<")
+      .to(this.lineSub, {
+        backgroundColor: "#494949",
+        ease: "power4.inOut",
+        duration: 0.5,
+      }, "<")
       .to(this.textarea, {
         color: "#494949",
         ease: "power4.inOut",
@@ -122,13 +168,60 @@ export default class FormTextareaFieldView {
       }, "<")
 
     this.timelineOnFocusoutWithoutAnimatedText
-      .to(
-        this.lineSub, {
-          width: "0",
+      .to(this.lineSub, {
+        width: "0",
+        ease: "power4.inOut",
+        duration: 0.5,
+      }, "<")
+      .to(this.lineSub, {
+        backgroundColor: "#494949",
+        ease: "power4.inOut",
+        duration: 0.5,
+      }, "<")
+      .to(this.textarea, {
+          color: "#494949",
           ease: "power4.inOut",
           duration: 0.5,
         }, "<")
-      .to(this.textarea, {
+      .to(this.placeholder, {
+          color: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<");
+
+
+        this.timelineOfValidationError
+      .to(
+        this.lineSub, {
+          width: "100%",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
+      .to(
+        this.lineSub, {
+          backgroundColor: "red",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
+      .to(this.input, {
+          color: "red",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
+      .to(this.placeholder, {
+          color: "red",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<");
+
+    this.timelineOfValidationSuccess
+      .to(
+        this.lineSub, {
+          backgroundColor: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
+      .to(this.input, {
           color: "#494949",
           ease: "power4.inOut",
           duration: 0.5,
@@ -155,7 +248,7 @@ export default class FormTextareaFieldView {
       <label for="${data.inputId}" class="form-textarea-field__label">${data.label}</label>
       <div class="form-textarea-field__textarea-wrapper">
         <span class="form-textarea-field__placeholder" data-title="${data.placeholder}"></span>
-        <textarea class="form-textarea-field__textarea" name="${data.name}" type="text" id="${data.inputId}" required="" data-input></textarea>
+        <textarea class="form-textarea-field__textarea" name="${data.name}" type="text" id="${data.inputId}" data-input></textarea>
       </div>
       <div class="form-textarea-field__line">
         <span class="form-textarea-field__line-sub"></span>

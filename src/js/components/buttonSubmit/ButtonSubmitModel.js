@@ -6,6 +6,9 @@ export default class ButtonSubmitModel {
     startAnimation() {
       this.view.startAnimation();
     }
+    endAnimation(result) {
+      this.view.animateResult(result);
+    }
   
     init() {
       this.view.init();

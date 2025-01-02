@@ -11,10 +11,15 @@ export default class FormInputFieldView {
     this.placeholderLetters = [];
 
     this.timelineOnMouseover = gsap.timeline({ paused: true });
+    this.timelineOnMouseoverOnError = gsap.timeline({ paused: true });
+    this.timelineOnMouseout = gsap.timeline({ paused: true });
     this.timelineOnFocusin = gsap.timeline({ paused: true });
     this.timelineOnFocusout = gsap.timeline({ paused: true });
     this.timelineOnFocusoutWithoutAnimatedText = gsap.timeline({ paused: true });
-    this.timelineOfAnimatedText = gsap.timeline({ paused: true });
+    this.timelineOfShowText = gsap.timeline({ paused: true });
+    this.timelineOfHideText = gsap.timeline({ paused: true });
+    this.timelineOfValidationError = gsap.timeline({ paused: true });
+    this.timelineOfValidationSuccess = gsap.timeline({ paused: true });
   }
 
   animateLetters(animatedProps) {
@@ -54,8 +59,13 @@ export default class FormInputFieldView {
 
   // инициализация
   initTimeline() {
-    this.timelineOfAnimatedText.add(this.animateLetters({
+    this.timelineOfShowText.add(this.animateLetters({
       transform: `translate(0, 0)`,
+      duration: 0.5,
+      ease: "power2.inOut",
+    }), 0);
+    this.timelineOfHideText.add(this.animateLetters({
+      transform: `translate(0, -100%)`,
       duration: 0.5,
       ease: "power2.inOut",
     }), 0);
@@ -66,6 +76,12 @@ export default class FormInputFieldView {
         ease: "power4.inOut",
         duration: 0.5,
       })
+      .to(
+        this.lineSub, {
+          backgroundColor: "#f0f0f0",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
       .to(this.input, {
           color: "#f0f0f0",
           ease: "power4.inOut",
@@ -73,6 +89,28 @@ export default class FormInputFieldView {
       }, "<")
       .to(this.placeholder, {
           color: "#f0f0f0",
+          ease: "power4.inOut",
+          duration: 0.5,
+      }, "<");
+
+    this.timelineOnMouseout
+      .to(this.lineSub, {
+        width: "0%",
+        ease: "power4.inOut",
+        duration: 0.5,
+      })
+      .to(this.lineSub, {
+          backgroundColor: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
+      .to(this.input, {
+          color: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+      }, "<")
+      .to(this.placeholder, {
+          color: "#494949",
           ease: "power4.inOut",
           duration: 0.5,
       }, "<");
@@ -88,6 +126,12 @@ export default class FormInputFieldView {
       .to(
         this.lineSub, {
           width: "100%",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
+      .to(
+        this.lineSub, {
+          backgroundColor: "#f0f0f0",
           ease: "power4.inOut",
           duration: 0.5,
         }, "<")
@@ -114,6 +158,12 @@ export default class FormInputFieldView {
           ease: "power4.inOut",
           duration: 0.5,
         }, "<")
+      .to(
+        this.lineSub, {
+          backgroundColor: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
       .to(this.input, {
           color: "#494949",
           ease: "power4.inOut",
@@ -126,22 +176,70 @@ export default class FormInputFieldView {
         }, "<");
 
     this.timelineOnFocusoutWithoutAnimatedText
-    .to(
-      this.lineSub, {
-        width: "0",
-        ease: "power4.inOut",
-        duration: 0.5,
-      }, "<")
-    .to(this.input, {
-        color: "#494949",
-        ease: "power4.inOut",
-        duration: 0.5,
-      }, "<")
-    .to(this.placeholder, {
-        color: "#494949",
-        ease: "power4.inOut",
-        duration: 0.5,
-      }, "<");
+      .to(
+        this.lineSub, {
+          width: "0",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
+      .to(
+        this.lineSub, {
+          backgroundColor: "red",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
+      .to(this.input, {
+          color: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
+      .to(this.placeholder, {
+          color: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<");
+
+    this.timelineOfValidationError
+      .to(
+        this.lineSub, {
+          width: "100%",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
+      .to(
+        this.lineSub, {
+          backgroundColor: "red",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
+      .to(this.input, {
+          color: "red",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
+      .to(this.placeholder, {
+          color: "red",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<");
+
+    this.timelineOfValidationSuccess
+      .to(
+        this.lineSub, {
+          backgroundColor: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
+      .to(this.input, {
+          color: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<")
+      .to(this.placeholder, {
+          color: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        }, "<");
   }
   init(data) {
     this.formInputField = this.create(data);
@@ -159,7 +257,7 @@ export default class FormInputFieldView {
       <label for="${options.inputId}" class="form-input-field__label">${options.label}</label>
       <div class="form-input-field__input-wrapper">
         <span class="form-input-field__placeholder" data-title="${options.placeholder}"></span>
-        <input class="form-input-field__input" name="${options.name}" type="text" id="${options.inputId}" required="" data-input>
+        <input class="form-input-field__input" name="${options.name}" type="text" id="${options.inputId}" data-input>
       </div>
       <div class="form-input-field__line">
         <span class="form-input-field__line-sub"></span>

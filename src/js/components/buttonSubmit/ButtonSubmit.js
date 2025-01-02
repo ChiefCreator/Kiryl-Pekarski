@@ -10,6 +10,13 @@ export default class ButtonSubmit {
     this.controller = new ButtonSubmitController(this.model, this.view);
   }
 
+  startAnimation() {
+    this.model.startAnimation();
+  }
+  endAnimation(result) {
+    this.model.endAnimation(result);
+  }
+
   render() {
     return this.view.render();
   }

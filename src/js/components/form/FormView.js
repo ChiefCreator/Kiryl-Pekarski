@@ -9,9 +9,18 @@ export default class FormView {
   constructor() {
     this.form = null;
 
+    this.buttonSubmitObject = null;
     this.formInputFieldObjects = [];
     this.formTextareaFieldObject = null;
     this.formInputAndTextareaFieldObjects = [];
+    this.checboxFieldObjects = [];
+  }
+
+  startButtonSubmitAnimation() {
+    return this.buttonSubmitObject.startAnimation();
+  }
+  endButtonSubmitAnimation(result) {
+    return this.buttonSubmitObject.endAnimation(result);
   }
 
   getData() {
@@ -40,14 +49,14 @@ export default class FormView {
 
     this.formInputFieldObjects = fieldsData.map((data) => new FormInputField({ data }));
     this.formTextareaFieldObject = new FormTextareaField({ data: textareaFieldData });
-    this.checboxFields = checboxFieldsData.map(data => new FormCheckboxField({ data: data }));
+    this.checboxFieldObjects = checboxFieldsData.map((data, index) => new FormCheckboxField({ data: data, index }));
     this.buttonSubmitObject = new ButtonSubmit();
 
     this.formInputFieldObjects.forEach(inputFieldObject => {
       fieldsList.append(inputFieldObject.render());
     });
     textareaFieldWrapper.append(this.formTextareaFieldObject.render());
-    this.checboxFields.forEach(field => {
+    this.checboxFieldObjects.forEach(field => {
       checkboxFieldsList.append(field.render());
     });  
     buttonWrapper.append(this.buttonSubmitObject.render());

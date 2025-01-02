@@ -4,7 +4,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "webpack serve --env mode=development",
+    "startServer": "node server/server.js",
+    "startApp": "webpack serve --env mode=development",
+    "start": "concurrently \"npm run startServer\" \"npm run startApp\"",
     "build:dev": "webpack --env mode=development",
     "build:prod": "webpack --env mode=production"
   },
@@ -19,6 +21,7 @@
     "@types/react-dom": "^18.3.1",
     "@types/three": "^0.170.0",
     "babel-loader": "^9.2.1",
+    "concurrently": "^9.1.1",
     "css-loader": "^7.1.2",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.6.3",
@@ -36,7 +39,10 @@
     "webpack-glsl-loader": "^1.0.1"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
     "gsap": "^3.12.5",
+    "nodemailer": "^6.9.16",
     "postprocessing": "^6.36.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

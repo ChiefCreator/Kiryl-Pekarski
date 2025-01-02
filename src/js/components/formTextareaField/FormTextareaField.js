@@ -10,6 +10,13 @@ export default class FormTextareaField {
     this.controller = new FormTextareaFieldController(this.model, this.view);
   }
 
+  checkIfErrorExist() {
+    return this.model.checkIfErrorExist();
+  }
+  setError(isError) {
+    this.model.setError(isError);
+  }
+
   // Методы с значением input
   checkIfInputEmpty() {
     return this.model.checkIfValueEmpty();
@@ -20,22 +27,31 @@ export default class FormTextareaField {
 
   // методы для анимации
   animateOnMouseover() {
-    return this.view.timelineOnMouseover.restart();
+    return this.view.timelineOnMouseover.invalidate().restart();
   }
   animateOnMouseout() {
-    return this.view.timelineOnMouseover.reverse();
+    return this.view.timelineOnMouseout.invalidate().restart();
   }
   animateOnFocusin() {
-    return this.view.timelineOnFocusin.restart();
+    return this.view.timelineOnFocusin.invalidate().restart();
   }
   animateOnFocusout() {
-    return this.view.timelineOnFocusout.restart();
+    return this.view.timelineOnFocusout.invalidate().restart();
   }
   animateOnFocusoutWithoutAnimatedText() {
-    return this.view.timelineOnFocusoutWithoutAnimatedText.restart();
+    return this.view.timelineOnFocusoutWithoutAnimatedText.invalidate().restart();
   }
-  animateOnFocusoutText() {
-    return this.view.timelineOfAnimatedText.restart();
+  showText() {
+    return this.view.timelineOfShowText.invalidate().restart();
+  }
+  hideText() {
+    return this.view.timelineOfHideText.invalidate().restart();
+  }
+  animateOnValidationError() {
+    return this.view.timelineOfValidationError.invalidate().restart();
+  }
+  animateOnValidationSuccess() {
+    return this.view.timelineOfValidationSuccess.invalidate().restart();
   }
 
   render() {

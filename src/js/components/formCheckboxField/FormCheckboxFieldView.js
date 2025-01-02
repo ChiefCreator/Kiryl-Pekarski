@@ -18,28 +18,17 @@ export default class FormCheckboxFieldView {
 
     const checkbox = this.checkboxObjects[checkboxIndex];
     checkbox.toggleStatus();
-
-    // if (checkbox.checkIsActive()) {
-    //   this.activeCheckboxes.push(checkbox);
-    // } else {
-    //   console.log(this.activeCheckboxes.find(item => item === checkbox))
-    //   const removedIndex = this.activeCheckboxes.find(item => item === checkbox).getIndex();
-    //   this.activeCheckboxes.splice(removedIndex, 1);
-    // }
-    // this.sortActiveCheckboxesByIndex();
-
-    // console.log(this.activeCheckboxes);
   }
   sortActiveCheckboxesByIndex() {
     return this.checkboxObjects.sort((a, b) => a.getIndex() - b.getIndex());
   }
 
   // инициализация
-  init(data) {
-    this.checkboxField = this.create(data);
+  init(data, index) {
+    this.checkboxField = this.create(data, index);
     this.lineSub = this.checkboxField.querySelector(".form-textarea-field__line-sub");
   }
-  create(data) {
+  create(data, index) {
     const innerHTML = `
       <label class="form-checkbox-field__label">${data.label}</label>
       <ul class="form-checkbox-field__list"></ul>
@@ -48,10 +37,10 @@ export default class FormCheckboxFieldView {
       </div>
     `;
 
-    const checkboxField = createDOM("fieldset", { className: "form-checkbox-field", innerHTML, id: data.id });
+    const checkboxField = createDOM("fieldset", { className: "form-checkbox-field", innerHTML, id: data.id, attributes: [{ title: "data-checkbox-field", value: true }, { title: "data-index", value: index }] });
     const list = checkboxField.querySelector(".form-checkbox-field__list");
 
-    data.checboxes.forEach((data, i) => {
+    data.checkboxes.forEach((data, i) => {
       const checkboxWrapper = createDOM("li", { className: "form-checkbox-field__li" });
       const checkbox = new Checkbox({ data: data, index: i });
 

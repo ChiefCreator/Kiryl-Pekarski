@@ -3,6 +3,7 @@ export default class FormController {
     this.model = model;
     this.view = view;
 
+    this.checkboxFieldSelector = "[data-checkbox-field]";
     this.inputFieldSelector = "[data-input-field]";
     this.inputSelector = "[data-input]";
 
@@ -19,10 +20,16 @@ export default class FormController {
   }
 
   submitHandler(event) {
-    console.log("submit")
     event.preventDefault();
-    console.log("dwd")
-    this.model.setData(this.view.getData());
+
+    const inputsData = this.view.getData();
+    const checkboxesData = this.view.checboxFieldObjects.reduce((acc, checboxFieldObject) => {
+      acc.push(checboxFieldObject.getData());
+      return acc;
+    }, []);
+
+    this.model.setData(inputsData, checkboxesData);
+    this.model.send();
   }
 
   mouseoverHandler(event) {
@@ -33,7 +40,7 @@ export default class FormController {
       const formFieldId = this.currentHoveredField.id;
       this.currentHoveredFieldObject = this.view.formInputAndTextareaFieldObjects.find(field => field.model.data.id === formFieldId);
     
-      this.currentHoveredFieldObject.animateOnMouseover();
+      if (!this.currentHoveredFieldObject.checkIfErrorExist()) this.currentHoveredFieldObject.animateOnMouseover();
 
       this.isMouseoverTrue = true;
     }
@@ -50,8 +57,10 @@ export default class FormController {
       relatedTarget = relatedTarget.parentElement;
     }
 
-    if (!this.isFocinTrue) this.currentHoveredFieldObject.animateOnMouseout();
-    else if (this.currentHoveredField !== this.currentFocusedField) this.currentHoveredFieldObject.animateOnMouseout();;
+    if (!this.currentHoveredFieldObject.checkIfErrorExist()) {
+      if (!this.isFocinTrue) this.currentHoveredFieldObject.animateOnMouseout();
+      else if (this.currentHoveredField !== this.currentFocusedField) this.currentHoveredFieldObject.animateOnMouseout();
+    }
 
     this.isMouseoverTrue = false;
     this.currentHoveredField = null;
@@ -64,9 +73,8 @@ export default class FormController {
       const formFieldId = this.currentFocusedField.id;
       this.currentFocusedFieldObject = this.view.formInputAndTextareaFieldObjects.find(field => field.model.data.id === formFieldId);
 
-      if (this.currentFocusedFieldObject.checkIfInputEmpty()) {
-        this.currentFocusedFieldObject.animateOnFocusin();
-      }
+      if (!this.currentFocusedFieldObject.checkIfErrorExist() && this.currentFocusedFieldObject.checkIfInputEmpty()) this.currentFocusedFieldObject.animateOnFocusin();
+      else if (this.currentFocusedFieldObject.checkIfErrorExist()) this.currentFocusedFieldObject.hideText();
 
       this.isFocinTrue = true;
     }
@@ -80,13 +88,17 @@ export default class FormController {
   focusoutHandler(event) {
     if (event.target.closest(this.inputSelector)) {
       if (this.isFocinTrue) {
-        if (this.currentFocusedFieldObject.checkIfInputEmpty()) this.currentFocusedFieldObject.animateOnFocusout();
-        else this.currentFocusedFieldObject.animateOnFocusoutWithoutAnimatedText();
+        if (!this.currentFocusedFieldObject.checkIfErrorExist() && !this.currentFocusedFieldObject.checkIfInputEmpty()) this.currentFocusedFieldObject.animateOnFocusoutWithoutAnimatedText();
+        if (!this.currentFocusedFieldObject.checkIfErrorExist() && this.currentFocusedFieldObject.checkIfInputEmpty()) this.currentFocusedFieldObject.animateOnFocusout();
+        else if (this.currentFocusedFieldObject.checkIfErrorExist() && this.currentFocusedFieldObject.checkIfInputEmpty()) {
+          this.currentFocusedFieldObject.showText();
+        }
+        else if (!this.currentFocusedFieldObject.checkIfInputEmpty()) this.currentFocusedFieldObject.hideText();
   
         this.isFocinTrue = false;
       } else {
-        if (this.currentFocusedFieldObject.checkIfInputEmpty()) this.currentFocusedFieldObject.animateOnFocusoutText();
-        else this.currentFocusedFieldObject.animateOnFocusoutWithoutAnimatedText();
+        if (this.currentFocusedFieldObject.checkIfInputEmpty()) this.currentFocusedFieldObject.showText();
+        else if (this.currentFocusedFieldObject.checkIfErrorExist() && !this.currentFocusedFieldObject.checkIfInputEmpty()) this.currentFocusedFieldObject.hideText();
       }
 
       this.currentFocusedField = null;
@@ -97,8 +109,24 @@ export default class FormController {
     if (event.target.closest(this.inputSelector)) {
       const input = event.target.closest(this.inputSelector);
       const value = input.value;
+      const name = input.name;
 
       this.currentFocusedFieldObject.updateValue(value);
+      this.model.updateDataOnInput(name, value)
+    }
+  }
+  clickCheckboxFieldHandler(event) {
+    if (event.target.closest(this.checkboxFieldSelector)) {
+      const checkboxField = event.target.closest(this.checkboxFieldSelector);
+      const checkboxFieldIndex = +checkboxField.dataset.index;
+      const checboxFieldObject = this.view.checboxFieldObjects[checkboxFieldIndex];
+
+      if (checboxFieldObject.isClickedOnCheckbox(event)) {
+        checboxFieldObject.clickCheckboxHandler(event);
+
+        const checkboxData = checboxFieldObject.getData();
+        this.model.updateDataCheckboxesOnClick(checkboxData, checkboxFieldIndex);
+      }
     }
   }
 
@@ -112,6 +140,7 @@ export default class FormController {
     this.view.form.addEventListener("focusout", this.focusoutHandler.bind(this));
 
     this.view.form.addEventListener("input", this.inputHandler.bind(this));
+    this.view.form.addEventListener("click", this.clickCheckboxFieldHandler.bind(this));
     this.view.form.addEventListener("submit", this.submitHandler.bind(this));
   }
   init() {

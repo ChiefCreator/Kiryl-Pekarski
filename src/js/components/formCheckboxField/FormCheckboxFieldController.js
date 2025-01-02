@@ -6,6 +6,9 @@ export default class FormCheckboxFieldController {
       this.init();
     }
 
+    isClickedOnCheckbox(event) {
+      return event.target.closest(".checkbox");
+    }
     clickCheckboxHandler(event) {
       if (event.target.closest(".checkbox")) {
         const checkbox = event.target.closest(".checkbox");
@@ -15,14 +18,8 @@ export default class FormCheckboxFieldController {
       }
     }
     
-    // инициализация
-    addListeners() {
-      this.view.checkboxField.addEventListener("click", this.clickCheckboxHandler.bind(this));
-    }
     init() {
       this.model.init();
-  
-      this.addListeners();
     }
   }
   

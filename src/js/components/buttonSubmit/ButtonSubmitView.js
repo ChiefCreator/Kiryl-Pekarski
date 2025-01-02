@@ -29,10 +29,6 @@ export default class ButtonSubmitView {
 
   startAnimation() {
     this.timelineOfLoadingAnimation.restart();
-
-    setTimeout(() => {
-      this.animateResult("error");
-    }, 3000)
   }
   animateResult(result) {
     if (result === "success") {

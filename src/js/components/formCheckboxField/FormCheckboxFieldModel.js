@@ -1,15 +1,33 @@
 export default class FormCheckboxFieldModel {
-    constructor(view, data) {
+    constructor(view, data, index) {
       this.view = view;
       this.data = data;
+      this.index = index;
+
+      this.selectedIndex = null;
     }
 
     updateCheckbox(index) {
-      this.view.updateCheckbox(index);
+      this.selectedIndex = index;
+      this.view.updateCheckbox(this.selectedIndex);
+    }
+    getData() {
+      let data = {
+        name: this.data.name,
+      }
+
+      if (this.selectedIndex !== null && this.selectedIndex !== undefined) {
+        data = Object.assign({
+          checkboxIndex: this.selectedIndex,
+          checkbox: this.data.checkboxes[this.selectedIndex]
+        }, data);
+      }
+
+      return data;
     }
   
     init() {
-      this.view.init(this.data);
+      this.view.init(this.data, this.index);
     }
   }
   

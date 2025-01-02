@@ -11,9 +11,10 @@ export default class ContactPage {
 
     this.formChecboxFieldsData = [
       {
+        name: "service",
         label: "Чем я могу помочь?",
         id: "checbox-field-service",
-        checboxes: [
+        checkboxes: [
           {
             title: "Лендинг",
           },
@@ -29,9 +30,10 @@ export default class ContactPage {
         ],
       },
       {
+        name: "budget",
         label: "Предполагаемый бюджет",
         id: "checbox-field-budget",
-        checboxes: [
+        checkboxes: [
           {
             title: "<200 BYN",
           },
@@ -47,9 +49,10 @@ export default class ContactPage {
         ],
       },
       {
+        name: "pageNumber",
         label: "Количество страниц",
         id: "checbox-field-page-number",
-        checboxes: [
+        checkboxes: [
           {
             title: "1-3",
           },
@@ -70,14 +73,14 @@ export default class ContactPage {
         id: "form-field-name",
         label: "Имя",
         placeholder: "Введите ваше имя",
-        name: "input-name",
+        name: "name",
         inputId: "input-name"
       },
       {
         id: "form-field-email",
         label: "Почта",
         placeholder: "Введите вашу почту",
-        name: "input-email",
+        name: "mail",
         inputId: "input-email"
       }, 
     ];
@@ -85,7 +88,7 @@ export default class ContactPage {
       id: "form-textarea-field-description",
       label: "Расскажите о своем проекте",
       placeholder: "Напишите сообщение",
-      name: "textarea-description",
+      name: "description",
       inputId: "textarea-description"
     };
 
