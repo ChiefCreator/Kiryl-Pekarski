@@ -51,6 +51,7 @@ export default class LinkReappearView {
       { title: "href", value: data.href },
       { title: "data-title", value: data.title },
       { title: "data-color-transition", value: true },
+      { title: "data-cursor", value: "cursorForceGravity" },
     ];
 
     attributes = data.attributes ? attributes.concat(data.attributes) : attributes;

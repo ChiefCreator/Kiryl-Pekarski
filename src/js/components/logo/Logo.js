@@ -9,7 +9,7 @@ export default class Logo {
   }
 
   create() {
-    return createDOM("a", { className: `logo ${this.className}`, textContent: "Kiryl Pekarski", attributes: [{ title: "href", value: this.href }] });
+    return createDOM("a", { className: `logo ${this.className}`, textContent: "Kiryl Pekarski", attributes: [{ title: "href", value: this.href }, { title: "data-cursor", value: "cursorForceGravity" },] });
   }
   render() {
     return this.logo;

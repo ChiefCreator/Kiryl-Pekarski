@@ -221,7 +221,7 @@ export default class ButtonSubmitView {
       </div>
     `;
 
-    return createDOM("button", { className: "button-submit", innerHTML, attributes: [{ title: "type", value: "submit" }] });
+    return createDOM("button", { className: "button-submit", innerHTML, attributes: [{ title: "type", value: "submit" }, { title: "data-cursor", value: "cursorForceGravity" }] });
   }
   render() {
     return this.button;

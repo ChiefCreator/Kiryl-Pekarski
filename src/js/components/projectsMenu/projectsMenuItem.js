@@ -33,7 +33,7 @@ export default class ProjectsMenuItem {
       </div>
     `;
 
-    return createDOM("a", { className: "projects-menu-item", innerHTML, attributes: [{ title: "data-image-url", value: data.imgUrl }] });
+    return createDOM("a", { className: "projects-menu-item", innerHTML, attributes: [{ title: "data-image-url", value: data.imgUrl }, { title: "data-cursor", value: "cursorScale" }] });
   }
   render() {
     return this.projectsMenuItem;

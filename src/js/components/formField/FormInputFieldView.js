@@ -255,7 +255,7 @@ export default class FormInputFieldView {
   create(options) {
     const innerHTML = `
       <label for="${options.inputId}" class="form-input-field__label">${options.label}</label>
-      <div class="form-input-field__input-wrapper">
+      <div class="form-input-field__input-wrapper" data-cursor="cursorScale">
         <span class="form-input-field__placeholder" data-title="${options.placeholder}"></span>
         <input class="form-input-field__input" name="${options.name}" type="text" id="${options.inputId}" data-input>
       </div>

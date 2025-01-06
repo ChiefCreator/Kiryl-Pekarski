@@ -91,7 +91,7 @@ export default class LinkMoreView {
             <path class="link-more__arrow" d="M42.9456 52.9577L44.9879 55L58.0272 41.9607L45.0665 29L43.0242 31.0423L52.6073 40.6254H27V43.4532H52.4502L42.9456 52.9577Z" data-svg-origin="27 29" transform="matrix(1,0,0,1,0,0)" data-color-transition></path>
           </svg>
         </div>
-        <div class="link-more__title-wrapper">
+        <div class="link-more__title-wrapper" data-cursor="cursorForceGravity">
           <div class="link-more__title"></div>
         </div>
       </div>
@@ -101,12 +101,8 @@ export default class LinkMoreView {
       { title: "href", value: data.href },
       { title: "data-title", value: data.title },
       { title: "data-color-transition", value: true },
-      { title: "data-element-animated-on-scroll", value: true }, { title: "data-element-animated-on-scroll-target", value: data.scrollTrigger }
+      { title: "data-element-animated-on-scroll", value: true }, { title: "data-element-animated-on-scroll-target", value: data.scrollTrigger },
     ];
-
-    // if (data.scrollTrigger) {
-    //   attributes.push({ title: "data-element-animated-on-scroll", value: true }, { title: "data-element-animated-on-scroll-target", value: scrollTarget });
-    // }
 
     return createDOM("a", {
       className: `link-more ${this.hasUnderline ? "link-more_underline" : ""} ${this.className}`,

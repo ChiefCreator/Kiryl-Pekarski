@@ -23,7 +23,7 @@ export default class ThemeToggleView {
       </svg>
     `;
 
-    return createDOM("button", { className: `theme-toggle ${theme === "dark" ? "theme-toggle_dark" : "theme-toggle_light"}`, innerHTML });
+    return createDOM("button", { className: `theme-toggle ${theme === "dark" ? "theme-toggle_dark" : "theme-toggle_light"}`, innerHTML, attributes: [{ title: "data-cursor", value: "cursorForceGravity" }] });
   }
   render() {
     return this.themeToggle;

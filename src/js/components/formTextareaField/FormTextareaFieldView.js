@@ -246,7 +246,7 @@ export default class FormTextareaFieldView {
   create(data) {
     const innerHTML = `
       <label for="${data.inputId}" class="form-textarea-field__label">${data.label}</label>
-      <div class="form-textarea-field__textarea-wrapper">
+      <div class="form-textarea-field__textarea-wrapper" data-cursor="cursorScale">
         <span class="form-textarea-field__placeholder" data-title="${data.placeholder}"></span>
         <textarea class="form-textarea-field__textarea" name="${data.name}" type="text" id="${data.inputId}" data-input></textarea>
       </div>

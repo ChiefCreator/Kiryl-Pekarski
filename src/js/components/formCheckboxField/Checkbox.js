@@ -39,7 +39,7 @@ export default class Checkbox {
       <input class="checkbox__input" type="checkbox">
     `;
 
-    return createDOM("div", { className: `checkbox`, innerHTML, attributes: [{ title: "data-index", value: this.index }] });
+    return createDOM("div", { className: `checkbox`, innerHTML, attributes: [{ title: "data-index", value: this.index }, { title: "data-cursor", value: "cursorForceGravity" }] });
   }
   render() {
     return this.checkbox;

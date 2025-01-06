@@ -154,10 +154,8 @@ export default class ProjectsMenuView {
     const closeButton = new CloseButton({
       className: "projects-menu__close-button",
       attributes: [
-        {
-          title: "data-projects-menu-close",
-          Value: true,
-        },
+        { title: "data-projects-menu-close", Value: true },
+        { title: "data-cursor", value: "cursorForceGravity" },
       ],
     });
 

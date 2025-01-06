@@ -14,7 +14,7 @@ export default class ArticleProject {
     const innerHTML = `
       <div class="article-project__container">
         <div class="article-project__illustration">
-          <img class="article-project__img" data-element-animated-on-scroll data-element-animated-on-scroll-target="${this.data.id}">
+          <img class="article-project__img" data-element-animated-on-scroll data-element-animated-on-scroll-target="${this.data.id}" data-cursor='cursorEye'>
         </div>
         <div class="article-project__information">
           <h3 class="article-project__title" data-text-animated-on-scroll data-text-animated-on-scroll-target="${this.data.id}">${this.data.title}</h3>
