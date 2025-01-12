@@ -11,12 +11,10 @@ export default class PageLoader {
   }
 
   show() {
-    this.view.mainTimeline.restart();
-    this.model.loaderObject.animate();
+    this.model.show();
   }
   hide() {
-    this.view.mainTimeline.pause();
-    this.view.timelineOfHide.restart();
+    this.model.hide();
   }
 
   render() {

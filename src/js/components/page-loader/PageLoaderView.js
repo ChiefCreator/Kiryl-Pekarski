@@ -10,10 +10,19 @@ export default class PageLoaderView {
   constructor() {
     this.pageLoader = null;
 
-    this.mainTimeline = gsap.timeline({ paused: true })
-    this.timelineOfShow = gsap.timeline();
+    this.timelineOfShow = gsap.timeline({ paused: true });
+    this.timelineOfShowAtFirstAppearance = gsap.timeline({ paused: true });
     this.timelineOfHide = gsap.timeline({ paused: true });
-    this.timelineOfTitleAnimation = gsap.timeline();
+  }
+
+  show() {
+    this.timelineOfShow.restart();
+  }
+  showAtFirstAppearance() {
+    this.timelineOfShowAtFirstAppearance.restart();
+  }
+  hide() {
+    this.timelineOfHide.restart();
   }
 
   initTimelineOfHide() {
@@ -41,14 +50,26 @@ export default class PageLoaderView {
           ease: "power4.inOut",
         }
       )
+      .add(this.initTimelineOfTitleAnimation(), .3)
+  }
+  initTimelineOfShowAtFirstAppearance() {
+    this.timelineOfShowAtFirstAppearance
+      .set(this.pageLoader,
+        {
+          transform: "translate(0, 0)",
+        },
+      )
+      .add(this.initTimelineOfTitleAnimation(), .3)
   }
   initTimelineOfTitleAnimation() {
+    const timelineOfTitleAnimation = gsap.timeline();
+
     this.titleLines.forEach(line => {
       const container = line.firstElementChild;
 
       container.style.transform = "translate(0, 100%)";
 
-      this.timelineOfTitleAnimation.fromTo(
+      timelineOfTitleAnimation.fromTo(
         container,
         {
           transform: `translate(0, 100%)`,
@@ -61,16 +82,14 @@ export default class PageLoaderView {
           "<+10%"
         )
     });
+
+    return timelineOfTitleAnimation;
   }
 
   initTimelines() {
     this.initTimelineOfShow();
+    this.initTimelineOfShowAtFirstAppearance();
     this.initTimelineOfHide();
-    this.initTimelineOfTitleAnimation();
-
-    this.mainTimeline
-      .add(this.timelineOfShow, 0)
-      .add(this.timelineOfTitleAnimation, .3)
   }
   init(loaderObject) {
     this.pageLoader = this.create(loaderObject);
