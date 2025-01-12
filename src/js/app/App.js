@@ -13,6 +13,7 @@ import ProjectsMenu from "../components/projectsMenu/ProjectsMenu.js";
 import Header from "./../components/header/Header.js";
 import Content from "./../components/content/Content.js";
 import Footer from "../components/footer/Footer.js";
+import PageLoader from "../components/page-loader/PageLoader.js";
 
 export default class App {
   constructor({ root }) {
@@ -34,9 +35,12 @@ export default class App {
   }
 
   renderComponents() {
-    this.root.append( this.components.cursor.render(), this.components.header.render(), this.components.content.render(), this.components.projectsMenu.render(), this.components.footer.render());
+    this.root.append( this.components.pageLoader.render(), this.components.cursor.render(), this.components.header.render(), this.components.content.render(), this.components.projectsMenu.render(), this.components.footer.render());
   }
   init() {
+    const pageLoaderObject = new PageLoader();
+    const homePage = new HomePage();
+
     this.components = {
       cursor: new Cursor({ 
         radius: 26,
@@ -48,19 +52,20 @@ export default class App {
       }),
       footer: new Footer(),
       content: new Content(),
+      pageLoader: pageLoaderObject,
     };
     this.routes = {
-      main: new HomePage(),
+      main: homePage,
       contact: new ContactPage(),
       about: new AboutPage({ app: this }),
-      // default: new HomePage(),
+      default: homePage,
       error: new ErrorPage(),
     };
   }
   render() {
     this.renderComponents();
 
-    this.view.init(this.root, this.routes);
+    this.view.init(this.root, this.routes, this.components.pageLoader);
     this.controller.init();
   }
 }
