@@ -1,8 +1,8 @@
 import { gsap } from "gsap";
 import { splitTextOnLines } from "./domUtils";
 
-export function getAnimateTextTimeline($text) {
-  splitTextOnLines($text);
+export function getAnimateTextTimeline($text, isNeedSplitText = true) {
+  if (isNeedSplitText) splitTextOnLines($text);
 
   const timeLine = gsap.timeline();
 
@@ -12,14 +12,18 @@ export function getAnimateTextTimeline($text) {
 
       $container.style.transform = "translate(0, 100%)";
 
-      timeLine.add(
-        gsap.to($container, {
+      timeLine.fromTo(
+        $container,
+        {
+          transform: `translate(0, 100%)`,
+        },
+        {
           transform: `translate(0, 0)`,
           duration: 1.5,
           ease: "power4.inOut",
-        }),
+        },
         "<+=10%"
-      );
+      )
 
       return timeLine;
     });

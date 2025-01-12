@@ -21,8 +21,25 @@ export default class ButtonSubmitView {
     this.timelineAnimationOfDotsAppearance = gsap.timeline({ paused: true });
     this.timelineAnimationOfSuccess = gsap.timeline({ paused: true });
     this.timelineAnimationOfError = gsap.timeline({ paused: true });
+    this.timelineOfPageRender = gsap.timeline({ onComplete: () => this.timelineOfPageRender.clear() });
   }
 
+  getTimelineOfPageRender() {
+    this.timelineOfPageRender
+      .fromTo(this.button, 
+        {
+          transform: "translate(0, 100%)",
+        },
+        {
+          transform: "translate(0, 0%)",
+          duration: 1,
+          ease: "power4.inOut",
+        },
+        0
+      )
+
+    return this.timelineOfPageRender;
+  }
   getRect() {
     return this.button.getBoundingClientRect();
   }
@@ -42,18 +59,24 @@ export default class ButtonSubmitView {
     const timeline = gsap.timeline({ repeat: -1 });
 
     timeline
-      .to(dot,
+      .to(
+        dot,
         {
           transform: "translate(0, 50%)",
-          duration: .5,
-          ease: "power1.inOut"
-        }, 0)
-      .to(dot,
+          duration: 0.5,
+          ease: "power1.inOut",
+        },
+        0
+      )
+      .to(
+        dot,
         {
           transform: "translate(0, -50%)",
-          duration: .5,
-          ease: "power1.inOut"
-        }, ">")
+          duration: 0.5,
+          ease: "power1.inOut",
+        },
+        ">"
+      );
 
     return timeline;
   }
@@ -61,109 +84,126 @@ export default class ButtonSubmitView {
   // инициализация
   initSecondaryTimelines() {
     this.timelineAnimationOfLoader
-      .to(this.firstLoader,
+      .to(
+        this.firstLoader,
         {
           rotate: 720,
           duration: 3,
           repeat: -1,
-          ease: "power4.inOut"
-        }, 0)
-      .to(this.secondLoader,
+          ease: "power4.inOut",
+        },
+        0
+      )
+      .to(
+        this.secondLoader,
         {
           rotate: 720,
           duration: 4,
           repeat: -1,
-          ease: "power4.inOut"
-        }, .2)
+          ease: "power4.inOut",
+        },
+        0.2
+      );
 
     this.timelineAnimationOfLoaderCircles
-      .to(this.firstLoaderCircle, 
+      .to(
+        this.firstLoaderCircle,
         {
           transform: `translate(0, ${this.rect.height - 5}px)`,
-          duration: .5,
-          ease: "power4.inOut"
-        }, 0)
-      .to(this.secondLoaderCircle, 
+          duration: 0.5,
+          ease: "power4.inOut",
+        },
+        0
+      )
+      .to(
+        this.secondLoaderCircle,
         {
           transform: `translate(0, ${this.rect.height - 5}px)`,
-          duration: .5,
-          ease: "power4.inOut"
-        }, .5)
+          duration: 0.5,
+          ease: "power4.inOut",
+        },
+        0.5
+      );
 
     this.timelineAnimationOfTransformButtonToCircle
-      .to(this.button,
+      .to(
+        this.button,
         {
           width: this.rect.height,
           height: this.rect.height,
           borderRadius: "50%",
-          duration: .5,
-          ease: "power4.inOut"
-        }, 0)
-      .to(this.titleVisible,
+          duration: 0.5,
+          ease: "power4.inOut",
+        },
+        0
+      )
+      .to(
+        this.titleVisible,
         {
           opacity: 0,
-          duration: .5,
-          ease: "power4.inOut"
-        }, 0)
-    
-    this.timelineAnimationOfDotsAppearance
-      .to(this.dots,
-        {
-          opacity: 1,
-          duration: .5,
-          ease: "power4.inOut"
-        }, 0)
+          duration: 0.5,
+          ease: "power4.inOut",
+        },
+        0
+      );
 
-    this.timelineAnimationOfDots
-      .add(this.getTimelineOfDotAnimation(this.dots[0]), 0)
-      .add(this.getTimelineOfDotAnimation(this.dots[1]), .2)
-      .add(this.getTimelineOfDotAnimation(this.dots[2]), .4)
+    this.timelineAnimationOfDotsAppearance.to(
+      this.dots,
+      {
+        opacity: 1,
+        duration: 0.5,
+        ease: "power4.inOut",
+      },
+      0
+    );
 
-    this.timelineAnimationOfSuccess
-      .to(this.iconSuccess,
-        {
-          strokeDashoffset: 0,
-          duration: 1,
-          ease: "power4.inOut"
-        }, 0
-      )
+    this.timelineAnimationOfDots.add(this.getTimelineOfDotAnimation(this.dots[0]), 0).add(this.getTimelineOfDotAnimation(this.dots[1]), 0.2).add(this.getTimelineOfDotAnimation(this.dots[2]), 0.4);
 
-    this.timelineAnimationOfError
-      .to(this.iconError,
-        {
-          strokeDashoffset: 0,
-          duration: 1,
-          ease: "power4.inOut"
-        }, 0
-      )
+    this.timelineAnimationOfSuccess.to(
+      this.iconSuccess,
+      {
+        strokeDashoffset: 0,
+        duration: 1,
+        ease: "power4.inOut",
+      },
+      0
+    );
+
+    this.timelineAnimationOfError.to(
+      this.iconError,
+      {
+        strokeDashoffset: 0,
+        duration: 1,
+        ease: "power4.inOut",
+      },
+      0
+    );
   }
-  initMainTimelines() {  
+  initMainTimelines() {
     this.timelineOfLoadingAnimation
       .add(() => this.timelineAnimationOfLoader.restart(), 0)
       .add(() => this.timelineAnimationOfTransformButtonToCircle.restart(), 0)
-      .add(() => this.timelineAnimationOfLoaderCircles.restart(), .1)
-      .add(() => this.timelineAnimationOfDotsAppearance.restart(), .1)
-      .add(() => this.timelineAnimationOfDots.restart(), .1)
-
+      .add(() => this.timelineAnimationOfLoaderCircles.restart(), 0.1)
+      .add(() => this.timelineAnimationOfDotsAppearance.restart(), 0.1)
+      .add(() => this.timelineAnimationOfDots.restart(), 0.1);
 
     this.timelineOfGettingSuccess
       .add(() => this.timelineAnimationOfLoader.pause(), 0)
       .add(() => this.timelineAnimationOfLoaderCircles.reverse(), 0)
       .add(() => this.timelineAnimationOfDotsAppearance.reverse(), 0)
       .add(() => this.timelineAnimationOfDots.pause(), 0.2)
-      .add(() => this.timelineAnimationOfSuccess.restart(), .5)
+      .add(() => this.timelineAnimationOfSuccess.restart(), 0.5)
       .add(() => this.timelineAnimationOfSuccess.reverse(), 1.5)
-      .add(() => this.timelineAnimationOfTransformButtonToCircle.reverse(), 2)
+      .add(() => this.timelineAnimationOfTransformButtonToCircle.reverse(), 2);
 
     this.timelineOfGettingError
       .add(() => this.timelineAnimationOfLoader.pause(), 0)
       .add(() => this.timelineAnimationOfLoaderCircles.reverse(), 0)
       .add(() => this.timelineAnimationOfDotsAppearance.reverse(), 0)
       .add(() => this.timelineAnimationOfDots.pause(), 0.2)
-      .add(() => this.timelineAnimationOfError.restart(), .5)
+      .add(() => this.timelineAnimationOfError.restart(), 0.5)
       .add(() => this.timelineAnimationOfError.reverse(), 1.5)
-      .add(() => this.timelineAnimationOfTransformButtonToCircle.reverse(), 2)
-      
+      .add(() => this.timelineAnimationOfTransformButtonToCircle.reverse(), 2);
   }
   initTimelines() {
     this.initSecondaryTimelines();
@@ -186,7 +226,7 @@ export default class ButtonSubmitView {
       callback: () => {
         this.rect = this.getRect();
         this.initTimelines();
-      }
+      },
     });
     watcher.startWatching();
   }
@@ -221,7 +261,14 @@ export default class ButtonSubmitView {
       </div>
     `;
 
-    return createDOM("button", { className: "button-submit", innerHTML, attributes: [{ title: "type", value: "submit" }, { title: "data-cursor", value: "cursorForceGravity" }] });
+    return createDOM("button", {
+      className: "button-submit",
+      innerHTML,
+      attributes: [
+        { title: "type", value: "submit" },
+        { title: "data-cursor", value: "cursorForceGravity" },
+      ],
+    });
   }
   render() {
     return this.button;

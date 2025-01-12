@@ -21,7 +21,7 @@ export function getScrollPercentage() {
 export function splitTextOnLines($text) {
   let $bufferText = document.createElement("p");
   $bufferText = $text.cloneNode(true);
-  $bufferText.style.width = $text.offsetWidth + .5 + "px";
+  $bufferText.style.width = $text.offsetWidth + 0.5 + "px";
   $bufferText.style.position = "absolute";
   $bufferText.style.left = "0px";
   $bufferText.innerHTML = "_";
@@ -71,4 +71,28 @@ export function splitTextOnLines($text) {
         </span>`;
     })
     .join("");
+}
+
+export function splitTextOnLetters($text) {
+  const title = $text.dataset.title;
+
+  const $splitText = createDOM("span", { className: "split-text" });
+
+  title.split(" ").forEach((word, index, arr) => {
+    const $word = createDOM("span", { className: "split-text__word" });
+
+    Array.from(word).forEach((letter) => {
+      const $letter = createDOM("span", { className: "split-text__letter", textContent: letter, attributes: [{ title: "data-letter", value: letter }] });
+      $word.append($letter);
+    });
+
+    $splitText.append($word);
+
+    if (index < arr.length - 1) {
+      const $space = createDOM("span", { className: "split-text__space", textContent: " ", attributes: [{ title: "data-letter", value: " " }] });
+      $splitText.append($space);
+    }
+  });
+
+  $text.append($splitText);
 }

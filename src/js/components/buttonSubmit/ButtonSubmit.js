@@ -16,6 +16,9 @@ export default class ButtonSubmit {
   endAnimation(result) {
     this.model.endAnimation(result);
   }
+  getTimelineOfPageRender() {
+    return this.view.getTimelineOfPageRender();
+  }
 
   render() {
     return this.view.render();

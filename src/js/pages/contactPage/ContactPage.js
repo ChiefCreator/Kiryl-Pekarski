@@ -96,6 +96,8 @@ export default class ContactPage {
       inputId: "textarea-description",
     };
 
+    this.formObject = new Form({ fieldsData: this.formFieldsData, textareaFieldData: this.formTextareaFieldData, checboxFieldsData: this.formChecboxFieldsData, page: this });
+
     this.page = null;
 
     this.init();
@@ -109,6 +111,17 @@ export default class ContactPage {
   }
 
   initAnimations() {
+    const watcherForm = new DOMElementWatcher({
+      selector: "form",
+      callback: () => {
+        setTimeout(() => {
+          const isNeedSplitText = !this.isRenderedMoreThanOneTime();
+          this.formObject.initAnimations(isNeedSplitText);
+        });
+      },
+    });
+    watcherForm.startWatching();
+
     this.textsAnimatedOnScroll = this.page.querySelectorAll("[data-text-animated-on-scroll]");
 
     if (!this.textsAnimatedOnScroll.length) return;
@@ -154,7 +167,7 @@ export default class ContactPage {
 
     const formWrapper = page.querySelector(".app-contact__form-wrapper");
 
-    formWrapper.append(new Form({ fieldsData: this.formFieldsData, textareaFieldData: this.formTextareaFieldData, checboxFieldsData: this.formChecboxFieldsData }).render());
+    formWrapper.append(this.formObject.render());
 
     return page;
   }

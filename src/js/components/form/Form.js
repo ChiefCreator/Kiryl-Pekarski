@@ -10,6 +10,10 @@ export default class Form {
     this.controller = new FormController(this.model, this.view);
   }
 
+  initAnimations(isNeedSplitText) {
+    this.view.initAnimations(isNeedSplitText);
+  }
+
   render() {
     return this.view.render();
   }

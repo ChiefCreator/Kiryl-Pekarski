@@ -21,6 +21,10 @@ export default class FormCheckboxField {
     return this.model.getData();
   }
 
+  getTimelineOfPageRender(isNeedSplitText) {
+    return this.view.getTimelineOfPageRender(isNeedSplitText);
+  }
+
   render() {
     return this.view.render();
   }

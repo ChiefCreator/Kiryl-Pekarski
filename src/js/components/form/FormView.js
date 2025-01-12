@@ -5,6 +5,10 @@ import FormTextareaField from "../formTextareaField/formTextareaField";
 import FormCheckboxField from "../formCheckboxField/FormCheckboxField";
 import ButtonSubmit from "../buttonSubmit/ButtonSubmit";
 
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
+
 export default class FormView {
   constructor() {
     this.form = null;
@@ -14,6 +18,37 @@ export default class FormView {
     this.formTextareaFieldObject = null;
     this.formInputAndTextareaFieldObjects = [];
     this.checboxFieldObjects = [];
+
+    this.timeLineOnScroll = null;
+  }
+
+  initTimelineOnScroll(isNeedSplitText) {
+    this.timeLineOnScroll = gsap.timeline({ 
+      scrollTrigger: { 
+        trigger: this.form,
+        start: "top 80%",
+        end: "+=500",
+      } 
+    });
+
+    const timelineOfCheckboxFieldsAnimation = gsap.timeline();
+    const timelineOfInputAnimation = gsap.timeline();
+    const timelineOfButtonAnimation = gsap.timeline();
+    
+    this.checboxFieldObjects.forEach(checkboxFieldObject => {
+      timelineOfCheckboxFieldsAnimation.add(checkboxFieldObject.getTimelineOfPageRender(isNeedSplitText), "<+=5%");
+    });
+    this.formInputAndTextareaFieldObjects.forEach(inputObject => {
+      timelineOfInputAnimation.add(inputObject.getTimelineOfPageRender(isNeedSplitText), "<+=5%");
+    });
+    timelineOfButtonAnimation.add(this.buttonSubmitObject.getTimelineOfPageRender());
+
+    this.timeLineOnScroll.add(timelineOfCheckboxFieldsAnimation, 0);
+    this.timeLineOnScroll.add(timelineOfInputAnimation, 0);
+    this.timeLineOnScroll.add(timelineOfButtonAnimation, 0);
+  }
+  initAnimations(isNeedSplitText) {
+    this.initTimelineOnScroll(isNeedSplitText);
   }
 
   startButtonSubmitAnimation() {

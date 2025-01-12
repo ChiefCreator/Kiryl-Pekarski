@@ -1,6 +1,8 @@
 import "./checkbox.scss";
 import { createDOM } from "../../utils/domUtils";
 
+import gsap from "gsap";
+
 export default class Checkbox {
   constructor({ data, index }) {
     this.checkbox = null;
@@ -10,6 +12,23 @@ export default class Checkbox {
     this.isActive = false;
 
     this.init(this.data);
+  }
+
+  getTimelineOfAppearance() {
+    const timeline = gsap.timeline();
+
+    timeline.fromTo(this.checkbox, 
+      {
+        transform: "translate(0, calc(100% + 2px))",
+      },
+      {
+        transform: "translate(0, 0)",
+        duration: 1,
+        ease: "power4.inOut",
+      }
+    )
+
+    return timeline;
   }
 
   getIndex() {

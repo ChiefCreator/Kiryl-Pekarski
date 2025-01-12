@@ -1,6 +1,9 @@
 import { createDOM } from "../../utils/domUtils";
 import gsap from "gsap";
 
+import { splitTextOnLetters } from "../../utils/domUtils";
+import { getAnimateTextTimeline } from "../../utils/animateUtils";
+
 export default class FormInputFieldView {
   constructor() {
     this.formInputField = null;
@@ -20,54 +23,72 @@ export default class FormInputFieldView {
     this.timelineOfHideText = gsap.timeline({ paused: true });
     this.timelineOfValidationError = gsap.timeline({ paused: true });
     this.timelineOfValidationSuccess = gsap.timeline({ paused: true });
+    this.timelineOfPageRender = gsap.timeline({ onComplete: () => this.timelineOfPageRender.clear() });
   }
 
-  animateLetters(animatedProps) {
+  getTimelineOfPageRender(isNeedSplitText) {
+    this.timelineOfPageRender
+      .add(getAnimateTextTimeline(this.label, isNeedSplitText))
+      .fromTo(this.line,
+        {
+          width: 0,
+        },
+        {
+          width: "100%",
+          duration: 0.5,
+          ease: "power4.inOut",
+        },
+        "<+50%"
+      )
+      .add(this.animateLetters({
+        letters: this.placeholderLetters,
+        gsapAction: "fromTo",
+        initialProps: {
+          transform: `translate(0, 100%)`,
+        },
+        animatedProps: {
+          transform: `translate(0, 0)`,
+          duration: 0.5,
+          ease: "power2.inOut",
+        },
+      }), "<");
+
+    return this.timelineOfPageRender;
+  }
+
+  animateLetters({ letters, gsapAction = "to", animatedProps, initialProps }) {
     const timeline = gsap.timeline();
 
-    this.placeholderLetters.forEach(($letter) => timeline.add(gsap.to($letter, animatedProps), "<0.03"));
-
-    return timeline;
-  }
-
-  splitPlaceholder() {
-    const title = this.placeholder.dataset.title;
-
-    title.split(" ").forEach((word, index, arr) => {
-      const $word = document.createElement("span");
-      $word.classList.add("form-input-field__placeholder-word");
-
-      Array.from(word).forEach((letter) => {
-        const $letter = document.createElement("span");
-        $letter.classList.add("form-input-field__placeholder-letter");
-        $letter.textContent = letter;
-        $letter.dataset.letter = letter;
-        $word.append($letter);
-      });
-
-      this.placeholder.append($word);
-
-      if (index < arr.length - 1) {
-        const $space = document.createElement("span");
-        $space.classList.add("form-input-field__placeholder-space");
-        $space.textContent = " ";
-        $space.dataset.letter = " ";
-        this.placeholder.append($space);
+    letters.forEach(($letter) => {
+      if (gsapAction === "to") {
+        timeline.add(gsap.to($letter, animatedProps), "<0.03")
+      } else {
+        timeline.add(gsap.from($letter, initialProps, animatedProps), "<0.03")
       }
     });
+
+    return timeline;
   }
 
   // инициализация
   initTimeline() {
     this.timelineOfShowText.add(this.animateLetters({
-      transform: `translate(0, 0)`,
-      duration: 0.5,
-      ease: "power2.inOut",
+      letters: this.placeholderLetters,
+      gsapAction: "to",
+      animatedProps: {
+        transform: `translate(0, 0)`,
+        duration: 0.5,
+        ease: "power2.inOut",
+      }
     }), 0);
     this.timelineOfHideText.add(this.animateLetters({
-      transform: `translate(0, -100%)`,
-      duration: 0.5,
-      ease: "power2.inOut",
+      letters: this.placeholderLetters,
+      gsapAction: "to",
+      animatedProps: {
+        transform: `translate(0, -100%)`,
+        duration: 0.5,
+        ease: "power2.inOut",
+      }
     }), 0);
 
     this.timelineOnMouseover
@@ -116,13 +137,15 @@ export default class FormInputFieldView {
       }, "<");
 
     this.timelineOnFocusin
-      .add(this.animateLetters(
-        {
+      .add(this.animateLetters({
+        letters: this.placeholderLetters,
+        gsapAction: "to",
+        animatedProps: {
           transform: `translate(0, -100%)`,
           duration: 0.5,
           ease: "power2.inOut",
         }
-      ), 0)
+      }), 0)
       .to(
         this.lineSub, {
           width: "100%",
@@ -148,10 +171,14 @@ export default class FormInputFieldView {
 
     this.timelineOnFocusout
       .add(this.animateLetters({
+        letters: this.placeholderLetters,
+        gsapAction: "to",
+        animatedProps: {
           transform: `translate(0, 0)`,
           duration: 0.5,
           ease: "power2.inOut",
-        }), 0)
+        },
+      }), 0)
       .to(
         this.lineSub, {
           width: "0",
@@ -243,12 +270,15 @@ export default class FormInputFieldView {
   }
   init(data) {
     this.formInputField = this.create(data);
+    this.label = this.formInputField.querySelector(".form-input-field__label");
     this.input = this.formInputField.querySelector(".form-input-field__input");
     this.placeholder = this.formInputField.querySelector(".form-input-field__placeholder");
+    this.line = this.formInputField.querySelector(".form-input-field__line");
     this.lineSub = this.formInputField.querySelector(".form-input-field__line-sub");
 
-    this.splitPlaceholder();
-    this.placeholderLetters = this.formInputField.querySelectorAll(".form-input-field__placeholder-letter");
+    splitTextOnLetters(this.placeholder);
+
+    this.placeholderLetters = this.placeholder.querySelectorAll(".split-text__letter");
 
     this.initTimeline();
   }

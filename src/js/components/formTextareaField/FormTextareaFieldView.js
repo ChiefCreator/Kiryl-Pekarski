@@ -1,6 +1,10 @@
 import { createDOM } from "../../utils/domUtils";
 import gsap from "gsap";
 
+import { splitTextOnLetters } from "../../utils/domUtils";
+import { splitTextOnLines } from "../../utils/domUtils";
+import { getAnimateTextTimeline } from "../../utils/animateUtils";
+
 export default class FormTextareaFieldView {
   constructor() {
     this.formTextareaField = null;
@@ -17,77 +21,111 @@ export default class FormTextareaFieldView {
     this.timelineOfHideText = gsap.timeline({ paused: true });
     this.timelineOfValidationError = gsap.timeline({ paused: true });
     this.timelineOfValidationSuccess = gsap.timeline({ paused: true });
+    this.timelineOfPageRender = gsap.timeline({ onComplete: () => this.timelineOfPageRender.clear() });
   }
 
-  animateLetters(animatedProps) {
+  getTimelineOfPageRender(isNeedSplitText) {
+    this.timelineOfPageRender
+      .add(getAnimateTextTimeline(this.label, isNeedSplitText))
+      .fromTo(
+        this.line,
+        {
+          width: 0,
+        },
+        {
+          width: "100%",
+          duration: 0.5,
+          ease: "power4.inOut",
+        },
+        "<+50%"
+      )
+      .add(
+        this.animateLetters({
+          letters: this.placeholderLetters,
+          gsapAction: "fromTo",
+          initialProps: {
+            transform: `translate(0, 100%)`,
+          },
+          animatedProps: {
+            transform: `translate(0, 0)`,
+            duration: 0.5,
+            ease: "power2.inOut",
+          },
+        }),
+        "<"
+      );
+
+    return this.timelineOfPageRender;
+  }
+
+  animateLetters({ letters, gsapAction = "to", animatedProps, initialProps }) {
     const timeline = gsap.timeline();
 
-    this.placeholderLetters.forEach(($letter) => timeline.add(gsap.to($letter, animatedProps), "<0.03"));
-
-    return timeline;
-  }
-
-  splitPlaceholder() {
-    const title = this.placeholder.dataset.title;
-
-    title.split(" ").forEach((word, index, arr) => {
-      const $word = document.createElement("span");
-      $word.classList.add("form-textarea-field__placeholder-word");
-
-      Array.from(word).forEach((letter) => {
-        const $letter = document.createElement("span");
-        $letter.classList.add("form-textarea-field__placeholder-letter");
-        $letter.textContent = letter;
-        $letter.dataset.letter = letter;
-        $word.append($letter);
-      });
-
-      this.placeholder.append($word);
-
-      if (index < arr.length - 1) {
-        const $space = document.createElement("span");
-        $space.classList.add("form-textarea-field__placeholder-space");
-        $space.textContent = " ";
-        $space.dataset.letter = " ";
-        this.placeholder.append($space);
+    letters.forEach(($letter) => {
+      if (gsapAction === "to") {
+        timeline.add(gsap.to($letter, animatedProps), "<0.03")
+      } else if (gsapAction === "fromTo") {
+        timeline.add(gsap.fromTo($letter, initialProps, animatedProps), "<0.03")
       }
     });
+
+    return timeline;
   }
 
   // инициализация
   initTimeline() {
     this.timelineOfShowText.add(this.animateLetters({
-      transform: `translate(0, 0)`,
-      duration: 0.5,
-      ease: "power2.inOut",
+      letters: this.placeholderLetters,
+      gsapAction: "to",
+      animatedProps: {
+        transform: `translate(0, 0)`,
+        duration: 0.5,
+        ease: "power2.inOut",
+      }
     }), 0);
     this.timelineOfHideText.add(this.animateLetters({
-      transform: `translate(0, -100%)`,
-      duration: 0.5,
-      ease: "power2.inOut",
+      letters: this.placeholderLetters,
+      gsapAction: "to",
+      animatedProps: {
+        transform: `translate(0, -100%)`,
+        duration: 0.5,
+        ease: "power2.inOut",
+      }
     }), 0);
 
     this.timelineOnMouseover
       .to(this.lineSub, {
         width: "100%",
         ease: "power4.inOut",
-        duration: .5,
-      })
-      .to(this.lineSub, {
-        backgroundColor: "#f0f0f0",
-        ease: "power4.inOut",
         duration: 0.5,
-      }, "<")
-      .to(this.textarea, {
-        color: "#f0f0f0",
-        ease: "power4.inOut",
-        duration: .5,
-      }, "<")
-      .to(this.placeholder, {
-        color: "#f0f0f0",
-        ease: "power4.inOut",
-        duration: .5,
-      }, "<")
+      })
+      .to(
+        this.lineSub,
+        {
+          backgroundColor: "#f0f0f0",
+          ease: "power4.inOut",
+          duration: 0.5,
+        },
+        "<"
+      )
+      .to(
+        this.textarea,
+        {
+          color: "#f0f0f0",
+          ease: "power4.inOut",
+          duration: 0.5,
+        },
+        "<"
+      )
+      .to(
+        this.placeholder,
+        {
+          color: "#f0f0f0",
+          ease: "power4.inOut",
+          duration: 0.5,
+        },
+        "<"
+      );
 
     this.timelineOnMouseout
       .to(this.lineSub, {
@@ -95,151 +133,244 @@ export default class FormTextareaFieldView {
         ease: "power4.inOut",
         duration: 0.5,
       })
-      .to(this.lineSub, {
+      .to(
+        this.lineSub,
+        {
           backgroundColor: "#494949",
           ease: "power4.inOut",
           duration: 0.5,
-        }, "<")
-      .to(this.textarea, {
+        },
+        "<"
+      )
+      .to(
+        this.textarea,
+        {
           color: "#494949",
           ease: "power4.inOut",
           duration: 0.5,
-      }, "<")
-      .to(this.placeholder, {
+        },
+        "<"
+      )
+      .to(
+        this.placeholder,
+        {
           color: "#494949",
           ease: "power4.inOut",
           duration: 0.5,
-      }, "<");
+        },
+        "<"
+      );
 
     this.timelineOnFocusin
-      .add(this.animateLetters(
-        {
+      .add(this.animateLetters({
+        letters: this.placeholderLetters,
+        gsapAction: "to",
+        animatedProps: {
           transform: `translate(0, -100%)`,
           duration: 0.5,
           ease: "power2.inOut",
         }
-      ), 0)
-      .to(this.lineSub, {
-        width: "100%",
-        ease: "power4.inOut",
-        duration: .5,
-      }, "<")
-      .to(this.lineSub, {
-        backgroundColor: "#f0f0f0",
-        ease: "power4.inOut",
-        duration: 0.5,
-      }, "<")
-      .to(this.textarea, {
-        color: "#f0f0f0",
-        ease: "power4.inOut",
-        duration: .5,
-      }, "<")
-      .to(this.placeholder, {
-        color: "#f0f0f0",
-        ease: "power4.inOut",
-        duration: .5,
-      }, "<")
-
-    this.timelineOnFocusout
-      .add(this.animateLetters({
-        transform: `translate(0, 0)`,
-        duration: 0.5,
-        ease: "power2.inOut",
       }), 0)
-      .to(this.lineSub, {
-        width: "0",
-        ease: "power4.inOut",
-        duration: .5,
-      }, "<")
-      .to(this.lineSub, {
-        backgroundColor: "#494949",
-        ease: "power4.inOut",
-        duration: 0.5,
-      }, "<")
-      .to(this.textarea, {
-        color: "#494949",
-        ease: "power4.inOut",
-        duration: .5,
-      }, "<")
-      .to(this.placeholder, {
-        color: "#494949",
-        ease: "power4.inOut",
-        duration: .5,
-      }, "<")
-
-    this.timelineOnFocusoutWithoutAnimatedText
-      .to(this.lineSub, {
-        width: "0",
-        ease: "power4.inOut",
-        duration: 0.5,
-      }, "<")
-      .to(this.lineSub, {
-        backgroundColor: "#494949",
-        ease: "power4.inOut",
-        duration: 0.5,
-      }, "<")
-      .to(this.textarea, {
-          color: "#494949",
-          ease: "power4.inOut",
-          duration: 0.5,
-        }, "<")
-      .to(this.placeholder, {
-          color: "#494949",
-          ease: "power4.inOut",
-          duration: 0.5,
-        }, "<");
-
-
-        this.timelineOfValidationError
       .to(
-        this.lineSub, {
+        this.lineSub,
+        {
           width: "100%",
           ease: "power4.inOut",
           duration: 0.5,
-        }, "<")
+        },
+        "<"
+      )
       .to(
-        this.lineSub, {
-          backgroundColor: "red",
+        this.lineSub,
+        {
+          backgroundColor: "#f0f0f0",
           ease: "power4.inOut",
           duration: 0.5,
-        }, "<")
-      .to(this.input, {
-          color: "red",
+        },
+        "<"
+      )
+      .to(
+        this.textarea,
+        {
+          color: "#f0f0f0",
           ease: "power4.inOut",
           duration: 0.5,
-        }, "<")
-      .to(this.placeholder, {
-          color: "red",
+        },
+        "<"
+      )
+      .to(
+        this.placeholder,
+        {
+          color: "#f0f0f0",
           ease: "power4.inOut",
           duration: 0.5,
-        }, "<");
+        },
+        "<"
+      );
 
-    this.timelineOfValidationSuccess
+    this.timelineOnFocusout
+      .add(this.animateLetters({
+        letters: this.placeholderLetters,
+        gsapAction: "to",
+        animatedProps: {
+          transform: `translate(0, 0)`,
+          duration: 0.5,
+          ease: "power2.inOut",
+        },
+      }), 0)
       .to(
-        this.lineSub, {
+        this.lineSub,
+        {
+          width: "0",
+          ease: "power4.inOut",
+          duration: 0.5,
+        },
+        "<"
+      )
+      .to(
+        this.lineSub,
+        {
           backgroundColor: "#494949",
           ease: "power4.inOut",
           duration: 0.5,
-        }, "<")
-      .to(this.input, {
+        },
+        "<"
+      )
+      .to(
+        this.textarea,
+        {
           color: "#494949",
           ease: "power4.inOut",
           duration: 0.5,
-        }, "<")
-      .to(this.placeholder, {
+        },
+        "<"
+      )
+      .to(
+        this.placeholder,
+        {
           color: "#494949",
           ease: "power4.inOut",
           duration: 0.5,
-        }, "<");
+        },
+        "<"
+      );
+
+    this.timelineOnFocusoutWithoutAnimatedText
+      .to(
+        this.lineSub,
+        {
+          width: "0",
+          ease: "power4.inOut",
+          duration: 0.5,
+        },
+        "<"
+      )
+      .to(
+        this.lineSub,
+        {
+          backgroundColor: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        },
+        "<"
+      )
+      .to(
+        this.textarea,
+        {
+          color: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        },
+        "<"
+      )
+      .to(
+        this.placeholder,
+        {
+          color: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        },
+        "<"
+      );
+
+    this.timelineOfValidationError
+      .to(
+        this.lineSub,
+        {
+          width: "100%",
+          ease: "power4.inOut",
+          duration: 0.5,
+        },
+        "<"
+      )
+      .to(
+        this.lineSub,
+        {
+          backgroundColor: "red",
+          ease: "power4.inOut",
+          duration: 0.5,
+        },
+        "<"
+      )
+      .to(
+        this.input,
+        {
+          color: "red",
+          ease: "power4.inOut",
+          duration: 0.5,
+        },
+        "<"
+      )
+      .to(
+        this.placeholder,
+        {
+          color: "red",
+          ease: "power4.inOut",
+          duration: 0.5,
+        },
+        "<"
+      );
+
+    this.timelineOfValidationSuccess
+      .to(
+        this.lineSub,
+        {
+          backgroundColor: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        },
+        "<"
+      )
+      .to(
+        this.input,
+        {
+          color: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        },
+        "<"
+      )
+      .to(
+        this.placeholder,
+        {
+          color: "#494949",
+          ease: "power4.inOut",
+          duration: 0.5,
+        },
+        "<"
+      );
   }
   init(data) {
     this.formTextareaField = this.create(data);
+    this.label = this.formTextareaField.querySelector(".form-textarea-field__label");
     this.textarea = this.formTextareaField.querySelector(".form-textarea-field__textarea");
     this.placeholder = this.formTextareaField.querySelector(".form-textarea-field__placeholder");
+    this.line = this.formTextareaField.querySelector(".form-textarea-field__line");
     this.lineSub = this.formTextareaField.querySelector(".form-textarea-field__line-sub");
 
-    this.splitPlaceholder();
-    this.placeholderLetters = this.formTextareaField.querySelectorAll(".form-textarea-field__placeholder-letter");
+    splitTextOnLetters(this.placeholder);
+
+    this.placeholderLetters = this.formTextareaField.querySelectorAll(".split-text__letter");
 
     this.initTimeline();
   }

@@ -53,6 +53,9 @@ export default class FormTextareaField {
   animateOnValidationSuccess() {
     return this.view.timelineOfValidationSuccess.invalidate().restart();
   }
+  getTimelineOfPageRender(isNeedSplitText) {
+    return this.view.getTimelineOfPageRender(isNeedSplitText);
+  }
 
   render() {
     return this.view.render();
