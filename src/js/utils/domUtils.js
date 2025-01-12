@@ -21,32 +21,54 @@ export function getScrollPercentage() {
 export function splitTextOnLines($text) {
   let $bufferText = document.createElement("p");
   $bufferText = $text.cloneNode(true);
-  $bufferText.style.width = $text.offsetWidth + "px";
+  $bufferText.style.width = $text.offsetWidth + .5 + "px";
   $bufferText.style.position = "absolute";
   $bufferText.style.left = "0px";
   $bufferText.innerHTML = "_";
   document.body.appendChild($bufferText);
 
-  const content = $text.textContent.split("");
   const oneLineHeight = $bufferText.scrollHeight;
-  const lines = [];
-  let i = 0;
 
-  while (i < content.length) {
-    let line = ($bufferText.innerHTML = "");
-    while (i < content.length && $bufferText.scrollHeight <= oneLineHeight) {
-      $bufferText.innerHTML = line += content[i++];
+  const contentNodes = Array.from($text.childNodes);
+  const lines = [];
+  let currentLine = document.createElement("span");
+
+  const isOverflowing = () => $bufferText.scrollHeight > oneLineHeight;
+
+  contentNodes.forEach((node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const words = node.textContent.split(" ");
+      words.forEach((word, index) => {
+        $bufferText.innerHTML = currentLine.innerHTML + word + " ";
+        if (isOverflowing()) {
+          lines.push(currentLine.innerHTML.trim());
+          currentLine = document.createElement("span");
+        }
+        currentLine.innerHTML += word + (index < words.length - 1 ? " " : "");
+      });
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const clone = node.cloneNode(true);
+      $bufferText.innerHTML = currentLine.innerHTML + clone.outerHTML;
+      if (isOverflowing()) {
+        lines.push(currentLine.innerHTML.trim());
+        currentLine = document.createElement("span");
+      }
+      currentLine.appendChild(clone);
     }
-    let lineEndIndex = i === content.length ? i : line.lastIndexOf(" ") + 1;
-    lines.push(content.splice(0, lineEndIndex).join(""));
-    i = 0;
+  });
+
+  if (currentLine.innerHTML.trim()) {
+    lines.push(currentLine.innerHTML.trim());
   }
+
   $bufferText.remove();
-  $text.innerHTML = lines.map((line) => {
-    return (
-      `<span class="text-line">
-        <span class="text-line__container">${line}</span>
-      </span>`
-    )
-  }).join("");
+
+  $text.innerHTML = lines
+    .map((line) => {
+      return `
+        <span class="text-line">
+          <span class="text-line__container">${line}</span>
+        </span>`;
+    })
+    .join("");
 }

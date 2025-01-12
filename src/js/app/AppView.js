@@ -1,34 +1,31 @@
 import { animateTextOnScroll } from "../utils/animateOnScrollUtils.js";
 import DOMElementWatcher from "../components/domElementWatcher/DOMElementWatcher.js";
 
+import gsap from "gsap";
+import { splitTextOnLines } from "../utils/domUtils.js";
+
 export default class AppView {
-  constructor(root, routes) {
-    this.root = root;
-    this.routes = routes;
-    this.content = this.root.querySelector("#content");
+  constructor() {
+    this.root = null;
+    this.routes = null;
+    this.content = null;
+
+    this.watcher = new DOMElementWatcher({ elements: null, selector: null, callback: null });
+
+    this.timelineOfTextAnimation = null
   }
 
   renderContent(pageId) {
-    const page = this.routes[pageId] || this.routes["error"];
+    const pageObject = this.routes[pageId] || this.routes["error"];
+    pageObject.updateCountOfRenders();
+    pageObject.initAnimations();
+
+    const page = pageObject.render();
+
     this.content.innerHTML = "";
 
-    this.content.append(page.render());
-
-    document.title = page.title;
-
-    const textAnimatedOnScrollList = document.querySelectorAll('[data-text-animated-on-scroll]');
-
-    if (textAnimatedOnScrollList.length) {
-      const watcher = new DOMElementWatcher({
-        elements: textAnimatedOnScrollList,
-        callback: () => {
-          textAnimatedOnScrollList.forEach(text => {
-            animateTextOnScroll(text);
-          });
-        }
-      });
-      watcher.startWatching();
-    }
+    this.content.append(page);
+    document.title = pageObject.title;
 
     // this.updateMenu(pageId);
   }
@@ -49,5 +46,11 @@ export default class AppView {
         link.style.color = link.dataset.color ?? "#4481eb";
       });
     });
+  }
+
+  init(root, routes) {
+    this.root = root;
+    this.routes = routes;
+    this.content = this.root.querySelector("#content");
   }
 }

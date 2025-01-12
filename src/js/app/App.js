@@ -6,6 +6,7 @@ import AppController from "./AppController.js";
 import HomePage from "./../pages/homePage/HomePage.js";
 import ErrorPage from "./../pages/errorPage/ErrorPage.js";
 import ContactPage from "./../pages/contactPage/ContactPage.js";
+import AboutPage from "../pages/aboutPage/AboutPage.js";
 // компоненты
 import Cursor from "../components/cursor/Cursor.js";
 import ProjectsMenu from "../components/projectsMenu/ProjectsMenu.js";
@@ -16,10 +17,20 @@ import Footer from "../components/footer/Footer.js";
 export default class App {
   constructor({ root }) {
     this.root = root;
+
+    this.view = new AppView();
+    this.model = new AppModel(this.view);
+    this.controller = new AppController(this.model);
+
     this.routes = null;
     this.components = null;
 
     this.init();
+  }
+
+  // методы подписи на определенные события другими классами
+  addListenerOfGettingScrollingSpeed(callback) {
+    this.model.listenersOfGettingScrollingSpeed.push(callback);
   }
 
   renderComponents() {
@@ -33,7 +44,7 @@ export default class App {
       }),
       projectsMenu: new ProjectsMenu(),
       header: new Header({
-        linksData: [ { title: "Проекты", href: null, attributes: [{ title: "data-projects-menu-open", value: true }] }, { title: "Обо мне" }, { title: "Портфолио" }, { title: "Навыки" }, { title: "Связаться", href: "#contact" }],
+        linksData: [ { title: "Проекты", href: null, attributes: [{ title: "data-projects-menu-open", value: true }] }, { title: "Обо мне", href: "#about" }, { title: "Связаться", href: "#contact" }],
       }),
       footer: new Footer(),
       content: new Content(),
@@ -41,6 +52,7 @@ export default class App {
     this.routes = {
       main: new HomePage(),
       contact: new ContactPage(),
+      about: new AboutPage({ app: this }),
       // default: new HomePage(),
       error: new ErrorPage(),
     };
@@ -48,8 +60,7 @@ export default class App {
   render() {
     this.renderComponents();
 
-    const view = new AppView(this.root, this.routes);
-    const model = new AppModel(view);
-    const controller = new AppController(model);
+    this.view.init(this.root, this.routes);
+    this.controller.init();
   }
 }

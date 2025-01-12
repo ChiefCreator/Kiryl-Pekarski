@@ -7,6 +7,16 @@ export default class DOMElementWatcher {
     this.observer = null;
   }
 
+  setElements(elements) {
+    this.elements = elements;
+  }
+  setCallback(callback) {
+    this.callback = callback
+  }
+  clearRenderedElements() {
+    this.renderedElements.clear();
+  }
+
   checkIsSingleElement() {
     return this.elements instanceof HTMLElement;
   }
@@ -23,7 +33,7 @@ export default class DOMElementWatcher {
     if (this.checkIsSingleElement()) {
       this.watchDocumentForSingleElement();
     } else if (this.checkIsSingleSelector(this.selector)) {
-      this.watchDocumentForSingleSelector();
+      this.watchDocumentForElementsBySelector();
     } else {
       this.watchDocumentForArrElements();
     }
@@ -43,9 +53,11 @@ export default class DOMElementWatcher {
     });
   }
   watchDocumentForArrElements() {
+    this.clearRenderedElements();
+
     this.observer = new MutationObserver((mutation) => {
       this.elements.forEach((element) => {
-        if (!this.renderedElements.has(element)) {
+        if (!this.renderedElements.has(element) && this.isRendered(element)) {
           this.renderedElements.add(element);
         }
       });
@@ -56,12 +68,18 @@ export default class DOMElementWatcher {
       }
     });
   }
-  watchDocumentForSingleSelector() {
+  watchDocumentForElementsBySelector() {
     this.observer = new MutationObserver((mutation) => {
-      const element = document.querySelector(this.selector);
-      if (element && this.isRendered(element)) {
-        this.observer.disconnect();
-        this.callback();
+      const elements = document.querySelectorAll(this.selector);
+
+      elements.forEach(element => {
+        if (!this.renderedElements.has(element) && this.isRendered(element)) {
+          this.renderedElements.add(element);
+        }
+      });
+
+      if (this.renderedElements.size === elements.length) {
+        this.callback(this.renderedElements);
         this.stopWatching();
       }
     });

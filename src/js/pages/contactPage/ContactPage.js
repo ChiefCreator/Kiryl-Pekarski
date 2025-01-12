@@ -1,6 +1,9 @@
 import { createDOM } from "../../utils/domUtils";
 import Container from "../../components/container/Container";
 import Form from "../../components/form/Form";
+import DOMElementWatcher from "../../components/domElementWatcher/DOMElementWatcher";
+
+import { animateTextOnScroll } from "../../utils/animateOnScrollUtils";
 
 import "./contact-page.scss";
 
@@ -8,6 +11,7 @@ export default class ContactPage {
   constructor() {
     this.id = "contact";
     this.title = "Связаться";
+    this.countOfRenders = 0;
 
     this.formChecboxFieldsData = [
       {
@@ -74,33 +78,68 @@ export default class ContactPage {
         label: "Имя",
         placeholder: "Введите ваше имя",
         name: "name",
-        inputId: "input-name"
+        inputId: "input-name",
       },
       {
         id: "form-field-email",
         label: "Почта",
         placeholder: "Введите вашу почту",
         name: "mail",
-        inputId: "input-email"
-      }, 
+        inputId: "input-email",
+      },
     ];
     this.formTextareaFieldData = {
       id: "form-textarea-field-description",
       label: "Расскажите о своем проекте",
       placeholder: "Напишите сообщение",
       name: "description",
-      inputId: "textarea-description"
+      inputId: "textarea-description",
     };
 
-    this.page = this.create();
+    this.page = null;
+
+    this.init();
   }
 
+  updateCountOfRenders() {
+    this.countOfRenders++;
+  }
+  isRenderedMoreThanOneTime() {
+    return this.countOfRenders > 1;
+  }
+
+  initAnimations() {
+    this.textsAnimatedOnScroll = this.page.querySelectorAll("[data-text-animated-on-scroll]");
+
+    if (!this.textsAnimatedOnScroll.length) return;
+
+    this.watcher = new DOMElementWatcher({
+      elements: this.textsAnimatedOnScroll,
+      callback: () => {
+        setTimeout(
+          () =>
+            this.textsAnimatedOnScroll.forEach((text) => {
+              const isNeedSplitText = !this.isRenderedMoreThanOneTime();
+              animateTextOnScroll(text, isNeedSplitText);
+            }),
+          100
+        );
+      },
+    });
+
+    this.watcher.startWatching();
+  }
+
+  init() {
+    this.page = this.create();
+    this.textsAnimatedOnScroll = this.page.querySelectorAll("[data-text-animated-on-scroll]");
+  }
   create() {
     const innerHTML = `
       <div class="app-contact__container">
         <article class="app-contact__introductory-content">
-          <h1 class="app-contact__title">У Вас есть на примете какой-нибудь проект? <span class="app-contact__title-let-talk">Давайте поговорим.</span></h1>
-          <p class="app-contact__description">Я всегда готов помочь! Если Вы заинтересованы в запуске нового проекта, доработке существующего сайта, поиске предложения или обсуждении возможного сотрудничества, не стесняйтесь обращаться ко мне!</p>
+          <h1 class="app-contact__title" data-text-animated-on-scroll data-text-animated-on-scroll-target="app-contact">У Вас есть на примете какой-нибудь проект? <span class="app-contact__title-let-talk">Давайте поговорим.</span></h1>
+          <p class="app-contact__description" data-text-animated-on-scroll data-text-animated-on-scroll-target="app-contact">Я всегда готов помочь! Если Вы заинтересованы в запуске нового проекта, доработке существующего сайта, поиске предложения или обсуждении возможного сотрудничества, не стесняйтесь обращаться ко мне!</p>
         </article>
         <article class="app-contact__form-wrapper">
           
@@ -109,12 +148,12 @@ export default class ContactPage {
     `;
 
     const container = new Container(innerHTML);
-    const page = createDOM("main", { className: "app-contact" });
+    const page = createDOM("main", { className: "app-contact", id: "app-contact" });
 
     page.append(container.render());
 
     const formWrapper = page.querySelector(".app-contact__form-wrapper");
-    
+
     formWrapper.append(new Form({ fieldsData: this.formFieldsData, textareaFieldData: this.formTextareaFieldData, checboxFieldsData: this.formChecboxFieldsData }).render());
 
     return page;
