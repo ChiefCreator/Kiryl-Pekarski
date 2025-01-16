@@ -12,7 +12,7 @@ import "./liquidBackground.scss";
 import vertexShader from "./../../../shaders/vertex.glsl";
 import fragmentShader from "./../../../shaders/fragment.glsl";
 import fragmentShader2 from "./../../../shaders/fragment2.glsl";
-import sculpture3D from "./../../../3d/sculpture3.glb";
+import sculpture3D from "./../../../3d/sculpture.glb";
 
 import NoiseTextureRenderer from "./NoiseTextureRenderer";
 import ColorTextureRenderer from "./ColorTextureRenderer";
