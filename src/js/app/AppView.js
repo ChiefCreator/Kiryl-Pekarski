@@ -26,6 +26,7 @@ export default class AppView {
 
       this.content.append(page);
       document.title = pageObject.title;
+      window.scrollTo({ top: 0, behavior: "instant" });
 
       this.pageLoader.hide();
     }, 2500);

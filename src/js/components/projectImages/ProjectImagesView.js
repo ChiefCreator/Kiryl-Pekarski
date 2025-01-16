@@ -118,7 +118,6 @@ export default class ProjectImagesView {
     this.composer.addPass(new RenderPass(this.scene, this.camera));
     this.composer.addPass(this.effect);
   }
-  initTimelines() {}
   init(data) {
     this.data = data;
     this.projectImages = this.create();

@@ -5,7 +5,7 @@ export default class Controller {
 
   // обработчики
   handleHashChange() {
-    const pageId = location.hash.slice(1).toLowerCase() || "main";
+    const pageId = location.hash.slice(1) || "main";
     this.model.updateState(pageId);
   }
   scrollHandler() {

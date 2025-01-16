@@ -7,6 +7,7 @@ import HomePage from "./../pages/homePage/HomePage.js";
 import ErrorPage from "./../pages/errorPage/ErrorPage.js";
 import ContactPage from "./../pages/contactPage/ContactPage.js";
 import AboutPage from "../pages/aboutPage/AboutPage.js";
+import ProjectPage from "../pages/projectPage/ProjectPage.js";
 // компоненты
 import Cursor from "../components/cursor/Cursor.js";
 import ProjectsMenu from "../components/projectsMenu/ProjectsMenu.js";
@@ -14,6 +15,8 @@ import Header from "./../components/header/Header.js";
 import Content from "./../components/content/Content.js";
 import Footer from "../components/footer/Footer.js";
 import PageLoader from "../components/page-loader/PageLoader.js";
+
+import projectsData from "../data/projectsData.js";
 
 export default class App {
   constructor({ root }) {
@@ -56,8 +59,32 @@ export default class App {
     };
     this.routes = {
       main: homePage,
-      contact: new ContactPage(),
       about: new AboutPage({ app: this }),
+      contact: new ContactPage(),
+      "nikita-efremov": new ProjectPage({ 
+        data: projectsData.find(dataObject => dataObject.title === "Nikita Efremov"),
+        app: this,
+      }),
+      "limited-charm": new ProjectPage({ 
+        data: projectsData.find(dataObject => dataObject.title === "Limited Charm"),
+        app: this,
+      }),
+      "studio-fifty-seven": new ProjectPage({ 
+        data: projectsData.find(dataObject => dataObject.title === "Studio fifty-seven"),
+        app: this,
+      }),
+      "panto": new ProjectPage({ 
+        data: projectsData.find(dataObject => dataObject.title === "Panto"),
+        app: this,
+      }),
+      "tennis": new ProjectPage({ 
+        data: projectsData.find(dataObject => dataObject.title === "Tennis"),
+        app: this,
+      }),
+      "kolyan-kovsh": new ProjectPage({ 
+        data: projectsData.find(dataObject => dataObject.title === "Kolyan Kovsh"),
+        app: this,
+      }),
       default: homePage,
       error: new ErrorPage(),
     };
