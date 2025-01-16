@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 export default (env, argv) => {
   const paths = {
     entry: path.resolve(__dirname, "src", "js", "index.js"),
-    output: path.resolve(__dirname, "build"),
+    output: path.resolve(__dirname, env.mode === "development" ? "build" : "docs"),
     html: path.resolve(__dirname, "src", "index.html"),
     devServer: path.resolve(__dirname, "build"),
     styleMixins: path.resolve(__dirname, "src", "scss", "base", "_mixin.scss"),
