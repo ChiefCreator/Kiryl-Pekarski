@@ -1,5 +1,8 @@
-.app-main__container {
-  display: flex;
-  flex-direction: column;
-  gap: 100px;
+.app-main {
+  padding-bottom: min(4vw, 100px) 0;
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: min(4vw, 100px);
+  }
 }

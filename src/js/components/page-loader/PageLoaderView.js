@@ -2,7 +2,7 @@ import { createDOM } from "../../utils/domUtils";
 
 import Container from "../container/Container";
 import { splitTextOnLines } from "../../utils/domUtils";
-import DOMElementWatcher from "../domElementWatcher/DOMElementWatcher";
+import ElementObserver from "../elementObserver/ElementObserver";
 
 import gsap from "gsap";
 
@@ -95,19 +95,17 @@ export default class PageLoaderView {
     this.pageLoader = this.create(loaderObject);
     this.title = this.pageLoader.querySelector(".page-loader__title");
 
-    const watcher = new DOMElementWatcher({ 
-      elements: this.title,
-      callback: () =>{
-        setTimeout(() => {
-          splitTextOnLines(this.title);
+    const observer = new ElementObserver({
+      target: this.title,
+      onRender: () => {
+        splitTextOnLines(this.title);
 
-          this.titleLines = this.title.querySelectorAll(".text-line");
+        this.titleLines = this.title.querySelectorAll(".text-line");
   
-          this.initTimelines();
-        })
+        this.initTimelines();
       }
-    })
-    watcher.startWatching()
+    });
+    observer.start();
   }
   create(loaderObject) {
     const innerHTML = `

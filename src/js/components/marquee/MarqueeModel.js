@@ -1,5 +1,5 @@
 export default class MarqueeModel {
-  constructor(view, data, rowsCount, app) {
+  constructor(view, data, rowsCount, marqueeItemAttributes, app) {
     this.view = view;
     this.data = data;
 
@@ -11,6 +11,7 @@ export default class MarqueeModel {
 
     this.rowsData = null;
 
+    this.marqueeItemAttributes = marqueeItemAttributes;
     this.app = app;
     this.app.addListenerOfGettingScrollingSpeed(this.updateMovingOnScroll.bind(this));
   }
@@ -81,6 +82,6 @@ export default class MarqueeModel {
 
   // инициализация
   init() {
-    this.view.init(this.transformData(this.data));
+    this.view.init(this.transformData(this.data), this.marqueeItemAttributes);
   }
 }

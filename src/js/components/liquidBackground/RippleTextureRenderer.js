@@ -56,7 +56,7 @@ export default class RippleTextureRenderer {
   }
 
   initMouseEvents() {
-    window.addEventListener("mousemove", this.mousemoveHandler.bind(this));
+    window.addEventListener("pointermove", this.mousemoveHandler.bind(this));
   }
   mousemoveHandler(event) {
     this.mouseObj.x = (event.clientX / window.innerWidth) * 2 - 1;

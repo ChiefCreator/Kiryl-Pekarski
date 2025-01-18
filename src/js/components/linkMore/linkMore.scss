@@ -1,7 +1,7 @@
 .link-more {
   display: inline-block;
   position: relative;
-  font-size: 30px;
+  font-size: min(8.5vw, 30px);
   text-transform: uppercase;
   letter-spacing: .5px;
   color: var(--color-neutral-contrast);
@@ -10,13 +10,13 @@
   &__container {
     display: inline-flex;
     align-items: center;
-    gap: 15px;
+    gap: min(3vw, 15px);
   }
   &__arrow-wrapper {
     flex: 0 0 auto;
   }
   &__svg {
-    width: 50px;
+    width: min(13vw, 50px);
     aspect-ratio: 1;
   }
   &__circle {

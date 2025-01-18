@@ -10,7 +10,6 @@ import { createDOM } from "../../utils/domUtils";
 import "./liquidBackground.scss";
 
 import vertexShader from "./../../../shaders/vertex.glsl";
-import fragmentShader from "./../../../shaders/fragment.glsl";
 import fragmentShader2 from "./../../../shaders/fragment2.glsl";
 import sculpture3D from "./../../../3d/sculpture.glb";
 
@@ -18,7 +17,6 @@ import NoiseTextureRenderer from "./NoiseTextureRenderer";
 import ColorTextureRenderer from "./ColorTextureRenderer";
 import RippleTextureRenderer from "./RippleTextureRenderer";
 
-import envMap from "./../../../img/envMap.jpg";
 import normalMap from "./../../../img/normal-map.jpg";
 import mainTexture from "./../../../img/main-texture.png";
 
@@ -27,28 +25,47 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 export default class LiquidBackground {
-  constructor() {
-    this.liquidBackground = this.create();
+  constructor({ app }) {
+    this.app = app;
 
+    this.liquidBackground = this.create();
+    this.sculptureWrapper = null;
+
+    this.time = 0;
     this.viewportSettings = {
       width: window.innerWidth,
       height: window.innerHeight,
       aspectRatio: window.innerWidth / window.innerHeight,
       frustumSize: 1,
     };
-
-    this.sculptureWrapper = null;
-    this.meshPosition = new THREE.Vector3(0, 0, 0);
-
     this.sculptureOptions = {
       angle: 0,
       rotationDirection: -1,
       rotationSpeed: 0.003,
     }
+    this.meshScale = null;
+    this.meshPosition = new THREE.Vector3(0, 0, 0);
 
     this.isTr = true;
 
+    this.animationId = null;
+
     this.init();
+  }
+
+  setMeshScale() {
+    switch(true) {
+      case window.innerWidth <= 450:
+        return .65;
+      case window.innerWidth <= 600:
+        return .7;
+      default:
+        return 1;
+    }
+  }
+
+  updateTime(seconds) {
+    this.time += seconds;
   }
 
   initLoaders() {
@@ -107,10 +124,9 @@ export default class LiquidBackground {
             });
           }
         });
-        this.mesh.scale.set(1, 1, 1);
-        this.animateTransformationFromliquid();
+        this.mesh.scale.set(...[.5, .5, .5]);
         this.scene.add(this.mesh);
-        this.mesh.position.set(this.meshPosition.x, this.meshPosition.y, 0)
+        this.mesh.position.set(this.meshPosition.x, this.meshPosition.y, 0);
       },
       undefined,
       (error) => console.error("Ошибка загрузки:", error)
@@ -145,13 +161,15 @@ export default class LiquidBackground {
     this.composer.addPass(this.effect);
   }
   init() {
+    this.meshScale = this.setMeshScale();
+
     this.initLoaders();
     this.initTextures();
 
     this.init3DScene();
     this.initPostprocessing();
 
-    this.animate();
+    this.app.addListenerOfGettingScrollingSpeed(() => this.updateTime(0.02));
 
     window.addEventListener("resize", this.onWindowResize.bind(this));
     window.addEventListener("scroll", this.updateSculpturePosition.bind(this));
@@ -163,23 +181,23 @@ export default class LiquidBackground {
     if (!this.sculptureWrapper) return;
 
     const rect = this.sculptureWrapper.getBoundingClientRect();
-    const elementPosition = {
-      x: rect.left,
-      y: rect.top 
+    const elementPositionCenter = {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
     };
   
-    const normalizedX = (elementPosition.x / window.innerWidth) * 2 - 1;
-    const normalizedY = -(elementPosition.y / window.innerHeight) * 2 + 1;
+    const normalizedX = (elementPositionCenter.x / window.innerWidth) * 2 - 1;
+    const normalizedY = -(elementPositionCenter.y / window.innerHeight) * 2 + 1;
   
-    const vector = new THREE.Vector3(normalizedX + .5, normalizedY - .5, 0.0);
+    const vector = new THREE.Vector3(normalizedX, normalizedY, 0.0);
     vector.unproject(this.camera);
 
     const direction = vector.sub(this.camera.position).normalize();
     const distance = (0 - this.camera.position.z) / direction.z;
     const position = this.camera.position.clone().add(direction.multiplyScalar(distance));
-    const yInaccuracy = 0.3;
+    const yInaccuracy = 0.4;
 
-    this.meshPosition = new THREE.Vector3(position.x,position.y + yInaccuracy, 0.0);
+    this.meshPosition = new THREE.Vector3(position.x, position.y + yInaccuracy, 0.0);
 
     if (!this.animateMeshPosition) return;
 
@@ -211,20 +229,18 @@ export default class LiquidBackground {
     switch(value) {
       case 1:
         if (this.mesh) {
-          gsap.to(this.mesh.position, {
-            x: 0,
-            y: 0,
-            z: 0,
-            duration: 2,
-          });
+          gsap.to(this.mesh.position, { x: 0, y: 0, z: 0, duration: 2 });
+          gsap.to(this.mesh.scale, { x: this.meshScale, y: this.meshScale, z: this.meshScale, duration: 2 });
+
           clearTimeout(this.timeoutId);
           cancelAnimationFrame(this.timeline)
         }
         break;
       case 0:
         if (this.mesh && this.meshPosition) {
-          this.animateMeshPosition.invalidate();
-          this.animateMeshPosition.restart(); 
+          gsap.to(this.mesh.scale, { x: 1, y: 1, z: 1, duration: 2 });
+
+          this.animateMeshPosition.invalidate().restart();
           this.timeoutId = setTimeout(() => {
             this.animateSculpturePosition();
           }, 2000)  
@@ -233,7 +249,7 @@ export default class LiquidBackground {
     }
   };
   animate = () => {
-    requestAnimationFrame(this.animate);
+    this.updateTime(0.01);
     this.animateSculptureRotation(-0.25, 0.75);
 
     this.rippleTextureRenderer.render(this.renderer);
@@ -242,32 +258,32 @@ export default class LiquidBackground {
     this.renderer.setRenderTarget(null);
 
     this.effect.uniforms.uWavesTexture.value = this.rippleTexture;
-    this.effect.uniforms.time.value += 0.01;
+    this.effect.uniforms.time.value = this.time;
 
     if (this.composer) this.composer.render();
+
+    this.animationId = requestAnimationFrame(this.animate);
   };
   onWindowResize() {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
   animateTransformationFromliquid() {
-    ScrollTrigger.create({
+    if (this.scrollTrigger) this.scrollTrigger.kill();
+
+    this.scrollTrigger = ScrollTrigger.create({
       trigger: document.querySelector(".section-main"),
       start: "top 75%",
       end: "bottom 25%",
       onEnter: () => {
-        console.log("liquid");
         this.updateProgress(1);
       },
       onLeave: () => {
-        console.log("sculpture");
         this.updateProgress(0);
       },
       onEnterBack: () => {
-        console.log("liquid again");
         this.updateProgress(1);
       },
       onLeaveBack: () => {
-        console.log("sculpture again");
         this.updateProgress(0);
       },
     });
@@ -282,6 +298,14 @@ export default class LiquidBackground {
     this.mesh.rotation.y += this.sculptureOptions.rotationSpeed * this.sculptureOptions.rotationDirection;
   }
 
+  initAnimations() {
+    this.animateTransformationFromliquid();
+    this.animate();
+  }
+  stopAnimations() {
+    this.scrollTrigger.kill();
+    cancelAnimationFrame(this.animationId);
+  }
   create() {
     const liquidBackground = createDOM("div", { className: "liquid-background" });
 

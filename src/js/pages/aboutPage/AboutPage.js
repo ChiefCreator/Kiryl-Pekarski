@@ -2,6 +2,7 @@ import { createDOM } from "../../utils/domUtils";
 import SectionAbout from "./SectionAbout";
 import SectionSkills from "./SectionSkills";
 import DOMElementWatcher from "../../components/domElementWatcher/DOMElementWatcher";
+import ElementObserver from "../../components/elementObserver/ElementObserver";
 
 import { animateTextOnScroll } from "../../utils/animateOnScrollUtils";
 
@@ -31,28 +32,27 @@ export default class AboutPage {
   }
 
   initAnimations() {
-    const watcher = new DOMElementWatcher({
-      selector: ".section-information__portrait-img",
-      callback: () => {
-        setTimeout(() => this.sectionAboutObject.initAnimations(), 100);
+    new ElementObserver({
+      target: ".section-information__portrait-img",
+      onRender: () => {
+        this.sectionAboutObject.initAnimations()
       }
-    });
-    watcher.startWatching();
+    }).start();
+
 
     this.textsAnimatedOnScroll = this.page.querySelectorAll('[data-text-animated-on-scroll]');
 
     if (!this.textsAnimatedOnScroll.length) return;
 
-    this.watcher = new DOMElementWatcher({
-      elements: this.textsAnimatedOnScroll,
-      callback: () => {
-        setTimeout(() => this.textsAnimatedOnScroll.forEach(text => {
+    new ElementObserver({
+      target: this.textsAnimatedOnScroll,
+      onRender: () => {
+        this.textsAnimatedOnScroll.forEach(text => {
           const isNeedSplitText = !this.isRenderedMoreThanOneTime();
           animateTextOnScroll(text, isNeedSplitText);
-        }), 100);
+        })
       }
-    });
-    this.watcher.startWatching();
+    }).start();
   }
 
   init() {
@@ -63,11 +63,7 @@ export default class AboutPage {
     this.textsAnimatedOnScroll = this.page.querySelectorAll('[data-text-animated-on-scroll]');
   }
   create() {
-    const innerHTML = `
-      <div class="app-about__container">
-    
-      </div>
-    `;
+    const innerHTML = `<div class="app-about__container"></div>`;
 
     const page = createDOM("main", { className: "app-about", innerHTML });
     const pageContainer = page.firstElementChild;

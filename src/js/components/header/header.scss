@@ -23,8 +23,27 @@
     align-items: center;
     gap: 40px;
   }
-  &__links, &__tools {
+  &__links {
     display: flex;
     gap: 20px;
+  }
+  &__tools {
+    display: flex;
+    gap: 20px;
+  }
+  &__burger-button-wrapper {
+    display: none;
+  }
+
+  @media (max-width: 800px) {
+    &__links {
+      display: none;
+    }
+    &__burger-button-wrapper {
+      display: block;
+    }
+    &__menu {
+      gap: 20px;
+    }
   }
 }

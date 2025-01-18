@@ -26,6 +26,33 @@ export default class ProjectImagesView {
     this.planeRects = [];
   }
 
+  initAnimations() {
+    this.data.forEach((data, i) => {
+      const timelineOnScroll = gsap.timeline({ paused: true });
+      timelineOnScroll.fromTo(
+        this.planeImages[i].scale,
+        {
+          x: 0,
+          y: 0,
+        },
+        {
+          x: 1,
+          y: 1,
+          duration: 2,
+          ease: "power4.inOut",
+        }
+      );
+
+      animateElementOnScroll(data.img, {
+        events: {
+          onEnter: () => {
+            timelineOnScroll.restart();
+          },
+        },
+      });
+    });
+  }
+
   getPlaneRects(data) {
     return data.map((dataObj) => {
       return {
@@ -59,27 +86,6 @@ export default class ProjectImagesView {
 
       this.planeImages.push(plane);
       this.scene.add(plane);
-
-      const timelineOnScroll = gsap.timeline({ paused: true });
-      timelineOnScroll.fromTo(
-        data.img,
-        {
-          transform: `translate(0, 100%)`,
-        },
-        {
-          transform: `translate(0, 0)`,
-          duration: 2,
-          ease: "power4.inOut",
-        }
-      );
-
-      animateElementOnScroll(data.img, {
-        events: {
-          onEnter: () => {
-            timelineOnScroll.restart();
-          },
-        },
-      });
     });
   }
   init3DScene() {

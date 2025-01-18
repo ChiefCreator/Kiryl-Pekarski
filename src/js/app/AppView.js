@@ -5,6 +5,7 @@ export default class AppView {
     this.root = null;
     this.routes = null;
     this.pageLoader = null;
+    this.menu = null;
     this.content = null;
 
     this.watcher = new DOMElementWatcher({ elements: null, selector: null, callback: null });
@@ -12,11 +13,11 @@ export default class AppView {
     this.timeout = null;
   }
 
-  renderContent(pageId) {
+  renderContent(currentPageId, prevPageId) {
     if (this.timeout) clearTimeout(this.timeout);
 
     this.timeout = setTimeout(() => {
-      const pageObject = this.routes[pageId] || this.routes["error"];
+      const pageObject = this.routes[currentPageId] || this.routes["error"];
       pageObject.updateCountOfRenders();
       pageObject.initAnimations();
 
@@ -29,15 +30,24 @@ export default class AppView {
       window.scrollTo({ top: 0, behavior: "instant" });
 
       this.pageLoader.hide();
-    }, 2500);
+    }, 3000);
+
+    if (this.menu.checkIsOpen()) this.menu.close();
+
+    if (prevPageId) {
+      const prevPageObject = this.routes[prevPageId] || this.routes["error"];
+
+      if (prevPageObject.stopAnimations) prevPageObject.stopAnimations();
+    }
 
     this.pageLoader.show();
   }
 
-  init(root, routes, pageLoader) {
+  init(root, routes, pageLoader, menu) {
     this.root = root;
     this.routes = routes;
     this.pageLoader = pageLoader;
+    this.menu = menu;
     this.content = this.root.querySelector("#content");
   }
 }

@@ -1,6 +1,6 @@
 .container {
   max-width: 1590px;
   height: 100%;
-  padding: 0 15px;
+  padding: 0 clamp(0.125rem, -0.025rem + 0.8vw, 0.938rem); // от 2(300) до 15(1920)
   margin: 0 auto;
 }

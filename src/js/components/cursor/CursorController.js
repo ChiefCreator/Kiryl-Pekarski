@@ -107,6 +107,8 @@ export default class CursorController {
     document.addEventListener("mouseleave", this.mouseleaveDocumentHandler.bind(this));
   }
   init() {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    
     this.model.init();
 
     this.addListeners();

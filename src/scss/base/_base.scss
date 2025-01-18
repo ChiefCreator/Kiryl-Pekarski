@@ -33,11 +33,12 @@
 
 #root {
   min-height: 100vh;
+}
+.main-structure {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-
 .content {
   position: relative;
   overflow: hidden;

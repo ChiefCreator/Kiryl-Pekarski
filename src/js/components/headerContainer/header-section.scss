@@ -4,7 +4,7 @@
     width: 100%;
   }
   &__title {
-    font-size: 40px;
+    font-size: min(13vw, 50px);
     font-weight: 500;
     text-transform: uppercase;
   }

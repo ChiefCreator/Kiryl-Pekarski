@@ -1,42 +1,60 @@
 .section-project-main {
-  margin-top: 20px;
   &__container {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 20px;
   }
+
+  @media (max-width: 1280px) {
+    &__container {
+      grid-template-columns: 12fr;
+    }
+  }
 }
 .project-information {
   max-width: 600px;
-  &__main-content {
-  }
   &__title {
-    font-size: 150px;
+    font-size: min(22vw, 150px);
     text-transform: uppercase;
     font-weight: 500;
   }
+  &__img {
+    display: none;
+    width: 100%;
+    object-fit: cover;
+    aspect-ratio: 1/0.7;
+    opacity: 0;
+    margin-bottom: 10px;
+  }
   &__role {
-    font-size: 35px;
+    font-size: min(7vw, 35px);
     text-transform: uppercase;
     font-weight: 500;
   }
   &__button-wrapper {
     margin-top: 20px;
   }
+
+  @media (max-width: 1280px) {
+    max-width: 100%;
+    &__img {
+      display: block;
+    }
+  }
 }
 .project-information-skills {
   margin-top: 10px;
   &__title {
-    font-size: 35px;
+    font-size: min(7vw, 35px);
     text-transform: uppercase;
     font-weight: 500;
     color: rgb(87, 87, 87);
     margin-bottom: 5px;
   }
-  &__marquee-wrapper {
+  .marquee {
     overflow: hidden;
   }
-  .marquee-item__title {
+  .marquee-item__title, .marquee__row-hidden-content {
     font-size: 65px;
     -webkit-text-stroke-width: .5px;
   }
@@ -54,5 +72,8 @@
     object-fit: cover;
     aspect-ratio: 1/0.7;
     opacity: 0;
+  }
+  @media (max-width: 1280px) {
+    display: none;
   }
 }

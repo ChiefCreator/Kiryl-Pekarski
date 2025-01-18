@@ -19,7 +19,7 @@
     overflow: hidden;
   }
   &__title {
-    font-size: 200px;
+    font-size: min(30vw, 200px);
     text-transform: uppercase;
     font-weight: 500;
   }

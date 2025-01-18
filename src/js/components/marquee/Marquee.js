@@ -4,9 +4,9 @@ import MarqueeController from "./MarqueeController";
 import "./marquee.scss";
 
 export default class Marquee {
-  constructor({ data, rowsCount, app }) {
+  constructor({ data, rowsCount, marqueeItemAttributes, app }) {
     this.view = new MarqueeView();
-    this.model = new MarqueeModel(this.view, data, rowsCount, app);
+    this.model = new MarqueeModel(this.view, data, rowsCount, marqueeItemAttributes, app);
     this.controller = new  MarqueeController(this.model, this.view);
   }
 

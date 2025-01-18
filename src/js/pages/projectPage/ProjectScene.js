@@ -10,8 +10,14 @@ import vertexShader from "./../../../shaders/vertex.glsl";
 import fragmentShader from "./../../../shaders/fragment3.glsl";
 import RippleTextureRenderer from "../../components/liquidBackground/RippleTextureRenderer";
 
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
+
+import { animateElementOnScroll } from "../../utils/animateOnScrollUtils";
+
 export default class ProjectScene {
-  constructor({ mainImgElement, mainImgSrc, imagesSrc, imageGaleryObject }) {
+  constructor({ mainImgElement, mainImgSrc, sliderImages, imagesSrc, imageGaleryObject }) {
     this.viewportSettings = {
       width: window.innerWidth,
       height: window.innerHeight,
@@ -26,34 +32,44 @@ export default class ProjectScene {
       posX: 0,
       posY: 0,
       prevPosX: null,
-      prebPosY: null,
-    }
+      prevPosY: null,
+    };
 
     this.imageGaleryObject = imageGaleryObject;
-    this.sliderSettings = {
-      imageAmount: imagesSrc.length,
-      imageWidth: 4.1,
-      imageHeight: 2,
-      gapX: 1.5,
-      gapY: .8,
-      sliderHeight: null,
-    };
-    this.sliderSettings.sliderHeight = (this.sliderSettings.imageAmount - 1) * (this.sliderSettings.imageHeight + this.sliderSettings.gapY);
-    this.sliderSettings.sliderWidth = (this.sliderSettings.imageAmount - 1) * (this.sliderSettings.imageWidth + this.sliderSettings.gapX);
-    this.sliderMeshPosition = {
-      posX: 0,
-      posY: 0,
-      prevPosX: null,
-      prebPosY: null,
 
-    }
+    this.sliderImages = sliderImages;
     this.imagesSrc = imagesSrc;
-    this.sliderMesh = null;
-    this.sliderContainerMesh = null;
+    this.sliderImageMeshes = [];
+    this.sliderImagesMeshPositions = Array.from({ length: this.sliderImages.length }).map((item) => (item = { posX: 0, posY: 0, prevPosX: null, prevPosY: null }));
 
     this.projectScene = null;
 
     this.init();
+  }
+
+  initAnimations() {
+    const timelineOnScroll = gsap.timeline({ paused: true });
+    timelineOnScroll.fromTo(
+      this.mainImagePlane.scale,
+      {
+        x: 0,
+        y: 0,
+      },
+      {
+        x: 1,
+        y: 1,
+        duration: 2,
+        ease: "power4.inOut",
+      }
+    );
+
+    animateElementOnScroll(this.mainImgElement, {
+      events: {
+        onEnter: () => {
+          timelineOnScroll.restart();
+        },
+      },
+    });
   }
 
   // инициализация 3D
@@ -66,8 +82,7 @@ export default class ProjectScene {
     this.rippleTexture = this.rippleTextureRenderer.getTexture();
   }
   initMainImagePlane() {
-    const rect = this.mainImgElement.getBoundingClientRect();
-    const size = this.getMainImagePlaneSize(rect.width, rect.height);
+    const size = this.getMeshSizeByHtmlElement(this.mainImgElement);
 
     const planeGeometry = new THREE.PlaneGeometry(size.width, size.height);
     const planeMaterial = new THREE.MeshBasicMaterial({
@@ -79,29 +94,18 @@ export default class ProjectScene {
 
     this.scene.add(this.mainImagePlane);
   }
-  initSlider() {
-    this.sliderMesh = new THREE.Object3D();
-    this.sliderContainerMesh = new THREE.Object3D();
-
-    const geometry = new THREE.PlaneGeometry(this.sliderSettings.imageWidth, this.sliderSettings.imageHeight);
-
-    geometry.computeVertexNormals();
-
+  initSliderImages() {
     this.imagesSrc.forEach((img, imgIndex) => {
-      const texture = this.textureLoader.load(img);
-      const material = new THREE.MeshBasicMaterial({
-        map: texture,
-      });
+      const size = this.getMeshSizeByHtmlElement(this.sliderImages[imgIndex]);
+
+      const geometry = new THREE.PlaneGeometry(size.width, size.height);
+      const material = new THREE.MeshBasicMaterial({ map: this.textureLoader.load(img) });
 
       const imgMesh = new THREE.Mesh(geometry, material);
-      imgMesh.position.x = -imgIndex * (this.sliderSettings.imageWidth + this.sliderSettings.gapX);
 
-      this.sliderContainerMesh.add(imgMesh);
+      this.scene.add(imgMesh);
+      this.sliderImageMeshes.push(imgMesh);
     });
-
-    this.sliderMesh.add(this.sliderContainerMesh);
-
-    this.scene.add(this.sliderMesh);
   }
   initScene() {
     this.renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -129,10 +133,10 @@ export default class ProjectScene {
     this.initScene();
     this.initPostprocessing();
     this.initMainImagePlane();
-    this.initSlider();
+    this.initSliderImages();
 
     this.animate();
-    this.initSliderScrollAnimation();
+    this.imageGaleryObject.initScrollAnimation();
   }
   initPostprocessing() {
     this.composer = new EffectComposer(this.renderer);
@@ -159,7 +163,7 @@ export default class ProjectScene {
     this.effect.uniforms.uWavesTexture.value = this.rippleTexture;
 
     this.updateMainImagePlanePosition();
-    this.updateImageGaleryPosition();
+    this.updateSliderImagesPositions();
 
     if (this.composer) this.composer.render();
 
@@ -167,7 +171,11 @@ export default class ProjectScene {
   };
 
   // Привязка 3D объектов к HTML
-  getMainImagePlaneSize(width, height) {
+  getMeshSizeByHtmlElement(element) {
+    const rect = element.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+
     return {
       width: (width / this.viewportSettings.width) * this.viewportSettings.aspectRatio * 2,
       height: (height / this.viewportSettings.height) * 2,
@@ -194,31 +202,17 @@ export default class ProjectScene {
       this.mainImageMeshPosition.prevPosY = posY;
     }
   }
-  updateImageGaleryPosition() {
-    const { posX, posY } = this.getMeshPositionByHtmlPosition(this.imageGaleryObject.render());
+  updateSliderImagesPositions() {
+    this.sliderImages.forEach((img, imgIndex) => {
+      const { posX, posY } = this.getMeshPositionByHtmlPosition(img);
 
-    if (!this.sliderMeshPosition.prevPosX || this.sliderMeshPosition.prevPosX !== posX || this.sliderMeshPosition.prevPosY !== posY) {
-      this.sliderMesh.position.set(posX, posY, 0);
+      if (!this.sliderImagesMeshPositions[imgIndex].prevPosX || this.sliderImagesMeshPositions[imgIndex].prevPosX !== posX || this.sliderImagesMeshPositions[imgIndex].prevPosY !== posY) {
+        this.sliderImageMeshes[imgIndex].position.set(posX, posY, 0);
 
-      this.sliderMeshPosition.prevPosX = posX;
-      this.sliderMeshPosition.prevPosY = posY;
-    }
-  }
-
-  // обновление слайдера по скроллу
-  initSliderScrollAnimation() {
-    this.imageGaleryObject.initScrollAnimation(this);
-  }
-  updateSliderContainerMeshPosition(position, scrollEnd) {
-    const normalizePosition = this.normalizePosition(position, scrollEnd);
-    const posX = Math.abs((normalizePosition.normalizedY - 1) / 2) * this.sliderSettings.sliderWidth;
-
-    this.sliderContainerMesh.position.x = posX;
-  }
-  normalizePosition(position, scrollEnd) {
-    return {
-      normalizedY: -(position.y / scrollEnd) * 2 + 1,
-    };
+        this.sliderImagesMeshPositions[imgIndex].prevPosX = posX;
+        this.sliderImagesMeshPositions[imgIndex].prevPosY = posY;
+      }
+    });
   }
 
   // инициализация и рендеринг

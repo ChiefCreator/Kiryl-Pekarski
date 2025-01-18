@@ -11,6 +11,10 @@ export default class ProjectImages {
     this.controller = new ProjectImagesController(this.model, this.view);
   }
 
+  initAnimations() {
+    this.view.initAnimations();
+  }
+
   render() {
     return this.view.render();
   }

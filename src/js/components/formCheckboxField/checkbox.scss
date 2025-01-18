@@ -1,13 +1,13 @@
 .checkbox {
   display: block;
-  padding: 9px 18px;
+  padding: clamp(0.375rem, 0.188rem + 1vw, 0.563rem) clamp(0.75rem, 0.375rem + 2vw, 1.125rem); // от 6(300) до 9(600) и от 12 до 18
   border: .5px solid #494949;
   border-radius: 5px;
   position: relative;
   cursor: pointer;
   transition: border .5s var(--transition-power--in-out), background-color .5s var(--transition-power--in-out);
   &__title {
-    font-size: 20px;
+    font-size: clamp(1.125rem, 1rem + 0.67vw, 1.25rem); // от 18(300) до 20(600)
     font-family: var(--font-secondary);
     color: #494949;
     transition: color .5s var(--transition-power--in-out);

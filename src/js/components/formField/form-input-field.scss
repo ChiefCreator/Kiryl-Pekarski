@@ -2,7 +2,7 @@
   border: none;
   &__label {
     text-transform: uppercase;
-    font-size: 32px;
+    font-size: clamp(1.563rem, 1.125rem + 2.33vw, 2rem); // от 25(300) до 32(600)
     letter-spacing: 0.5px;
     display: inline-block;
     margin-bottom: 15px;

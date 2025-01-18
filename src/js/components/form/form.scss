@@ -19,4 +19,10 @@
   &__button-wrapper {
     overflow: hidden;
   }
+
+  @media (max-width: 600px) {
+    &__fields-list {
+      grid-template-columns: 1fr;
+    }
+  }
 }

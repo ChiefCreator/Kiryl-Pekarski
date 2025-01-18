@@ -4,8 +4,7 @@ import { createDOM } from "../../utils/domUtils";
 import HeaderSection from "../../components/headerContainer/HeaderSection";
 import ArticleProject from "./ArticleProject";
 import ProjectImages from "../../components/projectImages/ProjectImages";
-import DOMElementWatcher from "../../components/domElementWatcher/DOMElementWatcher";
-import ImageGalery3D from "../../components/ImageGalery3D/ImageGalery3D";
+import ElementObserver from "../../components/elementObserver/ElementObserver";
 
 import "./sectionProjects.scss";
 
@@ -80,6 +79,9 @@ export default class SectionProjects {
     this.currentElem = null;
   }
 
+  initAnimations() {
+    this.projectImages.initAnimations();
+  }
   create() {
     const innerHTML = `<div class="section-projects__container id="section-projects__container"></div>`;
 
@@ -101,18 +103,16 @@ export default class SectionProjects {
       const articleProject = new ArticleProject(data);
       const articleProjectElement = articleProject.render();
       projectsContainer.append(articleProjectElement);
+    });
 
-      if (i === this.articlesData.length - 1) {
-        const watcher = new DOMElementWatcher({
-          elements: articleProjectElement.querySelector(".article-project__img"),
-          callback: () => {
-            const projectImages = new ProjectImages({ data: this.getArticleImgData() });
-            projectsContainer.append(projectImages.render());
-          }
-        });
-        watcher.startWatching();
+    const observer = new ElementObserver({
+      target: ".article-project__img",
+      onRender: () => {
+        this.projectImages = new ProjectImages({ data: this.getArticleImgData() });
+        projectsContainer.append(this.projectImages.render());
       }
     });
+    observer.start();
 
     return section;
   }

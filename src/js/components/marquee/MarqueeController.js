@@ -24,8 +24,8 @@ export default class MarqueeController {
     const rowsData = [];
 
     this.view.rows.forEach((row) => {
-      const blockFirst = row.firstElementChild;
-      const blockSecond = row.lastElementChild;
+      const blockFirst = row.querySelector(".marquee__block_first");
+      const blockSecond = row.querySelector(".marquee__block_second");
 
       const blockFirstRect = blockFirst.getBoundingClientRect();
       const blockSecondRect = blockSecond.getBoundingClientRect();

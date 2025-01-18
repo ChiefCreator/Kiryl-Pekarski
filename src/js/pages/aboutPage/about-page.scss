@@ -1,7 +1,8 @@
 .app-about {
+  padding: min(4vw, 100px) 0;
   &__container {
     display: flex;
     flex-direction: column;
-    gap: 100px;
+    gap: min(4vw, 100px);
   }
 }

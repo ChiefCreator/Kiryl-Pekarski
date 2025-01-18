@@ -1,6 +1,5 @@
 .app-contact {
-  margin-top: 100px;
-  margin-bottom: 100px;
+  padding: min(4vw, 100px) 0;
   &__container {
     display: grid;
     grid-template-columns: 7fr 5fr;
@@ -11,7 +10,7 @@
   }
   &__title {
     max-width: 600px;
-    font-size: 80px;
+    font-size: clamp(3.125rem, 2.717rem + 2.17vw, 5rem); // от 50 до 80
     font-weight: 500;
     text-transform: uppercase;
   }
@@ -20,10 +19,17 @@
   }
   &__description {
     text-transform: uppercase;
-    font-size: 30px;
+    font-size: clamp(1.563rem, 1.125rem + 2.33vw, 2rem); // от 25(300) до 32(600)
     max-width: 400px;
     font-weight: 500;
-    margin-top: 50px;
+    margin-top: min(2vw, 50px);
     color: #494949;
+  }
+
+  @media (max-width: 1024px) {
+    &__container {
+      grid-template-columns: 12fr;
+      gap: 50px;
+    }
   }
 }

@@ -10,13 +10,15 @@ import AboutPage from "../pages/aboutPage/AboutPage.js";
 import ProjectPage from "../pages/projectPage/ProjectPage.js";
 // компоненты
 import Cursor from "../components/cursor/Cursor.js";
-import ProjectsMenu from "../components/projectsMenu/ProjectsMenu.js";
+import Menu from "../components/menu/Menu.js";
 import Header from "./../components/header/Header.js";
 import Content from "./../components/content/Content.js";
 import Footer from "../components/footer/Footer.js";
 import PageLoader from "../components/page-loader/PageLoader.js";
 
 import projectsData from "../data/projectsData.js";
+
+import { createDOM } from "../utils/domUtils.js";
 
 export default class App {
   constructor({ root }) {
@@ -38,20 +40,33 @@ export default class App {
   }
 
   renderComponents() {
-    this.root.append( this.components.pageLoader.render(), this.components.cursor.render(), this.components.header.render(), this.components.content.render(), this.components.projectsMenu.render(), this.components.footer.render());
+    this.components.mainStructure.append(
+      this.components.header.render() ?? "",
+      this.components.content.render() ?? "",
+      this.components.footer.render() ?? ""
+    );
+    this.root.append(
+      this.components.pageLoader.render() ?? "",
+      this.components.cursor.render() ?? "",
+      this.components.menu.render() ?? "",
+      this.components.mainStructure
+    );
   }
   init() {
     const pageLoaderObject = new PageLoader();
-    const homePage = new HomePage();
+    const homePage = new HomePage({ app: this });
 
     this.components = {
+      mainStructure: createDOM("div", { className: "main-structure" }),
       cursor: new Cursor({ 
         radius: 26,
         borderWidth: 1.5,
       }),
-      projectsMenu: new ProjectsMenu(),
+      menu: new Menu({ 
+        linksData: [ { title: "Главная", href: "#main" }, { title: "Обо мне", href: "#about" }, { title: "Связаться", href: "#contact" }],
+      }),
       header: new Header({
-        linksData: [ { title: "Проекты", href: null, attributes: [{ title: "data-projects-menu-open", value: true }] }, { title: "Обо мне", href: "#about" }, { title: "Связаться", href: "#contact" }],
+        linksData: [ { title: "Проекты", href: null, attributes: [{ title: "data-menu-open", value: true }] }, { title: "Обо мне", href: "#about" }, { title: "Связаться", href: "#contact" }],
       }),
       footer: new Footer(),
       content: new Content(),
@@ -92,7 +107,7 @@ export default class App {
   render() {
     this.renderComponents();
 
-    this.view.init(this.root, this.routes, this.components.pageLoader);
+    this.view.init(this.root, this.routes, this.components.pageLoader, this.components.menu);
     this.controller.init();
   }
 }

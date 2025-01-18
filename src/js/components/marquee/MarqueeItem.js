@@ -1,19 +1,21 @@
 import { createDOM } from "../../utils/domUtils";
 
 export default class MarqueeItem {
-  constructor(data) {
+  constructor({ data, attributes }) {
     this.marqueeItem = null;
 
-    this.init(data);
+    this.init(data, attributes);
   }
 
-  init(data) {
-    this.marqueeItem = this.create(data);
+  init(data, attributes) {
+    this.marqueeItem = this.create(data, attributes);
   }
-  create(data) {
+  create(data, attributes) {
     const innerHTML = `
       <div class="marquee-item__container">
-        <h4 class="marquee-item__title" data-content="${data.title}">${data.title}</h4>
+        <h4 class="marquee-item__title" data-content="${data.title}" ${attributes ? attributes.map(obj => {
+          return `${obj.title}="${obj.value}"`
+        }).join(' ') : ''}>${data.title}</h4>
       </div>
     `;
 

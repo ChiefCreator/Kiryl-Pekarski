@@ -24,6 +24,7 @@ export function splitTextOnLines($text) {
   $bufferText.style.width = $text.offsetWidth + 0.5 + "px";
   $bufferText.style.position = "absolute";
   $bufferText.style.left = "0px";
+  $bufferText.style.textAlign = "justify";
   $bufferText.innerHTML = "_";
   document.body.appendChild($bufferText);
 
