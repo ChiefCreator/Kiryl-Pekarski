@@ -14,10 +14,8 @@ import fragmentShader2 from "./../../../shaders/fragment2.glsl";
 import sculpture3D from "./../../../3d/sculpture.glb";
 
 import NoiseTextureRenderer from "./NoiseTextureRenderer";
-import ColorTextureRenderer from "./ColorTextureRenderer";
 import RippleTextureRenderer from "./RippleTextureRenderer";
 
-import normalMap from "./../../../img/normal-map.jpg";
 import mainTexture from "./../../../img/main-texture.png";
 
 import { gsap } from "gsap";
@@ -80,16 +78,8 @@ export default class LiquidBackground {
     this.noiseTextureRenderer = new NoiseTextureRenderer();
     this.noiseTexture = this.noiseTextureRenderer.getTexture();
 
-    const ranges = [[ 0.0, 0.05 ], [ 0.05, 0.1 ], [ 0.1, 0.2 ], [ 0.2, 0.25 ], [ 0.25, 0.4 ], [ 0.4, 1.0 ]];
-    const colors = ["#ff4900", "#ff4900", "#00ffee", "pink", "#ffff00", "#ff4900"];
-
-    this.colorTextureRenderer= new ColorTextureRenderer({ colors, ranges: new Float32Array(ranges.flat()) });
-    this.colorTexture = this.colorTextureRenderer.getTexture();
-
     this.rippleTextureRenderer = new RippleTextureRenderer();
     this.rippleTexture = this.rippleTextureRenderer.getTexture();
-
-    this.normalTexture = this.textureLoader.load(normalMap);
   }
   init3DScene() {
     this.renderer = new THREE.WebGLRenderer({ alpha: true });

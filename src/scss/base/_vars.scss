@@ -1,12 +1,18 @@
 @font-face {
   font-family: "Cinematografica";
-  src: url("~@fonts/Cinematografica/Cinematografica-Regular-trial.ttf");
+  src: 
+    url('~@fonts/Cinematografica/Cinematografica-Regular-trial.woff2') format('woff2'),
+    url('~@fonts/Cinematografica/Cinematografica-Regular-trial.woff') format('woff'),
+    url("~@fonts/Cinematografica/Cinematografica-Regular-trial.ttf") format('truetype');
   font-style: normal;
   font-weight: 400;
 }
 @font-face {
   font-family: "BebasNeuePro";
-  src: url("~@fonts/BebasNeuePro/BebasNeuePro-Regular.woff");
+  src: 
+    url('~@fonts/BebasNeuePro/BebasNeuePro-Regular.woff2') format('woff2'),
+    url("~@fonts/BebasNeuePro/BebasNeuePro-Regular.woff") format('woff'),
+    url("~@fonts/BebasNeuePro/BebasNeuePro-Regular.ttf") format('truetype');
   font-style: normal;
   font-weight: 400;
 }

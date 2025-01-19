@@ -47,8 +47,9 @@
   }
   &__year {
     margin-top: 20px;
-    font-size: min(7vw, 25px);
-    font-family: var(--font-secondary);
+    font-size: min(7vw, 30px);
+    font-family: var(--font-nums);
+    letter-spacing: min(.5vw, 5px);
     color: var(--color-neutral-contrast--darken);
   }
   &__description {

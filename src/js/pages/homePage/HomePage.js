@@ -1,6 +1,5 @@
 import { createDOM } from "../../utils/domUtils";
 
-import DOMElementWatcher from "../../components/domElementWatcher/DOMElementWatcher";
 import LiquidBackground from "../../components/liquidBackground/LiquidBackground";
 import SectionMain from "./SectionMain";
 import SectionAbout from "./SectionAbout";
