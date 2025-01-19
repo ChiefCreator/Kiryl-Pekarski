@@ -6,9 +6,10 @@ import { getAnimateCloseButtonTimeline } from "../../utils/animateUtils";
 import gsap from "gsap";
 
 export default class MenuController {
-  constructor(model, view) {
+  constructor(model, view, app) {
     this.model = model;
     this.view = view;
+    this.app = app;
 
     this.dataProjectsMenuOpen = "data-menu-open";
     this.dataProjectsMenuClose = "data-menu-close";
@@ -98,9 +99,12 @@ export default class MenuController {
   // методы открытия и закрытия
   open() {
     this.timeline.restart();
+    this.app.toggleScroll("hide");
   }
   close() {
     this.timeline.reverse();
+
+    setTimeout(() => this.app.toggleScroll("open"), 2500);
   }
 
   // обработчики событий
@@ -161,7 +165,7 @@ export default class MenuController {
 
     this.timeline
       .to(this.view.menu, {
-        transform: "translateX(0)",
+        left: 0,
         ease: "power4.inOut",
         duration: 1,
       }, 0)

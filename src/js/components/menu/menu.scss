@@ -7,7 +7,7 @@
   height: 100vh;
   background-color: var(--color-neutral-main);
   display: block;
-  transform: translateX(-100%);
+  left: -100%;
   overflow: auto;
   &::-webkit-scrollbar {
     width: 0;

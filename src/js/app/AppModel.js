@@ -6,11 +6,33 @@ export default class AppModel {
     this.currentPage = null;
     this.prevPage = null;
 
+    // скорость прокрученных пикселей
     this.listenersOfGettingScrollingSpeed = [];
     this.speedOfScrolledPixelsObj = {
       lastPosition: window.scrollY || window.pageYOffset,
       lastTimestamp: Date.now(),
       speed: 0,
+    }
+
+    // включение и отключение скролла
+    this.scrollOptions = {
+      isOpen: true,
+    };
+  }
+
+  toggleScroll(action) {
+    switch(action) {
+      case "hide":
+        if (!this.scrollOptions.isOpen) return;
+        const scrollWidth = window.innerWidth - document.documentElement.clientWidth;
+        this.view.hideScroll(scrollWidth);
+        this.scrollOptions.isOpen = false;
+        break;
+      case "open":
+        if (this.scrollOptions.isOpen) return;
+        this.view.openScroll();
+        this.scrollOptions.isOpen = true;
+        break;
     }
   }
 
@@ -39,6 +61,6 @@ export default class AppModel {
     this.currentPage = pageId;
     this.prevPage = this.history.length > 1 ? this.history[this.history.length - 2] : null;
 
-    this.view.renderContent(this.currentPage, this.prevPage);
+    this.view.renderContent(this.currentPage, this.prevPage, window.innerWidth - document.documentElement.clientWidth);
   }
 }

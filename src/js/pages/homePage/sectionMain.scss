@@ -1,6 +1,6 @@
 .section-main {
   width: 100%;
-  flex: 1 0 calc(100vh - 62px);
+  // flex: 1 0 calc(100vh - 62px);
   &__container {
     width: 100%;
     height: 100%;
@@ -31,7 +31,7 @@
   }
   @media (max-width: 1024px) {
     &__title-wrapper {
-      height: 100%;
+      // height: 100%;
     }
   }
 }

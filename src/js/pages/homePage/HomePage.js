@@ -36,12 +36,11 @@ export default class HomePage {
   stopAnimations() {
     this.liquidBackgroundObject.stopAnimations();
   }
-  initAnimations() {
+
+  onLoad(callbackOnLoad) {
     this.textsAnimatedOnScroll = this.page.querySelectorAll("[data-text-animated-on-scroll]");
     const sectionMain = this.page.querySelector(".section-main");
     const projectImgs = this.page.querySelectorAll(".article-project__img");
-
-    if (!this.textsAnimatedOnScroll.length) return;
 
     new ElementObserver({
       target: [...this.textsAnimatedOnScroll, ...projectImgs, sectionMain],
@@ -53,10 +52,11 @@ export default class HomePage {
 
         this.liquidBackgroundObject.initAnimations();
         this.sectionProjectsObject.initAnimations();
+
+        callbackOnLoad();
       },
     }).start();
   }
-
   init() {
     this.page = this.create();
     this.textsAnimatedOnScroll = this.page.querySelectorAll("[data-text-animated-on-scroll]");

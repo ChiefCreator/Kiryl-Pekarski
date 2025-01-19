@@ -18,7 +18,7 @@ export default class AboutPage {
     this.sectionAboutObject = null;
     this.sectionSkillsObject = null;
     this.watcher = null;
-    
+
     this.page = null;
 
     this.init();
@@ -31,36 +31,26 @@ export default class AboutPage {
     return this.countOfRenders > 1;
   }
 
-  initAnimations() {
+  onLoad(callbackOnLoad) {
     new ElementObserver({
-      target: ".section-information__portrait-img",
+      target: [this.page.querySelector(".section-information__portrait-img"), ...this.page.querySelectorAll("[data-text-animated-on-scroll]")],
       onRender: () => {
-        this.sectionAboutObject.initAnimations()
-      }
-    }).start();
+        const isNeedSplitText = !this.isRenderedMoreThanOneTime();
 
+        this.sectionAboutObject.initAnimations();
 
-    this.textsAnimatedOnScroll = this.page.querySelectorAll('[data-text-animated-on-scroll]');
+        this.textsAnimatedOnScroll.forEach((text) => animateTextOnScroll(text, isNeedSplitText));
 
-    if (!this.textsAnimatedOnScroll.length) return;
-
-    new ElementObserver({
-      target: this.textsAnimatedOnScroll,
-      onRender: () => {
-        this.textsAnimatedOnScroll.forEach(text => {
-          const isNeedSplitText = !this.isRenderedMoreThanOneTime();
-          animateTextOnScroll(text, isNeedSplitText);
-        })
-      }
+        callbackOnLoad();
+      },
     }).start();
   }
-
   init() {
     this.sectionAboutObject = new SectionAbout();
     this.sectionSkillsObject = new SectionSkills({ app: this.app });
 
     this.page = this.create();
-    this.textsAnimatedOnScroll = this.page.querySelectorAll('[data-text-animated-on-scroll]');
+    this.textsAnimatedOnScroll = this.page.querySelectorAll("[data-text-animated-on-scroll]");
   }
   create() {
     const innerHTML = `<div class="app-about__container"></div>`;

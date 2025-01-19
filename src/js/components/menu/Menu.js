@@ -4,10 +4,10 @@ import MenuController from "./MenuController";
 import "./menu.scss";
 
 export default class Menu {
-  constructor({ linksData }) {
+  constructor({ linksData, app }) {
     this.view = new MenuView();
     this.model = new MenuModel(this.view, linksData);
-    this.controller = new MenuController(this.model, this.view);
+    this.controller = new MenuController(this.model, this.view, app);
   }
 
   checkIsOpen() {

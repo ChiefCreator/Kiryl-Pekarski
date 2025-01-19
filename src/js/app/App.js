@@ -39,6 +39,10 @@ export default class App {
     this.model.listenersOfGettingScrollingSpeed.push(callback);
   }
 
+  toggleScroll(action) {
+    this.model.toggleScroll(action);
+  }
+
   renderComponents() {
     this.components.mainStructure.append(
       this.components.header.render() ?? "",
@@ -64,6 +68,7 @@ export default class App {
       }),
       menu: new Menu({ 
         linksData: [ { title: "Главная", href: "#main" }, { title: "Обо мне", href: "#about" }, { title: "Связаться", href: "#contact" }],
+        app: this,
       }),
       header: new Header({
         linksData: [ { title: "Проекты", href: null, attributes: [{ title: "data-menu-open", value: true }] }, { title: "Обо мне", href: "#about" }, { title: "Связаться", href: "#contact" }],

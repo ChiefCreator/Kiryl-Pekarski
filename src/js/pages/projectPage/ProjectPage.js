@@ -31,27 +31,24 @@ export default class ProjectPage {
     return this.countOfRenders > 1;
   }
 
-  initAnimations() {
-    this.textsAnimatedOnScroll = this.page.querySelectorAll("[data-text-animated-on-scroll]");
+  onLoad(callbackOnLoad) {
+    const textsAnimatedOnScroll = this.page.querySelectorAll("[data-text-animated-on-scroll]");
     const mainImg = this.page.querySelector(".project-illustration__img");
     const mobileImg = this.page.querySelector(".project-information__img");
 
-    if (!this.textsAnimatedOnScroll.length) return;
-
-    const observer = new ElementObserver({
-      target: window.innerWidth > 1280 ? [mainImg, ...this.textsAnimatedOnScroll] : [mobileImg, ...this.textsAnimatedOnScroll],
+    new ElementObserver({
+      target: window.innerWidth > 1280 ? [mainImg, ...textsAnimatedOnScroll] : [mobileImg, ...textsAnimatedOnScroll],
       onRender: () => {
-        this.textsAnimatedOnScroll.forEach((text) => {
-          const isNeedSplitText = !this.isRenderedMoreThanOneTime();
-          animateTextOnScroll(text, isNeedSplitText);
-        });
+        const isNeedSplitText = !this.isRenderedMoreThanOneTime();
+
+        textsAnimatedOnScroll.forEach((text) => animateTextOnScroll(text, isNeedSplitText));
 
         this.projectSceneObject.initAnimations();
-      },
-    });
-    observer.start();
-  }
 
+        callbackOnLoad();
+      },
+    }).start();
+  }
   init() {
     this.page = this.create();
   }

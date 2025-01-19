@@ -2,6 +2,7 @@ import { createDOM } from "../../utils/domUtils";
 import Container from "../../components/container/Container";
 import Form from "../../components/form/Form";
 import DOMElementWatcher from "../../components/domElementWatcher/DOMElementWatcher";
+import ElementObserver from "../../components/elementObserver/ElementObserver";
 
 import { animateTextOnScroll } from "../../utils/animateOnScrollUtils";
 
@@ -110,39 +111,20 @@ export default class ContactPage {
     return this.countOfRenders > 1;
   }
 
-  initAnimations() {
-    const watcherForm = new DOMElementWatcher({
-      selector: "form",
-      callback: () => {
-        setTimeout(() => {
-          const isNeedSplitText = !this.isRenderedMoreThanOneTime();
-          this.formObject.initAnimations(isNeedSplitText);
-        });
+  onLoad(callbackOnLoad) {
+    new ElementObserver({
+      target: [this.page.querySelector(".form"), ...this.page.querySelectorAll("[data-text-animated-on-scroll]")],
+      onRender: () => {
+        const isNeedSplitText = !this.isRenderedMoreThanOneTime();
+
+        this.formObject.initAnimations(isNeedSplitText);
+
+        this.textsAnimatedOnScroll.forEach((text) => animateTextOnScroll(text, isNeedSplitText));
+
+        callbackOnLoad();
       },
-    });
-    watcherForm.startWatching();
-
-    this.textsAnimatedOnScroll = this.page.querySelectorAll("[data-text-animated-on-scroll]");
-
-    if (!this.textsAnimatedOnScroll.length) return;
-
-    this.watcher = new DOMElementWatcher({
-      elements: this.textsAnimatedOnScroll,
-      callback: () => {
-        setTimeout(
-          () =>
-            this.textsAnimatedOnScroll.forEach((text) => {
-              const isNeedSplitText = !this.isRenderedMoreThanOneTime();
-              animateTextOnScroll(text, isNeedSplitText);
-            }),
-          100
-        );
-      },
-    });
-
-    this.watcher.startWatching();
+    }).start();
   }
-
   init() {
     this.page = this.create();
     this.textsAnimatedOnScroll = this.page.querySelectorAll("[data-text-animated-on-scroll]");
