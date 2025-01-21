@@ -6,13 +6,18 @@ import ArticleProject from "./ArticleProject";
 import ProjectImages from "../../components/projectImages/ProjectImages";
 import ElementObserver from "../../components/elementObserver/ElementObserver";
 
+import { animateElementOnScroll } from "../../utils/animateOnScrollUtils";
+
+import gsap from "gsap";
+
 import "./sectionProjects.scss";
 
 import projectsData from "../../data/projectsData";
 
 export default class SectionProjects {
-  constructor() {
+  constructor({ app }) {
     this.articlesData = projectsData;
+    this.app = app;
     this.section = this.create();
 
     this.currentElem = null;
@@ -36,8 +41,10 @@ export default class SectionProjects {
   }
 
   addListeners() {
-    this.section.addEventListener("mouseover", this.mouseoverHandler.bind(this));
-    this.section.addEventListener("mouseout", this.mouseoutHandler.bind(this));
+    if (!this.app.getDevice().isSensoryInput) {
+      this.section.addEventListener("mouseover", this.mouseoverHandler.bind(this));
+      this.section.addEventListener("mouseout", this.mouseoutHandler.bind(this));
+    }
   }
   changeColorTheme(theme, isAddThemeColor) {
     document.body.setAttribute("data-theme", theme);
@@ -79,8 +86,41 @@ export default class SectionProjects {
     this.currentElem = null;
   }
 
-  initAnimations() {
-    this.projectImages.initAnimations();
+  setInitialScaleOfImages(projectImgs) {
+    projectImgs.forEach(img => {
+      gsap.set(
+        img,
+        {
+          transform: "scale(1)",
+        },
+      );
+    });
+  }
+  initAnimations(projectImgs) {
+    if (this.app.getDevice().isSensoryInput) {
+      projectImgs.forEach(img => {
+        const timelineOnScroll = gsap.timeline({ paused: true });
+        timelineOnScroll.fromTo(
+          img,
+          {
+            transform: "scale(0)",
+          },
+          {
+            transform: "scale(1)",
+            duration: 2,
+            ease: "power4.inOut",
+          }
+        );
+      
+        animateElementOnScroll(img, {
+          events: {
+            onEnter: () => { timelineOnScroll.restart() },
+          },
+        });
+      });
+    } else {
+      this.projectImages.initAnimations();
+    }
   }
   create() {
     const innerHTML = `<div class="section-projects__container id="section-projects__container"></div>`;
@@ -100,14 +140,16 @@ export default class SectionProjects {
 
     projectsContainer.append(sectionHeader.render());
     this.articlesData.forEach((data, i) => {
-      const articleProject = new ArticleProject(data);
+      const articleProject = new ArticleProject({ data, app: this.app });
       const articleProjectElement = articleProject.render();
       projectsContainer.append(articleProjectElement);
     });
 
     const observer = new ElementObserver({
       target: ".article-project__img",
-      onRender: () => {
+      onRender: () => { 
+        if (this.app.getDevice().isSensoryInput) return;
+
         this.projectImages = new ProjectImages({ data: this.getArticleImgData() });
         projectsContainer.append(this.projectImages.render());
       }

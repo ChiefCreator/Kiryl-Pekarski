@@ -3,6 +3,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 import { splitTextOnLines } from "./domUtils";
+import LocomotiveScroll from "locomotive-scroll";
 
 export function animateElementOnScroll($element, options) {
   const { events, start } = options;
@@ -42,7 +43,7 @@ export function animateTextOnScroll($text, isNeedSplitText = true) {
       timeline.fromTo(
         $container,
         {
-          transform: `translate(0, 100%)`,
+          transform: `translate(0, 110%)`,
         },
         {
           transform: `translate(0, 0)`,
@@ -59,4 +60,8 @@ export function animateTextOnScroll($text, isNeedSplitText = true) {
   const timelineOfTextAnimation = addTextAnimationToTimeline($text);
 
   timeLine.add(timelineOfTextAnimation);
+}
+
+export function initLocomotiveScroll(lenisOptions) {
+  return new LocomotiveScroll({ lenisOptions });
 }

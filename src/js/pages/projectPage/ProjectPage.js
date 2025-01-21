@@ -16,6 +16,7 @@ export default class ProjectPage {
     this.skillsData = skillsData.filter((skillData) => data.skills.includes(skillData.title));
     this.images = data.images;
     this.role = data.role;
+    this.linkToWebsite = data.linkToWebsite;
     this.countOfRenders = 0;
     this.app = app;
 
@@ -43,7 +44,12 @@ export default class ProjectPage {
 
         textsAnimatedOnScroll.forEach((text) => animateTextOnScroll(text, isNeedSplitText));
 
-        this.projectSceneObject.initAnimations();
+        if (this.app.getDevice().isSensoryInput) {
+          this.sectionProjectMainObject.initAnimations();
+        } else {
+          this.projectSceneObject.initAnimations();
+        }
+        this.sectionImageGalleryObject.initAnimations();
 
         callbackOnLoad();
       },
@@ -57,11 +63,11 @@ export default class ProjectPage {
 
     const page = createDOM("main", { className: "app-project", innerHTML });
     const container = page.querySelector(".app-project__container");
-    const sectionProjectMainObject = new SectionProjectMain({ title: this.title, role: this.role, skillsData: this.skillsData, images: this.images, app: this.app });
-    const sectionImageGalleryObject = new SectionProjectImageGalery({ images: this.images.other });
-    const sectionImageGallery = sectionImageGalleryObject.render();
+    this.sectionProjectMainObject = new SectionProjectMain({ title: this.title, role: this.role, skillsData: this.skillsData, images: this.images, app: this.app, linkToWebsite: this.linkToWebsite });
+    this.sectionImageGalleryObject = new SectionProjectImageGalery({ images: this.images.other, app: this.app });
+    const sectionImageGallery = this.sectionImageGalleryObject.render();
 
-    container.append(sectionProjectMainObject.render());
+    container.append(this.sectionProjectMainObject.render());
     container.append(sectionImageGallery);
 
     const mainImg = page.querySelector(".project-illustration__img");
@@ -71,15 +77,17 @@ export default class ProjectPage {
     const observer = new ElementObserver({
       target: window.innerWidth > 1280 ? [mainImg, sectionImageGallery, ...galeryImages] : [mobileImg, sectionImageGallery, ...galeryImages],
       onRender: () => {
-        this.projectSceneObject = null;
+        if (!this.app.getDevice().isSensoryInput) {
+          this.projectSceneObject = null;
+          
+          if (window.innerWidth > 1280) {
+            this.projectSceneObject = new ProjectScene({ mainImgElement: mainImg, mainImgSrc: this.images.mainHorizontal, imagesSrc: this.images.other, sliderImages: galeryImages });
+          } else {
+            this.projectSceneObject = new ProjectScene({ mainImgElement: mobileImg, mainImgSrc: this.images.mainHorizontal, imagesSrc: this.images.other, sliderImages: galeryImages });
+          }
 
-        if (window.innerWidth > 1280) {
-          this.projectSceneObject = new ProjectScene({ mainImgElement: mainImg, mainImgSrc: this.images.mainHorizontal, imagesSrc: this.images.other, sliderImages: galeryImages, imageGaleryObject: sectionImageGalleryObject });
-        } else {
-          this.projectSceneObject = new ProjectScene({ mainImgElement: mobileImg, mainImgSrc: this.images.mainHorizontal, imagesSrc: this.images.other, sliderImages: galeryImages, imageGaleryObject: sectionImageGalleryObject });
+          container.append(this.projectSceneObject.render());
         }
-
-        container.append(this.projectSceneObject.render());
       },
     });
     observer.start();

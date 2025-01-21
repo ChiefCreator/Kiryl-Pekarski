@@ -30,6 +30,18 @@
   &[data-theme="projectThemeOfKolyanKovsh"] {
     @include projectThemeOfKolyanKovsh;
   }
+
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-scroll-thumb);
+    border-radius: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: var(--color-scroll-track);
+    border-radius: 5px;
+  }
 }
 
 #root {

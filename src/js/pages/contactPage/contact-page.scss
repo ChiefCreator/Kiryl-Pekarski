@@ -10,7 +10,7 @@
   }
   &__title {
     max-width: 600px;
-    font-size: clamp(3.125rem, 2.717rem + 2.17vw, 5rem); // от 50 до 80
+    font-size: min(14vw, 80px);
     font-weight: 500;
     text-transform: uppercase;
   }
@@ -23,7 +23,7 @@
     max-width: 400px;
     font-weight: 500;
     margin-top: min(2vw, 50px);
-    color: #494949;
+    color: var(--color-neutral-additional);
   }
 
   @media (max-width: 1024px) {

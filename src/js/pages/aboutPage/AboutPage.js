@@ -1,7 +1,6 @@
 import { createDOM } from "../../utils/domUtils";
 import SectionAbout from "./SectionAbout";
 import SectionSkills from "./SectionSkills";
-import DOMElementWatcher from "../../components/domElementWatcher/DOMElementWatcher";
 import ElementObserver from "../../components/elementObserver/ElementObserver";
 
 import { animateTextOnScroll } from "../../utils/animateOnScrollUtils";
@@ -46,7 +45,7 @@ export default class AboutPage {
     }).start();
   }
   init() {
-    this.sectionAboutObject = new SectionAbout();
+    this.sectionAboutObject = new SectionAbout({ app: this.app });
     this.sectionSkillsObject = new SectionSkills({ app: this.app });
 
     this.page = this.create();

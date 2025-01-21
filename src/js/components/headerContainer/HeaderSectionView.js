@@ -28,8 +28,8 @@ export default class HeaderSectionView {
     const innerHTML = `
       <div class="header-section__container">
         <h2 class="header-section__title" data-text-animated-on-scroll data-text-animated-on-scroll-target="${data.sectionId}">${data.title}</h2>
-        <div class="header-section__border">
-          <span class="header-section__border-sub" data-element-animated-on-scroll data-element-animated-on-scroll-target="${data.sectionId}"></span>
+        <div class="header-section__border" data-color-transition="true">
+          <span class="header-section__border-sub" data-element-animated-on-scroll data-element-animated-on-scroll-target="${data.sectionId}" data-color-transition="true"></span>
         </div>
       </div>
     `;

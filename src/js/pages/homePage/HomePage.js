@@ -20,7 +20,7 @@ export default class HomePage {
     this.app = app;
 
     this.liquidBackgroundObject = new LiquidBackground({ app: this.app });
-    this.sectionProjectsObject = new SectionProjects();
+    this.sectionProjectsObject = new SectionProjects({ app: this.app });
 
     this.init();
   }
@@ -34,6 +34,7 @@ export default class HomePage {
 
   stopAnimations() {
     this.liquidBackgroundObject.stopAnimations();
+    this.sectionProjectsObject.setInitialScaleOfImages(this.page.querySelectorAll(".article-project__img"));
   }
 
   onLoad(callbackOnLoad) {
@@ -44,13 +45,13 @@ export default class HomePage {
     new ElementObserver({
       target: [...this.textsAnimatedOnScroll, ...projectImgs, sectionMain],
       onRender: () => {
+        const isNeedSplitText = !this.isRenderedMoreThanOneTime();
         this.textsAnimatedOnScroll.forEach((text) => {
-          const isNeedSplitText = !this.isRenderedMoreThanOneTime();
           animateTextOnScroll(text, isNeedSplitText);
         });
 
         this.liquidBackgroundObject.initAnimations();
-        this.sectionProjectsObject.initAnimations();
+        this.sectionProjectsObject.initAnimations(projectImgs);
 
         callbackOnLoad();
       },
@@ -69,7 +70,7 @@ export default class HomePage {
 
     const page = createDOM("main", { className: "app-main", innerHTML: innerHTML });
     const pageContainer = page.firstElementChild;
-    const liquidBackground = this.liquidBackgroundObject.render()
+    const liquidBackground = this.liquidBackgroundObject.render();
     const sectionMain = new SectionMain();
     const sectionAbout = new SectionAbout();
     const sectionProjects = this.sectionProjectsObject.render();

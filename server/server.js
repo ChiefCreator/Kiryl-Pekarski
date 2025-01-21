@@ -4,6 +4,9 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
 import nodemailer from "nodemailer";
@@ -276,7 +279,7 @@ const server = express();
 
 server.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://chiefcreator.github.io/Kiryl-Pekarski"],
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -288,12 +291,12 @@ server.get("/", (req, res) => {
 });
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
+  host: process.env.MAIL_SERVER_HOST,
+  port: process.env.MAIL_SERVER_PORT,
   secure: false,
   auth: {
-    user: "kipe122006@gmail.com",
-    pass: "uctv juff hyau vqok",
+    user: process.env.MAIL_SERVER_ADRESS,
+    pass: process.env.MAIL_SERVER_PASSWORD,
   },
 });
 
@@ -302,8 +305,8 @@ server.post("/api/feedback", async (req, res) => {
     const { name, mail, description, checkboxes } = req.body;
 
     await transporter.sendMail({
-      from: "kipe122006@gmail.com",
-      to: "kipe122006@gmail.com",
+      from: process.env.MAIL_SERVER_ADRESS,
+      to: process.env.MAIL_SERVER_ADRESS,
       subject: "Requests from Kiryl Pekarski",
       text: `Name: ${name}; Mail: ${mail}; Description: ${description}; Checkboxes: ${checkboxes}`,
       html: new HTMLMessageResponsePage(req.body).render(),

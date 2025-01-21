@@ -5,8 +5,13 @@
   &__container {
     width: 100%;
     height: 100%;
+    position: relative;
+    overflow: hidden;
   }
   &__current-line {
+    position: absolute;
+    left: 0;
+    top: 0;
     height: 100%;
     background-color: var(--color-neutral-contrast--dark);
     transition: width 1s var(--transition-elastic--in-out);

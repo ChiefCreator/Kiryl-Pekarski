@@ -11,6 +11,8 @@ import fragmentShader from "./../../../shaders/fragment3.glsl";
 import RippleTextureRenderer from "./../liquidBackground/RippleTextureRenderer";
 
 import { animateElementOnScroll } from "./../../utils/animateOnScrollUtils";
+import { adjustTextureToCover } from "../../utils/threeJsUtils";
+import { loadTexture } from "../../utils/threeJsUtils";
 
 export default class ProjectImagesView {
   constructor() {
@@ -24,9 +26,13 @@ export default class ProjectImagesView {
 
     this.planeImages = [];
     this.planeRects = [];
+
+    this.isImagePlanesRendered = false;
   }
 
   initAnimations() {
+    if (!this.isImagePlanesRendered) return;
+
     this.data.forEach((data, i) => {
       const timelineOnScroll = gsap.timeline({ paused: true });
       timelineOnScroll.fromTo(
@@ -72,21 +78,30 @@ export default class ProjectImagesView {
     this.rippleTexture = this.rippleTextureRenderer.getTexture();
   }
   initPlaneImages() {
-    this.data.forEach((data, i) => {
-      const planeWidth = (data.width / this.viewportSettings.width) * this.viewportSettings.aspectRatio * 2;
-      const planeHeight = (data.height / this.viewportSettings.height) * 2;
+    Promise.all(this.data.map((obj) => loadTexture(this.textureLoader, obj.url)))
+      .then((textures) => {
+        this.data.forEach((data, i) => {
+          const texture = textures[i];
 
-      const planeGeometry = new THREE.PlaneGeometry(planeWidth, planeHeight);
-      const texture = this.textureLoader.load(data.url);
-      const planeMaterial = new THREE.MeshBasicMaterial({
-        map: texture,
+          const planeWidth = (data.width / this.viewportSettings.width) * this.viewportSettings.aspectRatio * 2;
+          const planeHeight = (data.height / this.viewportSettings.height) * 2;
+
+          const planeGeometry = new THREE.PlaneGeometry(planeWidth, planeHeight);
+
+          const planeMaterial = new THREE.MeshBasicMaterial({ map: texture });
+
+          const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+          this.planeImages.push(plane);
+          this.scene.add(plane);
+
+          adjustTextureToCover(texture, planeWidth, planeHeight);
+        });
+
+        this.isImagePlanesRendered = true;
+
+        this.initAnimations();
       });
-
-      const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-
-      this.planeImages.push(plane);
-      this.scene.add(plane);
-    });
   }
   init3DScene() {
     this.renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -167,7 +182,7 @@ export default class ProjectImagesView {
     this.planeRects.forEach((planeRect, i) => {
       const { posX, posY } = this.getPlanePosition(planeRect);
 
-      if (!planeRect.prevPosX || planeRect.prevPosX !== posX || planeRect.prevPosY !== posY) {
+      if (this.planeImages[i] && (!planeRect.prevPosX || planeRect.prevPosX !== posX || planeRect.prevPosY !== posY)) {
         this.planeImages[i].position.set(posX, posY, 0);
 
         planeRect.prevPosX = posX;

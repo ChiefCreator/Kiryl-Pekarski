@@ -1,4 +1,5 @@
 import { createDOM } from "../../utils/domUtils";
+import ElementObserver from "../../components/elementObserver/ElementObserver";
 import * as THREE from "three";
 
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
@@ -7,11 +8,13 @@ import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 
 import vertexShader from "./../../../shaders/vertex.glsl";
 import fragmentShader from "./../../../shaders/fragment3.glsl";
-import blobVertexShader from "./../../../shaders/projectsMenuImageVertexShader.glsl";
-import blobFragmentShader from "./../../../shaders/projectsMenuImageFragmentShader.glsl";
 import RippleTextureRenderer from "../../components/liquidBackground/RippleTextureRenderer";
 
 import gsap from "gsap";
+
+import { getMeshSizeByHtmlElement } from "../../utils/threeJsUtils";
+import { loadTexture } from "../../utils/threeJsUtils";
+import { adjustTextureToCover } from "../../utils/threeJsUtils";
 
 export default class Portrait {
   constructor({ imgSrc, img }) {
@@ -24,33 +27,38 @@ export default class Portrait {
 
     this.imgElement = img;
     this.imgSrc = imgSrc;
+
     this.portrait = null;
-    this.blob = null;
+    this.portraitPlane = null;
+    
+    this.isPortraitPlaneRendered = false;
 
     this.init();
   }
 
   animateScale() {
+    if (!this.isPortraitPlaneRendered) return;
+
     gsap.fromTo(
-      this.blob.scale,
+      this.portraitPlane.scale,
       {
         x: 0,
         y: 0,
       },
-      { 
+      {
         x: 1,
-        y: 1, 
+        y: 1,
         duration: 2,
         ease: "power4.inOut",
       }
     );
   }
 
-  getBlobRect() {
+  getPortraitPlaneRect() {
     return {
-      ...this.getBlobPosition(this.imgElement),
+      ...this.getPortraitPlanePosition(this.imgElement),
       prevPosX: null,
-      prebPosY: null,
+      prevPosY: null,
     };
   }
 
@@ -58,46 +66,27 @@ export default class Portrait {
     this.textureLoader = new THREE.TextureLoader();
   }
   initTextures() {
-    this.texture = this.textureLoader.load(this.imgSrc);
     this.rippleTextureRenderer = new RippleTextureRenderer();
     this.rippleTexture = this.rippleTextureRenderer.getTexture();
   }
   initPortrait() {
-    const planeGeometry = new THREE.CircleGeometry(.6, 256);
-    const planeMaterial = new THREE.ShaderMaterial({
-      uniforms: {
-        uTexture: { value: this.texture },
-        u_time: { value: 0.0 },
-        u_mouse: {
-          value: {
-            x: 0.0,
-            y: 0.0,
-          },
-        },
-        u_resolution: {
-          value: {
-            x: window.innerWidth * window.devicePixelRatio,
-            y: window.innerHeight * window.devicePixelRatio,
-          },
-        },
-        u_pointsize: { value: 2.0 },
-        // wave 1
-        u_noise_freq_1: { value: 1 },
-        u_noise_amp_1: { value: 0.1 },
-        u_spd_modifier_1: { value: 1.0 },
-        // wave 2
-        u_noise_freq_2: { value: 2.0 },
-        u_noise_amp_2: { value: 0.1 },
-        u_spd_modifier_2: { value: 0.8 },
-      },
-      vertexShader: blobVertexShader,
-      fragmentShader: blobFragmentShader,
+    loadTexture(this.textureLoader, this.imgSrc).then((texture) => {
+      const size = getMeshSizeByHtmlElement(this.imgElement, this.viewportSettings);
+
+      const planeGeometry = new THREE.PlaneGeometry(size.width, size.height);
+      const planeMaterial = new THREE.MeshBasicMaterial({ map: texture });
+
+      this.portraitPlane = new THREE.Mesh(planeGeometry, planeMaterial);
+      this.portraitPlane.position.set(0, 0, 0);
+
+      this.scene.add(this.portraitPlane);
+
+      adjustTextureToCover(texture, size.width, size.height);
+
+      this.isPortraitPlaneRendered = true;
+
+      this.animateScale();
     });
-
-    this.blob = new THREE.Mesh(planeGeometry, planeMaterial);
-    this.blob.position.set(0, 0, 0);
-
-    this.scene.add(this.blob);
   }
   initScene() {
     this.renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -150,17 +139,16 @@ export default class Portrait {
     this.renderer.render(this.scene, this.camera);
     this.renderer.setRenderTarget(null);
 
-    this.blob.material.uniforms.u_time.value += 0.01;
     this.effect.uniforms.uWavesTexture.value = this.rippleTexture;
 
-    this.updateBlobPosition();
+    this.updatePortraitPlanePosition();
 
     if (this.composer) this.composer.render();
 
     requestAnimationFrame(this.animate);
   };
 
-  getBlobPosition(imgElement) {
+  getPortraitPlanePosition(imgElement) {
     const rect = imgElement.getBoundingClientRect();
 
     const elementCenterX = rect.left + rect.width / 2;
@@ -171,22 +159,25 @@ export default class Portrait {
 
     return { posX, posY };
   }
-  updateBlobPosition() {
-    const { posX, posY } = this.getBlobPosition(this.imgElement);
-    const blobRect = this.getBlobRect();
+  updatePortraitPlanePosition() {
+    const { posX, posY } = this.getPortraitPlanePosition(this.imgElement);
+    const portraitPlneRect = this.getPortraitPlaneRect();
 
-    if (!blobRect.prevPosX || blobRect.prevPosX !== posX || blobRect.prevPosY !== posY) {
-      this.blob.position.set(posX, posY, 0);
+    if (this.portraitPlane && (!portraitPlneRect.prevPosX || portraitPlneRect.prevPosX !== posX || portraitPlneRect.prevPosY !== posY)) {
+      this.portraitPlane.position.set(posX, posY, 0);
 
-      blobRect.prevPosX = posX;
-      blobRect.prevPosY = posY;
+      portraitPlneRect.prevPosX = posX;
+      portraitPlneRect.prevPosY = posY;
     }
   }
 
   init() {
     this.portrait = this.create();
 
-    this.init3D();
+    new ElementObserver({
+      target: this.imgElement,
+      onRender: () => this.init3D(),
+    }).start();
   }
   create() {
     return createDOM("div", { className: "portrait" });

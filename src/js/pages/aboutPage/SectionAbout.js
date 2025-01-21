@@ -7,20 +7,39 @@ import Portrait from "./Portrait";
 
 import portraitImgSrc from "./../../../img/portrait.jpg";
 
+import gsap from "gsap";
+
 export default class SectionAbout {
-  constructor() {
+  constructor({ app }) {
+    this.app = app;
     this.section = null;
+    this.portraitImg = null;
     this.textElements = null;
 
     this.init();
   }
 
   initAnimations() {
-    this.portraitObject.animateScale();
+    if (!this.app.getDevice().isSensoryInput) {
+      this.portraitObject.animateScale();
+    } else {
+      gsap.fromTo(
+        this.portraitImg,
+        {
+          transform: "scale(0)"
+        },
+        {
+          transform: "scale(1)",
+          duration: 2,
+          ease: "power4.inOut",
+        }
+      );
+    }
   }
 
   init() {
     this.section = this.create();
+    this.portraitImg = this.section.querySelector(".section-information__portrait-img");
     this.textElements = this.section.querySelectorAll('[data-open-animation="text"]');
   }
   create() {
@@ -40,7 +59,7 @@ export default class SectionAbout {
           </p>
         </article>
         <article class="section-information__illustration-wrapper">
-          <img class="section-information__portrait-img">
+          <img class="section-information__portrait-img" src="${portraitImgSrc}">
         </article>
       </div>
     `;
@@ -50,10 +69,12 @@ export default class SectionAbout {
 
     section.append(container.render());
 
-    const portaitImg = section.querySelector(".section-information__portrait-img");
-    this.portraitObject = new Portrait({ imgSrc: portraitImgSrc, img: portaitImg });
+    if (!this.app.getDevice().isSensoryInput) {
+      const portaitImg = section.querySelector(".section-information__portrait-img");
+      this.portraitObject = new Portrait({ imgSrc: portraitImgSrc, img: portaitImg });
 
-    section.append(this.portraitObject.render());
+      section.append(this.portraitObject.render());
+    }
 
     return section;
   }

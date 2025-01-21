@@ -134,7 +134,7 @@ export default class LiquidBackground {
 
         texturePattern: { value: this.texture },
         noise: { value: this.noiseTexture },
-        uDisplacement: { value: this.rippleTexture },
+        uDisplacement: { value: this.app.getDevice().isSensoryInput ? null : this.rippleTexture },
         meEase: { value: 0.075 },
         time: { value: Math.ceil(50 * Math.random()) },
         ease: { value: 0 },
@@ -247,7 +247,7 @@ export default class LiquidBackground {
     this.renderer.render(this.scene, this.camera);
     this.renderer.setRenderTarget(null);
 
-    this.effect.uniforms.uWavesTexture.value = this.rippleTexture;
+    if (!this.app.getDevice().isSensoryInput) this.effect.uniforms.uWavesTexture.value = this.rippleTexture;
     this.effect.uniforms.time.value = this.time;
 
     if (this.composer) this.composer.render();
@@ -263,7 +263,7 @@ export default class LiquidBackground {
     this.scrollTrigger = ScrollTrigger.create({
       trigger: document.querySelector(".section-main"),
       start: "top 75%",
-      end: "bottom 25%",
+      end: "50% 25%",
       onEnter: () => {
         this.updateProgress(1);
       },

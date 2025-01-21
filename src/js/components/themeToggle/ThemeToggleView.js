@@ -18,8 +18,8 @@ export default class ThemeToggleView {
   create(theme) {
     const innerHTML = `
       <svg class="theme-toggle__svg" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-        <circle class="theme-toggle__circle" cx="16" cy="16" r="15" />
-        <path class="theme-toggle__path" fill-rule="evenodd" clip-rule="evenodd" d="M16 26C21.5228 26 26 21.5228 26 16C26 10.4772 21.5228 6 16 6V26Z" data-svg-origin="16 16" />
+        <circle class="theme-toggle__circle" cx="16" cy="16" r="15" data-color-transition="true"/>
+        <path class="theme-toggle__path" fill-rule="evenodd" clip-rule="evenodd" d="M16 26C21.5228 26 26 21.5228 26 16C26 10.4772 21.5228 6 16 6V26Z" data-svg-origin="16 16" data-color-transition="true"/>
       </svg>
     `;
 

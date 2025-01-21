@@ -24,6 +24,12 @@ export default class SectionMain {
                 <span class="introductory-title__surname" data-text-animated-on-scroll data-text-animated-on-scroll-target="section-main">Пекарский</span>
               </h1>
             </div>
+            ${window.innerWidth <= 1024 ? `
+              <div class="introductory-information__profession-wrapper">
+                <div class="introductory-profession introductory-profession_behind" data-text-animated-on-scroll data-text-animated-on-scroll-target="section-main">Креативный Front-end разработчик, Web-программист</div>
+                <div class="introductory-profession introductory-profession_front" data-text-animated-on-scroll data-text-animated-on-scroll-target="section-main">Креативный Front-end разработчик, Web-программист</div>
+              </div>` : ""
+            }
           </div>
         </article>
       </div>

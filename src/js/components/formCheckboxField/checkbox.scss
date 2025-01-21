@@ -1,16 +1,16 @@
 .checkbox {
   display: block;
   padding: clamp(0.375rem, 0.188rem + 1vw, 0.563rem) clamp(0.75rem, 0.375rem + 2vw, 1.125rem); // от 6(300) до 9(600) и от 12 до 18
-  border: .5px solid #494949;
+  border: 0.5px solid #494949;
   border-radius: 5px;
   position: relative;
   cursor: pointer;
-  transition: border .5s var(--transition-power--in-out), background-color .5s var(--transition-power--in-out);
+  transition: border 0.5s var(--transition-power--in-out), background-color 0.5s var(--transition-power--in-out);
   &__title {
     font-size: clamp(1.125rem, 1rem + 0.67vw, 1.25rem); // от 18(300) до 20(600)
     font-family: var(--font-secondary);
     color: #494949;
-    transition: color .5s var(--transition-power--in-out);
+    transition: color 0.5s var(--transition-power--in-out);
   }
   &__input {
     opacity: 0;
@@ -22,10 +22,12 @@
       color: #b2b2b2;
     }
   }
-  &:hover {
-    border: .5px solid var(--color-neutral-contrast);
-    .checkbox__title {
+  @media (hover: hover) {
+    &:hover {
+      border: 0.5px solid var(--color-neutral-contrast);
+      .checkbox__title {
         color: var(--color-neutral-contrast);
+      }
     }
   }
 }

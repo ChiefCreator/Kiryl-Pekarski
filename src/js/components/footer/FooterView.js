@@ -34,8 +34,8 @@ export default class FooterView {
           <div class="footer__social-links-list"></div>
           <div class="footer__versions-links-list"></div>
         </div>
-        <div class="footer__border">
-          <span class="footer__border-sub" data-element-animated-on-scroll data-element-animated-on-scroll-target="footer"></span>
+        <div class="footer__border" data-color-transition>
+          <span class="footer__border-sub" data-element-animated-on-scroll data-element-animated-on-scroll-target="footer" data-color-transition></span>
         </div>
       </div>
     `;

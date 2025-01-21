@@ -18,6 +18,8 @@ import PageLoader from "../components/page-loader/PageLoader.js";
 
 import projectsData from "../data/projectsData.js";
 
+import { initLocomotiveScroll } from "../utils/animateOnScrollUtils.js";
+
 import { createDOM } from "../utils/domUtils.js";
 
 export default class App {
@@ -34,6 +36,10 @@ export default class App {
     this.init();
   }
 
+  getDevice() {
+    return this.model.getDevice();
+  }
+
   // методы подписи на определенные события другими классами
   addListenerOfGettingScrollingSpeed(callback) {
     this.model.listenersOfGettingScrollingSpeed.push(callback);
@@ -44,17 +50,8 @@ export default class App {
   }
 
   renderComponents() {
-    this.components.mainStructure.append(
-      this.components.header.render() ?? "",
-      this.components.content.render() ?? "",
-      this.components.footer.render() ?? ""
-    );
-    this.root.append(
-      this.components.pageLoader.render() ?? "",
-      this.components.cursor.render() ?? "",
-      this.components.menu.render() ?? "",
-      this.components.mainStructure
-    );
+    this.components.mainStructure.append(this.components.header.render() ?? "", this.components.content.render() ?? "", this.components.footer.render() ?? "");
+    this.root.append(this.components.pageLoader.render() ?? "", this.components.cursor.render() ?? "", this.components.menu.render() ?? "", this.components.mainStructure);
   }
   init() {
     const pageLoaderObject = new PageLoader();
@@ -62,16 +59,24 @@ export default class App {
 
     this.components = {
       mainStructure: createDOM("div", { className: "main-structure" }),
-      cursor: new Cursor({ 
+      cursor: new Cursor({
         radius: 26,
         borderWidth: 1.5,
       }),
-      menu: new Menu({ 
-        linksData: [ { title: "Главная", href: "#main" }, { title: "Обо мне", href: "#about" }, { title: "Связаться", href: "#contact" }],
+      menu: new Menu({
+        linksData: [
+          { title: "Главная", href: "#main" },
+          { title: "Обо мне", href: "#about" },
+          { title: "Связаться", href: "#contact" },
+        ],
         app: this,
       }),
       header: new Header({
-        linksData: [ { title: "Проекты", href: null, attributes: [{ title: "data-menu-open", value: true }] }, { title: "Обо мне", href: "#about" }, { title: "Связаться", href: "#contact" }],
+        linksData: [
+          { title: "Проекты", href: null, attributes: [{ title: "data-menu-open", value: true }] },
+          { title: "Обо мне", href: "#about" },
+          { title: "Связаться", href: "#contact" },
+        ],
       }),
       footer: new Footer(),
       content: new Content(),
@@ -81,33 +86,48 @@ export default class App {
       main: homePage,
       about: new AboutPage({ app: this }),
       contact: new ContactPage(),
-      "nikita-efremov": new ProjectPage({ 
-        data: projectsData.find(dataObject => dataObject.title === "Nikita Efremov"),
+      "nikita-efremov": new ProjectPage({
+        data: projectsData.find((dataObject) => dataObject.title === "Nikita Efremov"),
         app: this,
       }),
-      "limited-charm": new ProjectPage({ 
-        data: projectsData.find(dataObject => dataObject.title === "Limited Charm"),
+      "limited-charm": new ProjectPage({
+        data: projectsData.find((dataObject) => dataObject.title === "Limited Charm"),
         app: this,
       }),
-      "studio-fifty-seven": new ProjectPage({ 
-        data: projectsData.find(dataObject => dataObject.title === "Studio fifty-seven"),
+      "studio-fifty-seven": new ProjectPage({
+        data: projectsData.find((dataObject) => dataObject.title === "Studio fifty-seven"),
         app: this,
       }),
-      "panto": new ProjectPage({ 
-        data: projectsData.find(dataObject => dataObject.title === "Panto"),
+      panto: new ProjectPage({
+        data: projectsData.find((dataObject) => dataObject.title === "Panto"),
         app: this,
       }),
-      "tennis": new ProjectPage({ 
-        data: projectsData.find(dataObject => dataObject.title === "Tennis"),
+      tennis: new ProjectPage({
+        data: projectsData.find((dataObject) => dataObject.title === "Tennis"),
         app: this,
       }),
-      "kolyan-kovsh": new ProjectPage({ 
-        data: projectsData.find(dataObject => dataObject.title === "Kolyan Kovsh"),
+      "kolyan-kovsh": new ProjectPage({
+        data: projectsData.find((dataObject) => dataObject.title === "Kolyan Kovsh"),
         app: this,
       }),
       default: homePage,
       error: new ErrorPage(),
     };
+
+    initLocomotiveScroll({
+      wrapper: window,
+      content: document.documentElement,
+      lerp: 0.1,
+      duration: 1.2,
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      smoothTouch: false,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+      normalizeWheel: true,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    });
   }
   render() {
     this.renderComponents();

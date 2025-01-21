@@ -1,5 +1,4 @@
 import { createDOM } from "../../utils/domUtils";
-import DOMElementWatcher from "../../components/domElementWatcher/DOMElementWatcher";
 import * as THREE from "three";
 
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
@@ -16,8 +15,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 import { animateElementOnScroll } from "../../utils/animateOnScrollUtils";
 
+import { adjustTextureToCover } from "../../utils/threeJsUtils";
+
 export default class ProjectScene {
-  constructor({ mainImgElement, mainImgSrc, sliderImages, imagesSrc, imageGaleryObject }) {
+  constructor({ mainImgElement, mainImgSrc, sliderImages, imagesSrc }) {
     this.viewportSettings = {
       width: window.innerWidth,
       height: window.innerHeight,
@@ -35,8 +36,6 @@ export default class ProjectScene {
       prevPosY: null,
     };
 
-    this.imageGaleryObject = imageGaleryObject;
-
     this.sliderImages = sliderImages;
     this.imagesSrc = imagesSrc;
     this.sliderImageMeshes = [];
@@ -44,10 +43,14 @@ export default class ProjectScene {
 
     this.projectScene = null;
 
+    this.isMainImagePlaneRendered = false;
+
     this.init();
   }
 
   initAnimations() {
+    if (!this.isMainImagePlaneRendered) return;
+
     const timelineOnScroll = gsap.timeline({ paused: true });
     timelineOnScroll.fromTo(
       this.mainImagePlane.scale,
@@ -77,22 +80,29 @@ export default class ProjectScene {
     this.textureLoader = new THREE.TextureLoader();
   }
   initTextures() {
-    this.mainImageTexture = this.textureLoader.load(this.mainImgSrc);
     this.rippleTextureRenderer = new RippleTextureRenderer();
     this.rippleTexture = this.rippleTextureRenderer.getTexture();
   }
   initMainImagePlane() {
-    const size = this.getMeshSizeByHtmlElement(this.mainImgElement);
+    this.textureLoader.load(this.mainImgSrc, (texture) => {
+      this.mainImageTexture = texture;
 
-    const planeGeometry = new THREE.PlaneGeometry(size.width, size.height);
-    const planeMaterial = new THREE.MeshBasicMaterial({
-      map: this.mainImageTexture,
+      const size = this.getMeshSizeByHtmlElement(this.mainImgElement);
+
+      const planeGeometry = new THREE.PlaneGeometry(size.width, size.height);
+      const planeMaterial = new THREE.MeshBasicMaterial({ map: this.mainImageTexture });
+
+      this.mainImagePlane = new THREE.Mesh(planeGeometry, planeMaterial);
+      this.mainImagePlane.position.set(0, 0, 0);
+
+      this.scene.add(this.mainImagePlane);
+
+      adjustTextureToCover(this.mainImageTexture, size.width, size.height);
+
+      this.isMainImagePlaneRendered = true;
+
+      this.initAnimations();
     });
-
-    this.mainImagePlane = new THREE.Mesh(planeGeometry, planeMaterial);
-    this.mainImagePlane.position.set(0, 0, 0);
-
-    this.scene.add(this.mainImagePlane);
   }
   initSliderImages() {
     this.imagesSrc.forEach((img, imgIndex) => {
@@ -136,7 +146,6 @@ export default class ProjectScene {
     this.initSliderImages();
 
     this.animate();
-    this.imageGaleryObject.initScrollAnimation();
   }
   initPostprocessing() {
     this.composer = new EffectComposer(this.renderer);
@@ -162,7 +171,7 @@ export default class ProjectScene {
 
     this.effect.uniforms.uWavesTexture.value = this.rippleTexture;
 
-    this.updateMainImagePlanePosition();
+    if (this.mainImagePlane) this.updateMainImagePlanePosition();
     this.updateSliderImagesPositions();
 
     if (this.composer) this.composer.render();

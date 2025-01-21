@@ -18,6 +18,14 @@ export default class AppModel {
     this.scrollOptions = {
       isOpen: true,
     };
+
+    this.device = {
+      isSensoryInput: window.matchMedia("(pointer: coarse)").matches,
+    }
+  }
+
+  getDevice() {
+    return this.device;
   }
 
   toggleScroll(action) {

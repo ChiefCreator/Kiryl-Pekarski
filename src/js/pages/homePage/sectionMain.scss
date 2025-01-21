@@ -17,6 +17,11 @@
   &__title-wrapper {
     position: relative;
   }
+  &__profession-wrapper {
+    display: none;
+    position: relative;
+    margin-top: 20px;
+  }
   &__circular-text {
     position: absolute;
     right: 10%;
@@ -30,8 +35,8 @@
     }
   }
   @media (max-width: 1024px) {
-    &__title-wrapper {
-      // height: 100%;
+    &__profession-wrapper {
+      display: block;
     }
   }
 }
@@ -62,11 +67,27 @@
     top: 0;
     z-index: 3;
     color: transparent;
-    -webkit-text-stroke: clamp(0.031rem, -0.003rem + 0.18vw, 0.188rem) var(--color-neutral-contrast); // от .5(300) до 3(1680)
+    -webkit-text-stroke: min(.3vw, 3px) var(--color-neutral-contrast); // от .5(300) до 3(1680)
   }
 
   @media (max-width: 1024px) {
     height: 100%;
+  }
+}
+.introductory-profession {
+  position: relative;
+  font-size: min(15vw, 600px);
+  text-transform: uppercase;
+  &_behind {
+    z-index: 1;
+  }
+  &_front {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    color: transparent;
+    -webkit-text-stroke: clamp(0.031rem, -0.003rem + 0.18vw, 0.188rem) var(--color-neutral-contrast); // от .5(300) до 3(1680)
   }
 }
 .sculpture-wrapper {

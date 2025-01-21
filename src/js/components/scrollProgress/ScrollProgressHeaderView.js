@@ -17,11 +17,11 @@ export default class ScrollProgressHeaderView {
   create(percent) {
     const innerHTML = `
       <div class="scroll-progress-header__container">
-        <div class="scroll-progress-header__current-line" style="width: ${percent}"></div>
+        <div class="scroll-progress-header__current-line" style="width: ${percent}" data-color-transition="true"></div>
       </div>
     `;
 
-    return createDOM("div", { className: "scroll-progress-header", innerHTML: innerHTML });
+    return createDOM("div", { className: "scroll-progress-header", innerHTML: innerHTML, attributes: [{ title: "data-color-transition", value: true }] });
   }
   render() {
     return this.scrollProgress;

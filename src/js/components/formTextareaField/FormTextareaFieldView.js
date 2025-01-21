@@ -102,7 +102,7 @@ export default class FormTextareaFieldView {
       .to(
         this.lineSub,
         {
-          backgroundColor: "#f0f0f0",
+          backgroundColor: "var(--color-neutral-contrast)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -111,7 +111,7 @@ export default class FormTextareaFieldView {
       .to(
         this.textarea,
         {
-          color: "#f0f0f0",
+          color: "var(--color-neutral-contrast)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -120,7 +120,7 @@ export default class FormTextareaFieldView {
       .to(
         this.placeholder,
         {
-          color: "#f0f0f0",
+          color: "var(--color-neutral-contrast)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -136,7 +136,7 @@ export default class FormTextareaFieldView {
       .to(
         this.lineSub,
         {
-          backgroundColor: "#494949",
+          backgroundColor: "var(--color-neutral-additional)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -145,7 +145,7 @@ export default class FormTextareaFieldView {
       .to(
         this.textarea,
         {
-          color: "#494949",
+          color: "var(--color-neutral-additional)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -154,7 +154,7 @@ export default class FormTextareaFieldView {
       .to(
         this.placeholder,
         {
-          color: "#494949",
+          color: "var(--color-neutral-additional)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -183,7 +183,7 @@ export default class FormTextareaFieldView {
       .to(
         this.lineSub,
         {
-          backgroundColor: "#f0f0f0",
+          backgroundColor: "var(--color-neutral-contrast)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -192,7 +192,7 @@ export default class FormTextareaFieldView {
       .to(
         this.textarea,
         {
-          color: "#f0f0f0",
+          color: "var(--color-neutral-contrast)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -201,7 +201,7 @@ export default class FormTextareaFieldView {
       .to(
         this.placeholder,
         {
-          color: "#f0f0f0",
+          color: "var(--color-neutral-contrast)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -230,7 +230,7 @@ export default class FormTextareaFieldView {
       .to(
         this.lineSub,
         {
-          backgroundColor: "#494949",
+          backgroundColor: "var(--color-neutral-additional)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -239,7 +239,7 @@ export default class FormTextareaFieldView {
       .to(
         this.textarea,
         {
-          color: "#494949",
+          color: "var(--color-neutral-additional)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -248,7 +248,7 @@ export default class FormTextareaFieldView {
       .to(
         this.placeholder,
         {
-          color: "#494949",
+          color: "var(--color-neutral-additional)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -268,7 +268,7 @@ export default class FormTextareaFieldView {
       .to(
         this.lineSub,
         {
-          backgroundColor: "#494949",
+          backgroundColor: "var(--color-neutral-additional)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -277,7 +277,7 @@ export default class FormTextareaFieldView {
       .to(
         this.textarea,
         {
-          color: "#494949",
+          color: "var(--color-neutral-additional)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -286,7 +286,7 @@ export default class FormTextareaFieldView {
       .to(
         this.placeholder,
         {
-          color: "#494949",
+          color: "var(--color-neutral-additional)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -335,7 +335,7 @@ export default class FormTextareaFieldView {
       .to(
         this.lineSub,
         {
-          backgroundColor: "#494949",
+          backgroundColor: "var(--color-neutral-additional)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -344,7 +344,7 @@ export default class FormTextareaFieldView {
       .to(
         this.input,
         {
-          color: "#494949",
+          color: "var(--color-neutral-additional)",
           ease: "power4.inOut",
           duration: 0.5,
         },
@@ -353,7 +353,7 @@ export default class FormTextareaFieldView {
       .to(
         this.placeholder,
         {
-          color: "#494949",
+          color: "var(--color-neutral-additional)",
           ease: "power4.inOut",
           duration: 0.5,
         },
