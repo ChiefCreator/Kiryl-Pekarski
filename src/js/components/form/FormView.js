@@ -22,6 +22,20 @@ export default class FormView {
     this.timeLineOnScroll = null;
   }
 
+  removeData() {
+    this.formInputAndTextareaFieldObjects.forEach(fieldObject => {
+      fieldObject.removeValue();
+    });
+    this.checboxFieldObjects.forEach(fieldObject => {
+      fieldObject.removeData();
+    });
+  }
+  removeError() {
+    this.formInputFieldObjects.forEach(fieldObject => {
+      fieldObject.removeError();
+    })
+  }
+
   initTimelineOnScroll(isNeedSplitText) {
     this.timeLineOnScroll = gsap.timeline({ 
       scrollTrigger: { 

@@ -5,7 +5,7 @@ import "./section-information.scss";
 
 import Portrait from "./Portrait";
 
-import portraitImgSrc from "./../../../img/portrait.jpg";
+import portraitImgSrc from "./../../../img/portrait.jpg?as=webp";
 
 import gsap from "gsap";
 

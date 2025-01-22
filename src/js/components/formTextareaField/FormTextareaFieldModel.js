@@ -7,6 +7,15 @@ export default class FormTextareaFieldModel {
       this.error = false;
   }
 
+  removeError() {
+    this.error = false;
+    this.view.timelineOfValidationSuccess.restart();
+  }
+  removeValue() {
+    this.value = "";
+    this.view.removeValue();
+  }
+
   checkIfErrorExist() {
     return this.error;
   }

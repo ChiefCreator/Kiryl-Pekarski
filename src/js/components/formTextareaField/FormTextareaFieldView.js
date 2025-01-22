@@ -24,6 +24,11 @@ export default class FormTextareaFieldView {
     this.timelineOfPageRender = gsap.timeline({ onComplete: () => this.timelineOfPageRender.clear() });
   }
 
+  removeValue() {
+    this.textarea.value = "";
+    this.timelineOnFocusout.restart();
+  }
+
   getTimelineOfPageRender(isNeedSplitText) {
     this.timelineOfPageRender
       .add(getAnimateTextTimeline(this.label, isNeedSplitText))

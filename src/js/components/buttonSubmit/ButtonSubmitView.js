@@ -14,8 +14,6 @@ export default class ButtonSubmitView {
     this.timelineOfGettingError = gsap.timeline({ paused: true });
 
     // второстепенные анимации
-    this.timelineAnimationOfLoader = gsap.timeline({ paused: true });
-    this.timelineAnimationOfLoaderCircles = gsap.timeline({ paused: true });
     this.timelineAnimationOfTransformButtonToCircle = gsap.timeline({ paused: true });
     this.timelineAnimationOfDots = gsap.timeline({ paused: true });
     this.timelineAnimationOfDotsAppearance = gsap.timeline({ paused: true });
@@ -83,48 +81,6 @@ export default class ButtonSubmitView {
 
   // инициализация
   initSecondaryTimelines() {
-    this.timelineAnimationOfLoader
-      .to(
-        this.firstLoader,
-        {
-          rotate: 720,
-          duration: 3,
-          repeat: -1,
-          ease: "power4.inOut",
-        },
-        0
-      )
-      .to(
-        this.secondLoader,
-        {
-          rotate: 720,
-          duration: 4,
-          repeat: -1,
-          ease: "power4.inOut",
-        },
-        0.2
-      );
-
-    this.timelineAnimationOfLoaderCircles
-      .to(
-        this.firstLoaderCircle,
-        {
-          transform: `translate(0, ${this.rect.height - 5}px)`,
-          duration: 0.5,
-          ease: "power4.inOut",
-        },
-        0
-      )
-      .to(
-        this.secondLoaderCircle,
-        {
-          transform: `translate(0, ${this.rect.height - 5}px)`,
-          duration: 0.5,
-          ease: "power4.inOut",
-        },
-        0.5
-      );
-
     this.timelineAnimationOfTransformButtonToCircle
       .to(
         this.button,
@@ -181,15 +137,11 @@ export default class ButtonSubmitView {
   }
   initMainTimelines() {
     this.timelineOfLoadingAnimation
-      .add(() => this.timelineAnimationOfLoader.restart(), 0)
       .add(() => this.timelineAnimationOfTransformButtonToCircle.restart(), 0)
-      .add(() => this.timelineAnimationOfLoaderCircles.restart(), 0.1)
       .add(() => this.timelineAnimationOfDotsAppearance.restart(), 0.1)
       .add(() => this.timelineAnimationOfDots.restart(), 0.1);
 
     this.timelineOfGettingSuccess
-      .add(() => this.timelineAnimationOfLoader.pause(), 0)
-      .add(() => this.timelineAnimationOfLoaderCircles.reverse(), 0)
       .add(() => this.timelineAnimationOfDotsAppearance.reverse(), 0)
       .add(() => this.timelineAnimationOfDots.pause(), 0.2)
       .add(() => this.timelineAnimationOfSuccess.restart(), 0.5)
@@ -197,8 +149,6 @@ export default class ButtonSubmitView {
       .add(() => this.timelineAnimationOfTransformButtonToCircle.reverse(), 2);
 
     this.timelineOfGettingError
-      .add(() => this.timelineAnimationOfLoader.pause(), 0)
-      .add(() => this.timelineAnimationOfLoaderCircles.reverse(), 0)
       .add(() => this.timelineAnimationOfDotsAppearance.reverse(), 0)
       .add(() => this.timelineAnimationOfDots.pause(), 0.2)
       .add(() => this.timelineAnimationOfError.restart(), 0.5)
@@ -214,10 +164,6 @@ export default class ButtonSubmitView {
     this.titleVisible = this.button.querySelector(".button-submit__title_visible");
     this.dotsWrapper = this.button.querySelector(".button-submit__dots-wrapper");
     this.dots = this.button.querySelectorAll(".button-submit__dot");
-    this.firstLoader = this.button.querySelector(".button-submit__loader_1");
-    this.firstLoaderCircle = this.firstLoader.firstElementChild;
-    this.secondLoader = this.button.querySelector(".button-submit__loader_2");
-    this.secondLoaderCircle = this.secondLoader.firstElementChild;
     this.iconSuccess = this.button.querySelector(".button-submit__check");
     this.iconError = this.button.querySelector(".button-submit__cross");
 
@@ -241,14 +187,6 @@ export default class ButtonSubmitView {
           <span class="button-submit__dot"></span>
           <span class="button-submit__dot"></span>
           <span class="button-submit__dot"></span>
-        </div>
-        <div class="button-submit__loader-wrapper">
-          <div class="button-submit__loader button-submit__loader_1">
-            <span class="button-submit__loader-circle"></span>
-          </div>
-          <div class="button-submit__loader button-submit__loader_2">
-            <span class="button-submit__loader-circle"></span>
-          </div>
         </div>
         <div class="button-submit__icon-wrapper">
           <svg class="button-submit__icon button-submit__icon_success" version="1.1" width="30px" height="30px" viewBox="0 0 64.5 37.4">

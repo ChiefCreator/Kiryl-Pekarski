@@ -37,6 +37,7 @@ export default class AboutPage {
         const isNeedSplitText = !this.isRenderedMoreThanOneTime();
 
         this.sectionAboutObject.initAnimations();
+        this.sectionSkillsObject.initAnimations();
 
         this.textsAnimatedOnScroll.forEach((text) => animateTextOnScroll(text, isNeedSplitText));
 

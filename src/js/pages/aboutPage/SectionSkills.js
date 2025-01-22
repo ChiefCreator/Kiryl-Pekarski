@@ -14,6 +14,10 @@ export default class SectionSkills {
     this.section = this.create();
   }
 
+  initAnimations() {
+    this.sectionHeader.initAnimations();
+  }
+
   create() {
     const innerHTML = `
       <div class="section-skills__container">
@@ -31,7 +35,7 @@ export default class SectionSkills {
 
     const sectionHeaderWrapper = section.querySelector(".section-skills__header-wrapper");
     const articleSkills = section.querySelector(".article-skills");
-    const sectionHeader = new HeaderSection({
+    this.sectionHeader = new HeaderSection({
       data: {
         title: "Мои Hard Skills",
         sectionId: "section-skills",
@@ -39,7 +43,7 @@ export default class SectionSkills {
     });
     const marquee = new Marquee({ data: skillsData, rowsCount: 3, app: this.app });
 
-    sectionHeaderWrapper.append(sectionHeader.render());
+    sectionHeaderWrapper.append(this.sectionHeader.render());
     articleSkills.append(marquee.render());
 
     return section;

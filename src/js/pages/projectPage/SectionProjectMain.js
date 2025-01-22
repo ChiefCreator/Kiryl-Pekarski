@@ -22,6 +22,14 @@ export default class SectionProjectMain {
     this.init();
   }
 
+  setInitialScaleOfImages() {
+    gsap.set(
+      window.innerWidth > 1280 ? this.mainImg : this.mainImgMobile,
+      {
+        transform: "scale(1)",
+      },
+    );
+  }
   initAnimations() {
     const timelineOnScroll = gsap.timeline({ paused: true });
     timelineOnScroll.fromTo(

@@ -132,7 +132,7 @@ export default class App {
   render() {
     this.renderComponents();
 
-    this.view.init(this.root, this.routes, this.components.pageLoader, this.components.menu);
+    this.view.init(this.root, this.routes, this.components.pageLoader, this.components.menu, this.components.footer);
     this.controller.init();
   }
 }

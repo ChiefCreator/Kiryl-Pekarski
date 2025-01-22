@@ -8,7 +8,7 @@ export default class FooterController {
     this.init();
   }
 
-  addListeners() {
+  initAnimations() {
     animateElementOnScroll(this.view.borderSub, {
       events: {
         onEnter: () => {
@@ -21,7 +21,5 @@ export default class FooterController {
 
   init() {
     this.model.init();
-
-    this.addListeners();
   }
 }

@@ -7,6 +7,9 @@ export default class FormCheckboxFieldModel {
       this.selectedIndex = null;
     }
 
+    resetCheckboxes() {
+      this.view.resetCheckboxes();
+    }
     updateCheckbox(index) {
       this.selectedIndex = index;
       this.view.updateCheckbox(this.selectedIndex);

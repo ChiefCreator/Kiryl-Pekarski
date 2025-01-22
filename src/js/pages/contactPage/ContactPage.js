@@ -40,16 +40,16 @@ export default class ContactPage {
         id: "checbox-field-budget",
         checkboxes: [
           {
-            title: "<200 BYN",
+            title: "<100 $",
           },
           {
-            title: "200-400 BYN",
+            title: "100-200 $",
           },
           {
-            title: "400-800 BYN",
+            title: "200-400 $",
           },
           {
-            title: "800+ BYN",
+            title: "400+ $",
           },
         ],
       },
@@ -109,6 +109,10 @@ export default class ContactPage {
   }
   isRenderedMoreThanOneTime() {
     return this.countOfRenders > 1;
+  }
+
+  stopAnimations() {
+    this.formObject.reset();
   }
 
   onLoad(callbackOnLoad) {

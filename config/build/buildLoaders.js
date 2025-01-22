@@ -1,4 +1,5 @@
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import ImageMinimizerPlugin from "image-minimizer-webpack-plugin";
 
 export default function buildLoaders(options) {
   const idDev = options.mode === "development";
@@ -34,7 +35,7 @@ export default function buildLoaders(options) {
     },
   };
   const imgLoader = {
-    test: /\.(jpg|png|webp)$/,
+    test: /\.(jpeg|jpg|png|webp)$/,
     type: 'asset/resource',
     generator: {
       filename: 'img/[name][hash][ext][query]',

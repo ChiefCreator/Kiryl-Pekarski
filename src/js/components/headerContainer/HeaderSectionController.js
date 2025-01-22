@@ -8,7 +8,7 @@ export default class HeaderSectionController {
     this.init();
   }
 
-  addListeners() {
+  initAnimations() {
     animateElementOnScroll(this.view.borderSub, {
       events: {
         onEnter: () => {
@@ -20,7 +20,5 @@ export default class HeaderSectionController {
 
   init() {
     this.model.init();
-
-    this.addListeners();
   }
 }

@@ -121,6 +121,8 @@ export default class SectionProjects {
     } else {
       this.projectImages.initAnimations();
     }
+
+    this.sectionHeader.initAnimations()
   }
   create() {
     const innerHTML = `<div class="section-projects__container id="section-projects__container"></div>`;
@@ -131,14 +133,14 @@ export default class SectionProjects {
     section.append(container.render());
 
     const projectsContainer = section.querySelector(".section-projects__container");
-    const sectionHeader = new HeaderSection({ 
+    this.sectionHeader = new HeaderSection({ 
       data: {
         title: "Избранные проекты",
         sectionId: "section-projects",
       },
     })
 
-    projectsContainer.append(sectionHeader.render());
+    projectsContainer.append(this.sectionHeader.render());
     this.articlesData.forEach((data, i) => {
       const articleProject = new ArticleProject({ data, app: this.app });
       const articleProjectElement = articleProject.render();

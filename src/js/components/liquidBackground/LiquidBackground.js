@@ -16,7 +16,7 @@ import sculpture3D from "./../../../3d/sculpture.glb";
 import NoiseTextureRenderer from "./NoiseTextureRenderer";
 import RippleTextureRenderer from "./RippleTextureRenderer";
 
-import mainTexture from "./../../../img/main-texture.png";
+import mainTexture from "./../../../img/main-texture.png?as=webp";
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";

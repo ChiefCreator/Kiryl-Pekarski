@@ -16,6 +16,12 @@ export default class FormTextareaField {
   setError(isError) {
     this.model.setError(isError);
   }
+  removeError() {
+    this.model.removeError();
+  }
+  removeValue() {
+    this.model.removeValue();
+  }
 
   // Методы с значением input
   checkIfInputEmpty() {

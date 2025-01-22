@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import rippleNoiseMap from "./../../../img/ripple-noise-map.png";
+import rippleNoiseMap from "./../../../img/ripple-noise-map.png?as=webp";
 
 import rippleVertexShader from "./../../../shaders/rippleVertexShader.glsl";
 import rippleFragmentShader from "./../../../shaders/rippleFragmentShader.glsl";

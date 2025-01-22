@@ -61,14 +61,18 @@ export default class SectionProjectImageGalery {
       const scrollStartRegardingElement = -(window.innerHeight - sectionRect.height) / 2;
       const scrollEnd = this.calcScrollEnd();
 
-      gsap.to(this.section, {
-        scrollTrigger: {
-          trigger: this.section,
-          start: `${scrollStartRegardingElement}px top`,
-          end: `+=${scrollEnd}px`,
-          scrub: true,
-          pin: true,
-        },
+      if (this.scrollTriggerAnimation && this.scrollTriggerAnimation.scrollTrigger) this.scrollTriggerAnimation.scrollTrigger.kill()
+
+      this.scrollTrigger = {
+        trigger: this.section,
+        start: `${scrollStartRegardingElement}px top`,
+        end: `+=${scrollEnd}px`,
+        scrub: true,
+        pin: true,
+      }
+
+      this.scrollTriggerAnimation = gsap.to(this.section, {
+        scrollTrigger: this.scrollTrigger,
         x: `-${scrollEnd}px`,
       });
     }

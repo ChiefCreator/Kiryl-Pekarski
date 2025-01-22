@@ -10,6 +10,10 @@ export default class FormCheckboxField {
     this.controller = new FormCheckboxFieldController(this.model, this.view);
   }
 
+  removeData() {
+    this.model.resetCheckboxes();
+  }
+
   isClickedOnCheckbox(event) {
     return this.controller.isClickedOnCheckbox(event);
   }

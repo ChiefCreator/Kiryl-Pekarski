@@ -1,40 +1,40 @@
-import project_1_mainVerticalImg from "./../../img/project_1_main-vertical.jpg";
-import project_1_mainHorizontalImg from "./../../img/project_1_main-horizontal.jpg";
+import project_1_mainVerticalImg from "./../../img/project_1_main-vertical.jpg?as=webp";
+import project_1_mainHorizontalImg from "./../../img/project_1_main-horizontal.jpg?as=webp";
 
-import project_2_mainVerticalImg from "./../../img/project_2_main-vertical.jpg";
-import project_2_mainHorizontalImg from "./../../img/project_2_main-horizontal.jpg";
+import project_2_mainVerticalImg from "./../../img/project_2_main-vertical.jpg?as=webp";
+import project_2_mainHorizontalImg from "./../../img/project_2_main-horizontal.jpg?as=webp";
 
-import project_3_mainVerticalImg from "./../../img/project_3_main-vertical.jpg";
-import project_3_mainHorizontalImg from "./../../img/project_3_main-horizontal.jpg";
+import project_3_mainVerticalImg from "./../../img/project_3_main-vertical.jpg?as=webp";
+import project_3_mainHorizontalImg from "./../../img/project_3_main-horizontal.jpg?as=webp";
 
-import project_4_mainVerticalImg from "./../../img/project_4_main-vertical.jpg";
-import project_4_mainHorizontalImg from "./../../img/project_4_main-horizontal.jpg";
+import project_4_mainVerticalImg from "./../../img/project_4_main-vertical.jpg?as=webp";
+import project_4_mainHorizontalImg from "./../../img/project_4_main-horizontal.jpg?as=webp";
 
-import project_5_mainVerticalImg from "./../../img/project_5_main-vertical.jpg";
-import project_5_mainHorizontalImg from "./../../img/project_5_main-horizontal.jpg";
+import project_5_mainVerticalImg from "./../../img/project_5_main-vertical.jpg?as=webp";
+import project_5_mainHorizontalImg from "./../../img/project_5_main-horizontal.jpg?as=webp";
 
-import project_6_mainVerticalImg from "./../../img/project_6_main-vertical.jpg";
-import project_6_mainHorizontalImg from "./../../img/project_6_main-horizontal.jpg";
+import project_6_mainVerticalImg from "./../../img/project_6_main-vertical.jpg?as=webp";
+import project_6_mainHorizontalImg from "./../../img/project_6_main-horizontal.jpg?as=webp";
 
-import project_1_other_1 from "./../../img/project-1-other-1.jpg";
-import project_1_other_2 from "./../../img/project-1-other-2.jpg";
-import project_1_other_3 from "./../../img/project-1-other-3.jpg";
+import project_1_other_1 from "./../../img/project-1-other-1.jpg?as=webp";
+import project_1_other_2 from "./../../img/project-1-other-2.jpg?as=webp";
+import project_1_other_3 from "./../../img/project-1-other-3.jpg?as=webp";
 
-import project_2_other_1 from "./../../img/project-2-other-1.jpg";
-import project_2_other_2 from "./../../img/project-2-other-2.jpg";
-import project_2_other_3 from "./../../img/project-2-other-3.jpg";
+import project_2_other_1 from "./../../img/project-2-other-1.jpg?as=webp";
+import project_2_other_2 from "./../../img/project-2-other-2.jpg?as=webp";
+import project_2_other_3 from "./../../img/project-2-other-3.jpg?as=webp";
 
-import project_4_other_1 from "./../../img/project-4-other-1.jpg";
-import project_4_other_2 from "./../../img/project-4-other-2.jpg";
-import project_4_other_3 from "./../../img/project-4-other-3.jpg";
+import project_4_other_1 from "./../../img/project-4-other-1.jpg?as=webp";
+import project_4_other_2 from "./../../img/project-4-other-2.jpg?as=webp";
+import project_4_other_3 from "./../../img/project-4-other-3.jpg?as=webp";
 
-import project_5_other_1 from "./../../img/project-5-other-1.jpg";
-import project_5_other_2 from "./../../img/project-5-other-2.jpg";
-import project_5_other_3 from "./../../img/project-5-other-3.jpg";
+import project_5_other_1 from "./../../img/project-5-other-1.jpg?as=webp";
+import project_5_other_2 from "./../../img/project-5-other-2.jpg?as=webp";
+import project_5_other_3 from "./../../img/project-5-other-3.jpg?as=webp";
 
-import project_6_other_1 from "./../../img/project-6-other-1.jpg";
-import project_6_other_2 from "./../../img/project-6-other-2.jpg";
-import project_6_other_3 from "./../../img/project-6-other-3.jpg";
+import project_6_other_1 from "./../../img/project-6-other-1.jpg?as=webp";
+import project_6_other_2 from "./../../img/project-6-other-2.jpg?as=webp";
+import project_6_other_3 from "./../../img/project-6-other-3.jpg?as=webp";
 
 const projectsData = [
   {

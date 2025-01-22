@@ -13,6 +13,21 @@ export default class FormModel {
     this.error = false;
   }
 
+  // сброс данных и ошибок
+  removeData() {
+    this.view.removeData();
+  }
+  removeError() {
+    this.error = false;
+
+    this.view.removeError();
+  }
+  reset() {
+    if (this.error) this.removeError();
+
+    this.removeData();
+  }
+
   // обновление данных
   updateDataOnInput(prop, value) {
     this.data[prop] = value;
@@ -87,6 +102,7 @@ export default class FormModel {
     .then(response => {
       if (response.ok) {
         this.view.endButtonSubmitAnimation("success");
+        this.removeData();
       } else {
         this.view.endButtonSubmitAnimation("error");
       }

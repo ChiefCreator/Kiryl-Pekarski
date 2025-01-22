@@ -44,6 +44,11 @@ export default class FormCheckboxFieldView {
     return this.timelineOfPageRender;
   }
 
+  resetCheckboxes() {
+    this.checkboxObjects.forEach((checkboxObject) => {
+      checkboxObject.setStatus(false);
+    });
+  } 
   updateCheckbox(checkboxIndex) {
     this.checkboxObjects.forEach((checkboxObject) => {
       if (this.checkboxObjects[checkboxIndex] === checkboxObject) return;

@@ -32,6 +32,9 @@ export default class ProjectPage {
     return this.countOfRenders > 1;
   }
 
+  stopAnimations() {
+    this.sectionProjectMainObject.setInitialScaleOfImages();
+  }
   onLoad(callbackOnLoad) {
     const textsAnimatedOnScroll = this.page.querySelectorAll("[data-text-animated-on-scroll]");
     const mainImg = this.page.querySelector(".project-illustration__img");

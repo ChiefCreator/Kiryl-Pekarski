@@ -1,4 +1,4 @@
-import DOMElementWatcher from "../domElementWatcher/DOMElementWatcher";
+import ElementObserver from "../elementObserver/ElementObserver";
 import { getAnimateTextTimeline } from "../../utils/animateUtils";
 
 import { getAnimateCloseButtonTimeline } from "../../utils/animateUtils";
@@ -24,8 +24,8 @@ export default class MenuController {
         y: 0,
         normalizedX: 0,
         normalizedY: 0,
-      }
-    }
+      },
+    };
     this.illustrationData = {
       width: 0,
       height: 0,
@@ -33,7 +33,7 @@ export default class MenuController {
       normalizedHeight: 0,
       normalizedCenterX: 0,
       normalizedCenterY: 0,
-    }
+    };
     this.isOpen = false;
 
     this.init();
@@ -75,7 +75,7 @@ export default class MenuController {
 
     this.illustrationData.width = rect.width;
     this.illustrationData.height = rect.height;
-    
+
     this.illustrationData.normalizedWidth = (rect.width / this.viewportSettings.width) * this.viewportSettings.aspectRatio * 2;
     this.illustrationData.normalizedHeight = (rect.height / this.viewportSettings.height) * 2;
 
@@ -164,21 +164,29 @@ export default class MenuController {
     this.timeline = gsap.timeline({ paused: true });
 
     this.timeline
-      .to(this.view.menu, {
-        left: 0,
-        ease: "power4.inOut",
-        duration: 1,
-      }, 0)
-      .to(this.view.line, {
-        width: "100%",
-        ease: "power4.inOut",
-        duration: 1,
-      }, .5)
+      .to(
+        this.view.menu,
+        {
+          left: 0,
+          ease: "power4.inOut",
+          duration: 1,
+        },
+        0
+      )
+      .to(
+        this.view.line,
+        {
+          width: "100%",
+          ease: "power4.inOut",
+          duration: 1,
+        },
+        0.5
+      )
       .add(getAnimateTextTimeline(this.view.title), "<")
       .add(this.timelineOfLinks, "<")
       .add(getAnimateTextTimeline(this.view.projectsTitle), "<")
       .add(this.timelineOfTitles, "<")
-      .add(getAnimateCloseButtonTimeline(this.view.closeButton).restart(), "<+=50%")
+      .add(getAnimateCloseButtonTimeline(this.view.closeButton).restart(), "<+=50%");
   }
   initTimelineOfTitles() {
     this.timelineOfTitles = gsap.timeline();
@@ -193,36 +201,33 @@ export default class MenuController {
         .add(getAnimateTextTimeline(numbers[0]), iterationDelay)
         .add(getAnimateTextTimeline(numbers[1]), "<")
         .add(getAnimateTextTimeline(titles[0]), iterationDelay + 0.05)
-        .add(getAnimateTextTimeline(titles[1]), "<")
-    })
+        .add(getAnimateTextTimeline(titles[1]), "<");
+    });
   }
   initTimelineOfLinks() {
     this.timelineOfLinks = gsap.timeline();
 
     this.view.links.forEach((link, i) => {
-      this.timelineOfLinks.add(getAnimateTextTimeline(link), "<+10%")
-    })
+      this.timelineOfLinks.add(getAnimateTextTimeline(link), "<+10%");
+    });
   }
   init() {
     this.model.init();
 
-    const watcher = new DOMElementWatcher({
-      elements: [this.view.title, this.view.illustration],
-      callback: () => {
-        setTimeout(() => {
-          this.updateIllustrationData();
+    new ElementObserver({
+      target: [this.view.title, this.view.illustration],
+      onRender: () => {
+        this.updateIllustrationData();
 
-          this.view.init3D(this.illustrationData.normalizedWidth / 2);
+        this.view.init3D(this.illustrationData.normalizedWidth / 2);
 
-          this.initTimelineOfLinks();
-          this.initTimelineOfTitles()
-          this.initTimeline();
+        this.initTimelineOfLinks();
+        this.initTimelineOfTitles();
+        this.initTimeline();
 
-          this.addListeners();
-        }, 100)
+        this.addListeners();
       },
-    });
-    watcher.startWatching();
+    }).start();
   }
   addListeners() {
     this.projectsMenuListProperties = this.getProjectsMenuListProperties();

@@ -6,6 +6,7 @@ export default class AppView {
     this.routes = null;
     this.pageLoader = null;
     this.menu = null;
+    this.footer = null;
     this.content = null;
 
     this.watcher = new DOMElementWatcher({ elements: null, selector: null, callback: null });
@@ -34,6 +35,8 @@ export default class AppView {
     window.scrollTo({ top: 0, behavior: "instant" });
 
     setTimeout(() => this.openScroll(), 1000);
+
+    this.footer.initAnimations();
   }
 
   renderContent(currentPageId, prevPageId, scrollWidth) {
@@ -62,11 +65,12 @@ export default class AppView {
     this.hideScroll(scrollWidth);
   }
 
-  init(root, routes, pageLoader, menu) {
+  init(root, routes, pageLoader, menu, footer) {
     this.root = root;
     this.routes = routes;
     this.pageLoader = pageLoader;
     this.menu = menu;
+    this.footer = footer;
     this.content = this.root.querySelector("#content");
   }
 }

@@ -26,6 +26,11 @@ export default class FormInputFieldView {
     this.timelineOfPageRender = gsap.timeline({ onComplete: () => this.timelineOfPageRender.clear() });
   }
 
+  removeValue() {
+    this.input.value = "";
+    this.timelineOnFocusout.restart();
+  }
+
   getTimelineOfPageRender(isNeedSplitText) {
     this.timelineOfPageRender
       .add(getAnimateTextTimeline(this.label, isNeedSplitText))

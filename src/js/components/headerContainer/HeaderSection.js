@@ -10,6 +10,10 @@ export default class HeaderSection {
     this.controller = new HeaderSectionController(this.model, this.view);
   }
 
+  initAnimations() {
+    this.controller.initAnimations();
+  }
+
   render() {
     return this.view.render();
   }

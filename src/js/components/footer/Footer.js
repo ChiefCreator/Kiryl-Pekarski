@@ -10,6 +10,10 @@ export default class Footer {
     this.controller = new FooterController(this.model, this.view);
   }
 
+  initAnimations() {
+    this.controller.initAnimations();
+  }
+
   render() {
     return this.view.render();
   }
