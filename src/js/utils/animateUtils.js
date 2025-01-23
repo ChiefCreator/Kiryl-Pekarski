@@ -10,12 +10,12 @@ export function getAnimateTextTimeline($text, isNeedSplitText = true) {
     $text.querySelectorAll(".text-line").forEach(($line) => {
       const $container = $line.firstElementChild;
 
-      $container.style.transform = "translate(0, 110%)";
+      $container.style.transform = "translate(0, 120%)";
 
       timeLine.fromTo(
         $container,
         {
-          transform: `translate(0, 110%)`,
+          transform: `translate(0, 120%)`,
         },
         {
           transform: `translate(0, 0)`,

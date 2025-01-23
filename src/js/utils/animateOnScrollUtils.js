@@ -43,7 +43,7 @@ export function animateTextOnScroll($text, isNeedSplitText = true) {
       timeline.fromTo(
         $container,
         {
-          transform: `translate(0, 110%)`,
+          transform: `translate(0, 120%)`,
         },
         {
           transform: `translate(0, 0)`,
