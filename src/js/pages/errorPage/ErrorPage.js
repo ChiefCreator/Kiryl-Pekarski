@@ -5,8 +5,6 @@ export default class ErrorPage {
     this.id = "error";
     this.title = "Ошибка";
     this.page = this.create();
-
-    this.init();
   }
 
   create() {
@@ -16,7 +14,7 @@ export default class ErrorPage {
     return createDOM("main", { className: "app-error", innerHTML: innerHTML });
   }
   init() {
-    document.title = this.title;
+    this.page = this.create();
   }
   render() {
     return this.page;

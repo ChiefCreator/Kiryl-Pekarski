@@ -279,7 +279,7 @@ const server = express();
 
 server.use(
   cors({
-    origin: ["http://localhost:3000", "https://chiefcreator.github.io/Kiryl-Pekarski"],
+    origin: ["http://localhost:3000", "https://chiefcreator.github.io/Kiryl-Pekarski", "https://kiryl-pekarski.vercel.app"],
     methods: ["GET", "POST"],
     credentials: true,
   })

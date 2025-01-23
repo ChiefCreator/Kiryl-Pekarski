@@ -1,10 +1,11 @@
 import { createDOM } from "../../utils/domUtils";
 import Container from "../../components/container/Container";
 import Form from "../../components/form/Form";
-import DOMElementWatcher from "../../components/domElementWatcher/DOMElementWatcher";
 import ElementObserver from "../../components/elementObserver/ElementObserver";
 
 import { animateTextOnScroll } from "../../utils/animateOnScrollUtils";
+
+import formData from "../../data/formData";
 
 import "./contact-page.scss";
 
@@ -14,88 +15,9 @@ export default class ContactPage {
     this.title = "Связаться";
     this.countOfRenders = 0;
 
-    this.formChecboxFieldsData = [
-      {
-        name: "service",
-        label: "Чем я могу помочь?",
-        id: "checbox-field-service",
-        checkboxes: [
-          {
-            title: "Лендинг",
-          },
-          {
-            title: "Интернет-магазин",
-          },
-          {
-            title: "Дизайн",
-          },
-          {
-            title: "Другое",
-          },
-        ],
-      },
-      {
-        name: "budget",
-        label: "Предполагаемый бюджет",
-        id: "checbox-field-budget",
-        checkboxes: [
-          {
-            title: "<100 $",
-          },
-          {
-            title: "100-200 $",
-          },
-          {
-            title: "200-400 $",
-          },
-          {
-            title: "400+ $",
-          },
-        ],
-      },
-      {
-        name: "pageNumber",
-        label: "Количество страниц",
-        id: "checbox-field-page-number",
-        checkboxes: [
-          {
-            title: "1-3",
-          },
-          {
-            title: "3-6",
-          },
-          {
-            title: "6-10",
-          },
-          {
-            title: "10+",
-          },
-        ],
-      },
-    ];
-    this.formFieldsData = [
-      {
-        id: "form-field-name",
-        label: "Имя",
-        placeholder: "Введите ваше имя",
-        name: "name",
-        inputId: "input-name",
-      },
-      {
-        id: "form-field-email",
-        label: "Почта",
-        placeholder: "Введите вашу почту",
-        name: "mail",
-        inputId: "input-email",
-      },
-    ];
-    this.formTextareaFieldData = {
-      id: "form-textarea-field-description",
-      label: "Расскажите о своем проекте",
-      placeholder: "Напишите сообщение",
-      name: "description",
-      inputId: "textarea-description",
-    };
+    this.formChecboxFieldsData = formData.checboxFieldsData;
+    this.formFieldsData = formData.inputFieldsData;
+    this.formTextareaFieldData = formData.textareaFieldData;
 
     this.formObject = new Form({ fieldsData: this.formFieldsData, textareaFieldData: this.formTextareaFieldData, checboxFieldsData: this.formChecboxFieldsData, page: this });
 

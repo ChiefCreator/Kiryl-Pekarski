@@ -6,7 +6,10 @@ import "./../scss/base/_utils.scss";
 import "./../scss/base/_reset.scss";
 
 window.addEventListener("load", () => {
-  const root = document.getElementById("root");
-  const app = new App({ root });
-  app.render();
+  Promise.all([document.fonts.load('1em "Cinematografica"'), document.fonts.load('1em "BebasNeuePro"'), document.fonts.load('1em "Maelstrom Sans"')])
+    .then(() => {
+      const root = document.getElementById("root");
+      const app = new App({ root });
+      app.render();
+    })
 });
